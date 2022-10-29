@@ -7,7 +7,7 @@
 		<DiCode />
 	</div>
 	<h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-base-content">
-		Register for an account
+		Create a new project
 	</h2>
 	<p class="text-center mt-1">
 		Or <a href="/login" class="text-primary font-medium hover:cursor-pointer">sign in</a> if you already
