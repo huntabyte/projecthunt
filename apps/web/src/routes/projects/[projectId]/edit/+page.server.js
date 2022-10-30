@@ -50,5 +50,18 @@ export const actions = {
 		}
 
 		throw redirect(303, '/my/projects');
+	},
+	delete: async ({ locals, params }) => {
+		try {
+			await locals.pb.records.update('projects', params.projectId, {
+				thumbnail: null
+			});
+		} catch (err) {
+			console.log('Error:', err);
+			throw error(err.status, 'Something went wrong');
+		}
+		return {
+			success: true
+		};
 	}
 };

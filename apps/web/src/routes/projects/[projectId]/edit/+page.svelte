@@ -65,7 +65,7 @@
 				<label for="thumbnail" class="avatar w-20 hover:cursor-pointer">
 					{#if data.project.thumbnail}
 						<label for="thumbnail" class="absolute -top-0.5 -right-0.5 hover:cursor-pointer">
-							<button formaction="/projects/{data.project.id}/delete?id=hello" class="w-5 h-5">
+							<button formaction="?/delete&id=hello" class="w-5 h-5">
 								<FaRegTrashAlt />
 							</button>
 						</label>
