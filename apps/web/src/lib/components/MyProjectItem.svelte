@@ -1,7 +1,6 @@
 <script>
 	import FaComment from 'svelte-icons/fa/FaComment.svelte';
 	import { getImageURL } from '$lib/helpers';
-	import ProjectVoteForm from './ProjectVoteForm.svelte';
 
 	export let project;
 </script>
@@ -29,7 +28,7 @@
 			</div>
 		</div>
 	</div>
-	<div>
-		<ProjectVoteForm {project} />
+	<div class="flex items-center justify-end w-full">
+		<a href="/projects/{project.id}/edit" class="btn btn-outline">Edit Project</a>
 	</div>
 </div>

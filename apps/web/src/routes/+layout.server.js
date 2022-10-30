@@ -6,4 +6,8 @@ export const load = ({ locals }) => {
 			profile: serializeNonPOJOs(locals.user.profile)
 		};
 	}
+
+	return {
+		profile: undefined
+	};
 };

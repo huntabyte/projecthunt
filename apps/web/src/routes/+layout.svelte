@@ -28,7 +28,7 @@
 					<ul
 						class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 					>
-						{#if data?.profile}
+						{#if data.profile}
 							<li>
 								<form action="/logout" method="POST">
 									<button>Logout</button>
@@ -48,7 +48,7 @@
 				</a>
 			</div>
 			<div class="navbar-end space-x-2">
-				{#if data?.profile}
+				{#if data.profile}
 					<a href="/projects/new" class="btn btn-primary">Submit</a>
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">
@@ -62,6 +62,7 @@
 							<li>
 								<a href="/">Profile</a>
 							</li>
+							<li><a href="/my/projects">My Projects</a></li>
 							<li><a href="/">Settings</a></li>
 							<li>
 								<form action="/logout" method="POST">
@@ -77,7 +78,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="h-full w-full xl:container mx-auto mt-8 px-4">
+	<div class="h-full w-full xl:container mx-auto mt-8 px-8">
 		<slot />
 	</div>
 </div>

@@ -1,33 +1,21 @@
 import { serializeNonPOJOs } from '$lib/helpers';
 import { DefaultProject } from '$lib/_server_utils';
-import { error } from '@sveltejs/kit';
 
-export const load = ({ locals }) => {
-	const getProjects = async () => {
-		const projects = serializeNonPOJOs(
-			await locals.pb.records.getList('projects', 1, 15, {
-				sort: '-created'
+export const load = ({ locals, params }) => {
+	const getProject = async (projectId) => {
+		const project = serializeNonPOJOs(await locals.pb.records.getOne('projects', projectId));
+		const votes = serializeNonPOJOs(
+			await locals.pb.records.getFullList('votes', 9999999, {
+				filter: `project = "${project.id}"`
 			})
 		);
+		project.votes = votes;
 
-		const projectsIdFilter = projects.items
-			.map((project) => `project = "${project.id}"`)
-			.join(' || ');
-		const voteList = serializeNonPOJOs(
-			await locals.pb.records.getFullList('votes', 99999, {
-				filter: projectsIdFilter
-			})
-		);
-		projects.items.map((project) => {
-			project.votes = voteList.filter((vote) => vote.project == project.id);
-			return { DefaultProject, ...project };
-		});
-
-		return projects;
+		return { DefaultProject, ...project };
 	};
 
 	return {
-		projects: getProjects()
+		project: getProject(params.projectId)
 	};
 };
 
