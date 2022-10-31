@@ -53,7 +53,7 @@
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">
 							<div class="w-10 rounded-full">
-								<img src="https://placeimg.com/80/80/people" alt="User " />
+								<img src="https://ui-avatars.com/api/?name={data.profile.name}" alt="User " />
 							</div>
 						</button>
 						<ul

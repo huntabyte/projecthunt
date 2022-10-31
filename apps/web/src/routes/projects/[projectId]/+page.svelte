@@ -1,8 +1,9 @@
 <script>
 	import { enhance, applyAction } from '$app/forms';
-	import { getImageURL } from '$lib/helpers';
 	import ProjectVoteForm from '$lib/components/ProjectVoteForm.svelte';
-	import { Result } from 'postcss';
+	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
+
+	import { getImageURL } from '$lib/helpers';
 	export let data;
 	export let form;
 </script>
@@ -41,7 +42,7 @@
 	<div class="flex mt-4 w-full  items-center space-x-4">
 		<div class="avatar">
 			<div class="w-12 rounded-full">
-				<img src="https://placeimg.com/192/192/people" alt="User Avatar" />
+				<img src="https://ui-avatars.com/api/?name={data.profile.name}" alt="User Avatar" />
 			</div>
 		</div>
 		<form
@@ -80,18 +81,49 @@
 			<div class="flex w-full space-x-4">
 				<div class="avatar h-max">
 					<div class="w-12 rounded-full">
-						<img src="https://placeimg.com/192/192/people" alt="User Avatar" />
+						<img
+							src="https://ui-avatars.com/api/?name={comment.userProfile.name}"
+							alt="User Avatar"
+						/>
 					</div>
 				</div>
 				<div class="flex flex-col">
 					<p class="font-bold">{comment.userProfile.name}</p>
 					<div class="mt-2">
-						<p>{comment.content}</p>
+						{#if form?.showEdit && form?.editId === comment.id}
+							<form action="?/editComment" method="POST" class="flex ">
+								<input
+									type="text"
+									value={comment.content}
+									class="input input-bordered input-primary"
+								/>
+								<button class="btn ml-2">Update</button>
+							</form>
+						{:else}
+							<p>{comment.content}</p>
+						{/if}
 					</div>
-					<div class="flex space-x-4 mt-2 text-sm font-medium  ">
+					<div class="flex space-x-4 mt-2 text-sm font-medium items-center ">
 						<p>Upvote</p>
 						<p>Reply</p>
 						<p>Share</p>
+						<div class="dropdown dropdown-top">
+							<button class="btn btn-ghost btn-circle btn-xs">
+								<div class="w-4 h-4">
+									<FaEllipsisV />
+								</div>
+							</button>
+							<ul class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+								<li>
+									<form action="?/showEdit" class="w-full" method="POST">
+										<input type="hidden" name="editId" value={comment.id} />
+										<button type="submit" class="">Edit</button>
+									</form>
+								</li>
+								<li><a>Delete</a></li>
+								<li><a>Report</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

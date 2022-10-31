@@ -1,6 +1,6 @@
 import { serializeNonPOJOs } from '$lib/helpers';
 import { DefaultProject } from '$lib/_server_utils';
-import { formData, zfd } from 'zod-form-data';
+import { zfd } from 'zod-form-data';
 import { z, ZodError } from 'zod';
 import { ClientResponseError } from 'pocketbase';
 import { error } from '@sveltejs/kit';
@@ -95,6 +95,13 @@ export const actions = {
 		}
 		return {
 			success: true
+		};
+	},
+	showEdit: async ({ request }) => {
+		const { editId } = Object.fromEntries(await request.formData());
+		return {
+			showEdit: true,
+			editId
 		};
 	}
 };
