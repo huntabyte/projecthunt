@@ -23,8 +23,31 @@ export const load = ({ locals, params }) => {
 		return { DefaultProject, ...project };
 	};
 
+	const getComments = async (projectId) => {
+		const comments = serializeNonPOJOs(
+			await locals.pb.records.getFullList('comments', 9999999, {
+				filter: `project = "${projectId}"`
+			})
+		);
+		const usersIdFilter = comments.map((comment) => `userId = "${comment.user}"`).join(' || ');
+
+		const usersList = serializeNonPOJOs(
+			await locals.pb.records.getFullList('profiles', 99999, {
+				filter: usersIdFilter
+			})
+		);
+
+		comments.map((comment) => {
+			comment.userProfile = usersList.find((user) => user.userId == comment.user);
+			return comment;
+		});
+
+		return comments;
+	};
+
 	return {
-		project: getProject(params.projectId)
+		project: getProject(params.projectId),
+		comments: getComments(params.projectId)
 	};
 };
 
