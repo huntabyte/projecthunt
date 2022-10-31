@@ -1,5 +1,6 @@
 <script>
 	export let data;
+	console.log(data);
 </script>
 
 <div class="w-full h-full">
@@ -12,10 +13,10 @@
 <div class="flex w-full h-full">
 	<ul class="menu w-96 rounded-box p-2 space-y-2">
 		<li class="w-5/6">
-			<a href="/projects/" class="active text-xl font-bold"> Main info </a>
+			<a href="/projects/{data.project.id}/edit" class="active text-xl font-bold"> Main info </a>
 		</li>
 		<li class="w-5/6">
-			<a href="/projects/" class="text-xl font-bold"> Images & Media </a>
+			<a href="/projects/{data.project.id}/edit" class="text-xl font-bold"> Images & Media </a>
 		</li>
 	</ul>
 

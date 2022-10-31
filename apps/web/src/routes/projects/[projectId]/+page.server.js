@@ -1,5 +1,14 @@
 import { serializeNonPOJOs } from '$lib/helpers';
 import { DefaultProject } from '$lib/_server_utils';
+import { formData, zfd } from 'zod-form-data';
+import { z, ZodError } from 'zod';
+import { ClientResponseError } from 'pocketbase';
+import { error } from '@sveltejs/kit';
+
+const commentSchema = zfd.formData({
+	content: z.string().min(2).max(240).trim(),
+	project: z.string()
+});
 
 export const load = ({ locals, params }) => {
 	const getProject = async (projectId) => {
@@ -29,7 +38,7 @@ export const actions = {
 				sort: '-created'
 			});
 			if (existingVote.length < 1) {
-				const newVote = await locals.pb.records.create('votes', {
+				await locals.pb.records.create('votes', {
 					user: locals.user.id,
 					project: id
 				});
@@ -41,5 +50,28 @@ export const actions = {
 			console.log('Error:', err);
 			throw error(500, 'Something went wrong with voting.');
 		}
+	},
+	createComment: async ({ request, locals }) => {
+		let commentObj;
+		try {
+			commentObj = commentSchema.parse(await request.formData());
+			commentObj.user = locals.user.id;
+			await locals.pb.records.create('comments', commentObj);
+		} catch (err) {
+			console.log('Error:', err);
+			if (err instanceof ZodError) {
+				const { fieldErrors: errors } = err.flatten();
+				return {
+					data: commentObj,
+					errors
+				};
+			}
+			if (err instanceof ClientResponseError) {
+				throw error(err.status, err.data.message);
+			}
+		}
+		return {
+			success: true
+		};
 	}
 };

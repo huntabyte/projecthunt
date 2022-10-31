@@ -7,7 +7,7 @@ export const load = ({ locals, params }) => {
 		if (locals.user.id != project.user) {
 			throw error(401, 'You do not have permission to edit this project');
 		} else {
-			return { DefaultProject, ...project };
+			return project;
 		}
 	};
 	return {
