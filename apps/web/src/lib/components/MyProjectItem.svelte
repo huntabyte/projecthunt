@@ -1,6 +1,7 @@
 <script>
 	import FaComment from 'svelte-icons/fa/FaComment.svelte';
 	import { getImageURL } from '$lib/helpers';
+	import ConfirmDeleteModal from '$lib/components/ConfirmDeleteModal.svelte';
 
 	export let project;
 </script>
@@ -28,7 +29,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex items-center justify-end w-full">
+	<div class="flex items-center justify-end w-full space-x-2">
 		<a href="/projects/{project.id}/edit" class="btn btn-outline">Edit Project</a>
+		<ConfirmDeleteModal {project} />
 	</div>
 </div>
