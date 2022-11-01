@@ -3,11 +3,11 @@ import { DefaultProject } from '$lib/_server_utils';
 import { zfd } from 'zod-form-data';
 import { z, ZodError } from 'zod';
 import { ClientResponseError } from 'pocketbase';
-import { error, redirect } from '@sveltejs/kit';
+import { error, invalid, redirect } from '@sveltejs/kit';
 
 const commentSchema = zfd.formData({
-	content: z.string().min(2).max(240).trim(),
-	project: z.string()
+	id: z.string().optional(),
+	content: z.string().min(2).max(240).trim()
 });
 
 export const load = ({ locals, params, url }) => {
@@ -65,20 +65,22 @@ export const actions = {
 			throw error(500, 'Something went wrong with voting.');
 		}
 	},
-	createComment: async ({ request, locals }) => {
-		let commentObj;
+	createComment: async ({ request, locals, params }) => {
+		let commentObj = {
+			user: locals.user.id,
+			project: params.projectId
+		};
 		try {
-			commentObj = commentSchema.parse(await request.formData());
-			commentObj.user = locals.user.id;
+			commentObj = { ...commentSchema.parse(await request.formData()), ...commentObj };
 			await locals.pb.collection('comments').create(commentObj);
 		} catch (err) {
 			console.log('Error:', err);
 			if (err instanceof ZodError) {
 				const { fieldErrors: errors } = err.flatten();
-				return {
+				return invalid(400, {
 					data: commentObj,
 					errors
-				};
+				});
 			}
 			if (err instanceof ClientResponseError) {
 				throw error(err.status, err.data.message);
@@ -87,6 +89,46 @@ export const actions = {
 		return {
 			success: true
 		};
+	},
+	updateComment: async ({ request, locals, params }) => {
+		let commentObj = {
+			user: locals.user.id,
+			project: params.projectId
+		};
+		try {
+			commentObj = { ...commentSchema.parse(await request.formData()), ...commentObj };
+
+			await locals.pb.collection('comments').update(commentObj.id, commentObj);
+		} catch (err) {
+			console.log('Error:', err);
+			if (err instanceof ZodError) {
+				const { fieldErrors: errors } = err.flatten();
+				return invalid(400, {
+					data: commentObj,
+					errors
+				});
+			}
+			if (err instanceof ClientResponseError) {
+				throw error(err.status, err.data.message);
+			}
+		}
+		return {
+			success: true
+		};
+	},
+	deleteComment: async ({ request, locals }) => {
+		const { id } = Object.fromEntries(await request.formData());
+		try {
+			await locals.pb.collection('comments').delete(id);
+			return {
+				success: true
+			};
+		} catch (err) {
+			console.log('Error:', err);
+			if (err instanceof ClientResponseError) {
+				throw error(err.status, err.data.message);
+			}
+		}
 	},
 	showEdit: async ({ request, params }) => {
 		const { editId } = Object.fromEntries(await request.formData());

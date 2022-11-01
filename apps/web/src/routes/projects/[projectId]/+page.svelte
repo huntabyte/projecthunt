@@ -4,9 +4,25 @@
 	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
 
 	import { getImageURL } from '$lib/helpers';
-	export let data;
 	export let form;
-	console.log(data.showEdit, data.editId);
+	export let data;
+
+	const toggleEdit = (id) => {
+		showEdit = true;
+		editId = id;
+	};
+
+	const toggleDropdown = (id, bool) => {
+		dropdown.id = id;
+		dropdown.hidden = bool;
+	};
+
+	$: showEdit = data?.showEdit;
+	$: editId = data?.editId;
+	$: dropdown = {
+		id: '',
+		hidden: false
+	};
 </script>
 
 <div class="flex flex-col w-full min-w-full">
@@ -58,7 +74,6 @@
 				};
 			}}
 		>
-			<input type="hidden" value={data.project.id} name="project" />
 			<div class="w-full">
 				<input
 					type="text"
@@ -87,13 +102,30 @@
 				<div class="flex flex-col">
 					<p class="font-bold">{comment.expand.user.name}</p>
 					<div class="mt-2">
-						{#if data?.showEdit && data?.editId === comment.id}
-							<a href="#{comment.id}" class="hidden">Anchor</a>
-							<form action="?/editComment" method="POST" class="flex ">
+						{#if showEdit && editId === comment.id}
+							<a href="#{comment.id}" class="hidden absolute -top-20">Anchor</a>
+							<form
+								action="?/updateComment"
+								method="POST"
+								class="flex"
+								use:enhance={({ form }) => {
+									return async ({ result, update }) => {
+										if (result.type === 'success') {
+											form.reset();
+										}
+										if (result.type === 'invalid') {
+											await applyAction(result);
+										}
+										update();
+									};
+								}}
+							>
+								<input type="hidden" value={comment.id} name="id" />
 								<input
 									type="text"
 									value={comment.content}
 									class="input input-bordered input-primary"
+									name="content"
 								/>
 								<button class="btn ml-2">Update</button>
 							</form>
@@ -105,21 +137,56 @@
 						<p>Upvote</p>
 						<p>Reply</p>
 						<p>Share</p>
-						<div class="dropdown dropdown-top">
-							<button class="btn btn-ghost btn-circle btn-xs">
+						<div class="dropdown dropdown-top ">
+							<button
+								class="btn btn-ghost btn-circle btn-xs"
+								on:click={() => toggleDropdown(comment.id, false)}
+							>
 								<div class="w-4 h-4">
 									<FaEllipsisV />
 								</div>
 							</button>
-							<ul class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-								<li>
-									<form action="?/showEdit" class="w-full" method="POST">
-										<input type="hidden" name="editId" value={comment.id} />
-										<button type="submit" class="">Edit</button>
-									</form>
-								</li>
-								<li><a>Delete</a></li>
-								<li><a>Report</a></li>
+							<ul
+								class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 {dropdown.id ===
+									comment.id && dropdown.hidden
+									? 'hidden'
+									: ''}"
+							>
+								{#if data.user.id === comment.user}
+									<li>
+										<form
+											action="?/showEdit"
+											class="w-full"
+											method="POST"
+											use:enhance={({ cancel }) => {
+												toggleEdit(comment.id);
+												cancel();
+											}}
+										>
+											<input type="hidden" name="editId" value={comment.id} />
+											<button
+												type="submit"
+												class="w-full text-start"
+												on:click={() => toggleDropdown(comment.id, true)}>Edit</button
+											>
+										</form>
+									</li>
+								{/if}
+								{#if data.user.id === comment.user || data.user.id === data.project.user}
+									<li>
+										<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
+											<input type="hidden" name="id" value={comment.id} />
+											<button
+												type="submit"
+												class="w-full text-start"
+												on:click={() => toggleDropdown(comment.id, true)}>Delete</button
+											>
+										</form>
+									</li>
+								{/if}
+								{#if data.user.id !== comment.user}
+									<li><a>Report</a></li>
+								{/if}
 							</ul>
 						</div>
 					</div>
