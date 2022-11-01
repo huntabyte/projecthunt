@@ -3,7 +3,9 @@
 	import { page } from '$app/stores';
 	import FaCaretUp from 'svelte-icons/fa/FaCaretUp.svelte';
 	export let project;
-	let hasVoted = Boolean(project.votes.find((vote) => vote.user === $page?.data?.profile?.userId));
+	let hasVoted = Boolean(
+		project.expand?.['votes(project)'].find((vote) => vote.user === $page?.data?.profile?.userId)
+	);
 </script>
 
 <form
@@ -23,7 +25,7 @@
 	}}
 >
 	<input type="hidden" value={project.id} name="id" />
-	{#if $page?.data?.profile}
+	{#if $page?.data?.user}
 		<button
 			type="submit"
 			class="btn btn-outline flex flex-col space-y-1 items-center justify-center p-3 h-auto z-10 {hasVoted
@@ -33,7 +35,7 @@
 			<div class="h-6 w-6">
 				<FaCaretUp />
 			</div>
-			<div class="text-xs">{project?.votes?.length ?? ''}</div>
+			<div class="text-xs">{project?.expand?.['votes(project)'].length ?? ''}</div>
 		</button>
 	{:else}
 		<a
@@ -43,7 +45,7 @@
 			<div class="h-6 w-6">
 				<FaCaretUp />
 			</div>
-			<div class="text-xs">{project?.votes?.length ?? ''}</div>
+			<div class="text-xs">{project?.expand?.['votes(project)'].length ?? ''}</div>
 		</a>
 	{/if}
 </form>

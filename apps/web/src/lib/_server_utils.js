@@ -4,5 +4,8 @@ export const DefaultProject = {
 	description: '',
 	url: '',
 	thumbnail: '',
-	user: ''
+	user: '',
+	expand: {
+		'votes(project)': []
+	}
 };

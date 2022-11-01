@@ -65,14 +65,14 @@
 				<label for="thumbnail" class="avatar w-20 hover:cursor-pointer">
 					{#if data.project.thumbnail}
 						<label for="thumbnail" class="absolute -top-0.5 -right-0.5 hover:cursor-pointer">
-							<button formaction="?/delete&id=hello" class="w-5 h-5">
+							<button formaction="?/delete" class="w-5 h-5">
 								<FaRegTrashAlt />
 							</button>
 						</label>
 						<div class="w-20 rounded">
 							<img
 								src={getImageURL(
-									data.project['@collectionId'],
+									data.project.collectionName,
 									data.project.id,
 									data.project.thumbnail
 								)}

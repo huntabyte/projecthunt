@@ -28,7 +28,7 @@
 					<ul
 						class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
 					>
-						{#if data.profile}
+						{#if data.user}
 							<li>
 								<form action="/logout" method="POST">
 									<button>Logout</button>
@@ -48,12 +48,12 @@
 				</a>
 			</div>
 			<div class="navbar-end space-x-2">
-				{#if data.profile}
+				{#if data.user}
 					<a href="/projects/new" class="btn btn-primary">Submit</a>
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">
 							<div class="w-10 rounded-full">
-								<img src="https://ui-avatars.com/api/?name={data.profile.name}" alt="User " />
+								<img src="https://ui-avatars.com/api/?name={data.user.name}" alt="User " />
 							</div>
 						</button>
 						<ul

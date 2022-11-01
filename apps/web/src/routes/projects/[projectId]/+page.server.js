@@ -12,35 +12,26 @@ const commentSchema = zfd.formData({
 
 export const load = ({ locals, params }) => {
 	const getProject = async (projectId) => {
-		const project = serializeNonPOJOs(await locals.pb.records.getOne('projects', projectId));
-		const votes = serializeNonPOJOs(
-			await locals.pb.records.getFullList('votes', 9999999, {
-				filter: `project = "${project.id}"`
+		const project = serializeNonPOJOs(
+			await locals.pb.collection('projects').getOne(projectId, {
+				expand: 'votes(project)'
 			})
 		);
-		project.votes = votes;
+		if (project.expand?.['votes(project)']) {
+			return { ...DefaultProject, ...project };
+		}
+		project.expand['votes(project)'] = [];
 
-		return { DefaultProject, ...project };
+		return { ...DefaultProject, ...project };
 	};
 
 	const getComments = async (projectId) => {
 		const comments = serializeNonPOJOs(
-			await locals.pb.records.getFullList('comments', 9999999, {
-				filter: `project = "${projectId}"`
+			await locals.pb.collection('comments').getFullList(undefined, {
+				filter: `project = "${projectId}"`,
+				expand: 'user'
 			})
 		);
-		const usersIdFilter = comments.map((comment) => `userId = "${comment.user}"`).join(' || ');
-
-		const usersList = serializeNonPOJOs(
-			await locals.pb.records.getFullList('profiles', 99999, {
-				filter: usersIdFilter
-			})
-		);
-
-		comments.map((comment) => {
-			comment.userProfile = usersList.find((user) => user.userId == comment.user);
-			return comment;
-		});
 
 		return comments;
 	};
@@ -56,18 +47,16 @@ export const actions = {
 		const { id } = Object.fromEntries(await request.formData());
 
 		try {
-			const existingVote = await locals.pb.records.getFullList('votes', 1, {
+			const existingVote = await locals.pb.collection('votes').getFullList(99999999, {
 				filter: `user = "${locals.user.id}" && project = "${id}"`,
 				sort: '-created'
 			});
+
 			if (existingVote.length < 1) {
-				await locals.pb.records.create('votes', {
-					user: locals.user.id,
-					project: id
-				});
+				await locals.pb.collection('votes').create();
 			} else {
 				const vote = serializeNonPOJOs(existingVote[0]);
-				await locals.pb.records.delete('votes', vote.id);
+				await locals.pb.collection('votes').delete(vote.id);
 			}
 		} catch (err) {
 			console.log('Error:', err);
@@ -79,7 +68,7 @@ export const actions = {
 		try {
 			commentObj = commentSchema.parse(await request.formData());
 			commentObj.user = locals.user.id;
-			await locals.pb.records.create('comments', commentObj);
+			await locals.pb.collection('comments').create(commentObj);
 		} catch (err) {
 			console.log('Error:', err);
 			if (err instanceof ZodError) {

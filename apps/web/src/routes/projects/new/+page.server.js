@@ -20,7 +20,7 @@ export const actions = {
 			const formData = serialize(formObj);
 
 			try {
-				const record = await locals.pb.records.create('projects', formData);
+				const record = await locals.pb.collection('projects').create(formData);
 			} catch (err) {
 				console.log('Error:', err);
 				throw error(500, 'Something went wrong during project submission');

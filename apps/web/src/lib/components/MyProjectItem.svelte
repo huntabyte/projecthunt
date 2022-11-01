@@ -9,7 +9,7 @@
 	<div class="avatar">
 		<div class="w-20 rounded">
 			<img
-				src={getImageURL(project['@collectionName'], project.id, project.thumbnail, '80x80')}
+				src={getImageURL(project.collectionName, project.id, project.thumbnail, '80x80')}
 				alt="Project thumbnail"
 			/>
 		</div>

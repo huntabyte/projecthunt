@@ -1,0 +1,252 @@
+[
+    {
+        "id": "ou4em1vta5bw5ts",
+        "name": "projects",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "id": "pxakqb7d",
+                "name": "name",
+                "type": "text",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "min": 1,
+                    "max": 40,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "bh8gu8kv",
+                "name": "tagline",
+                "type": "text",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "min": 1,
+                    "max": 60,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "zbq4wgb6",
+                "name": "url",
+                "type": "url",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "exceptDomains": null,
+                    "onlyDomains": null
+                }
+            },
+            {
+                "id": "xvhhucy2",
+                "name": "description",
+                "type": "text",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "min": 1,
+                    "max": 240,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "fwburpak",
+                "name": "user",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "systemprofiles0",
+                    "cascadeDelete": true
+                }
+            },
+            {
+                "id": "rfzeihbp",
+                "name": "thumbnail",
+                "type": "file",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "maxSize": 2000000,
+                    "mimeTypes": [
+                        "image/jpg",
+                        "image/jpeg",
+                        "image/png",
+                        "image/svg+xml",
+                        "image/gif",
+                        "image/webp"
+                    ],
+                    "thumbs": [
+                        "80x80"
+                    ]
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "@request.auth.id != \"\" && @request.auth.id = @request.data.user",
+        "updateRule": "@request.auth.id = user",
+        "deleteRule": null,
+        "options": {}
+    },
+    {
+        "id": "iv4zns811w76oqs",
+        "name": "votes",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "id": "eblmipgz",
+                "name": "user",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "systemprofiles0",
+                    "cascadeDelete": true
+                }
+            },
+            {
+                "id": "azqysuzi",
+                "name": "project",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "ou4em1vta5bw5ts",
+                    "cascadeDelete": true
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "@request.auth.id != \"\" && @request.auth.id = @request.data.user",
+        "updateRule": null,
+        "deleteRule": "@request.auth.id = user",
+        "options": {}
+    },
+    {
+        "id": "8jngy0xhw7qti2c",
+        "name": "comments",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "id": "o2yz45zf",
+                "name": "content",
+                "type": "text",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "min": 2,
+                    "max": 240,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "hut1pc7j",
+                "name": "user",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "systemprofiles0",
+                    "cascadeDelete": false
+                }
+            },
+            {
+                "id": "vebgcey3",
+                "name": "project",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "ou4em1vta5bw5ts",
+                    "cascadeDelete": true
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "@request.auth.id != \"\" && @request.auth.id = @request.data.user",
+        "updateRule": "@request.auth.id = user",
+        "deleteRule": "@request.auth.id = user || @request.auth.id = project.user",
+        "options": {}
+    },
+    {
+        "id": "systemprofiles0",
+        "name": "users",
+        "type": "auth",
+        "system": false,
+        "schema": [
+            {
+                "id": "pbfieldname",
+                "name": "name",
+                "type": "text",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "min": null,
+                    "max": null,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "pbfieldavatar",
+                "name": "avatar",
+                "type": "file",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "maxSize": 5242880,
+                    "mimeTypes": [
+                        "image/jpg",
+                        "image/jpeg",
+                        "image/png",
+                        "image/svg+xml",
+                        "image/gif"
+                    ],
+                    "thumbs": null
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "",
+        "updateRule": "id = @request.auth.id",
+        "deleteRule": null,
+        "options": {
+            "allowEmailAuth": true,
+            "allowOAuth2Auth": true,
+            "allowUsernameAuth": false,
+            "exceptEmailDomains": null,
+            "manageRule": null,
+            "minPasswordLength": 8,
+            "onlyEmailDomains": null,
+            "requireEmail": true
+        }
+    }
+]

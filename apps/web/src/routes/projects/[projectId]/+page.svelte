@@ -13,11 +13,7 @@
 		<div class="avatar">
 			<div class="w-20 rounded">
 				<img
-					src={getImageURL(
-						data.project['@collectionName'],
-						data.project.id,
-						data.project.thumbnail
-					)}
+					src={getImageURL(data.project.collectionName, data.project.id, data.project.thumbnail)}
 					alt="Project Thumbnail"
 				/>
 			</div>
@@ -42,7 +38,7 @@
 	<div class="flex mt-4 w-full  items-center space-x-4">
 		<div class="avatar">
 			<div class="w-12 rounded-full">
-				<img src="https://ui-avatars.com/api/?name={data.profile.name}" alt="User Avatar" />
+				<img src="https://ui-avatars.com/api/?name={data.user.name}" alt="User Avatar" />
 			</div>
 		</div>
 		<form
@@ -82,13 +78,13 @@
 				<div class="avatar h-max">
 					<div class="w-12 rounded-full">
 						<img
-							src="https://ui-avatars.com/api/?name={comment.userProfile.name}"
+							src="https://ui-avatars.com/api/?name={comment.expand.user.name}"
 							alt="User Avatar"
 						/>
 					</div>
 				</div>
 				<div class="flex flex-col">
-					<p class="font-bold">{comment.userProfile.name}</p>
+					<p class="font-bold">{comment.expand.user.name}</p>
 					<div class="mt-2">
 						{#if form?.showEdit && form?.editId === comment.id}
 							<form action="?/editComment" method="POST" class="flex ">

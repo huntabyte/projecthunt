@@ -12,15 +12,7 @@ export const actions = {
 		const data = Object.fromEntries([...formData]);
 
 		try {
-			const newUser = await locals.pb.users.create(data);
-
-			const { token, user } = await locals.pb.users.authViaEmail(data.email, data.password);
-
-			const updatedProfile = await locals.pb.records.update('profiles', user.profile.id, {
-				name: data.name
-			});
-
-			locals.pb.authStore.clear();
+			await locals.pb.collection('users').create(data);
 		} catch (err) {
 			console.log('Error:', err);
 			return {

@@ -10,12 +10,12 @@ export const load = ({ locals }) => {
 	const getUserProjects = async () => {
 		try {
 			const projects = serializeNonPOJOs(
-				await locals.pb.records.getFullList('projects', 200, {
+				await locals.pb.collection('projects').getFullList(undefined, {
 					filter: `user = "${locals.user.id}"`
 				})
 			);
 			projects.map((project) => {
-				return { DefaultProject, ...project };
+				return { ...DefaultProject, ...project };
 			});
 			return projects;
 		} catch (err) {

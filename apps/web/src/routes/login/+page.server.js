@@ -12,7 +12,7 @@ export const actions = {
 		const data = Object.fromEntries([...formData]);
 
 		try {
-			const { token, user } = await locals.pb.users.authViaEmail(data.email, data.password);
+			await locals.pb.collection('users').authWithPassword(data.email, data.password);
 		} catch (err) {
 			console.log('Error:', err);
 			return {

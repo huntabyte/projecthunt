@@ -4,25 +4,21 @@ import { error } from '@sveltejs/kit';
 
 export const load = ({ locals }) => {
 	const getProjects = async () => {
-		const projects = serializeNonPOJOs(
-			await locals.pb.records.getList('projects', 1, 15, {
-				sort: '-created'
+		let projects = serializeNonPOJOs(
+			await locals.pb.collection('projects').getList(1, 15, {
+				sort: '-created',
+				expand: 'votes(project)'
 			})
 		);
-
-		const projectsIdFilter = projects.items
-			.map((project) => `project = "${project.id}"`)
-			.join(' || ');
-		const voteList = serializeNonPOJOs(
-			await locals.pb.records.getFullList('votes', 99999, {
-				filter: projectsIdFilter
-			})
-		);
-		projects.items.map((project) => {
-			project.votes = voteList.filter((vote) => vote.project == project.id);
-			return { DefaultProject, ...project };
+		projects.items = projects.items.map((project) => {
+			if (project.expand?.['votes(project)']) {
+				project = { ...DefaultProject, ...project };
+				return project;
+			}
+			project.expand['votes(project)'] = [];
+			project = { ...DefaultProject, ...project };
+			return project;
 		});
-
 		return projects;
 	};
 
@@ -36,18 +32,18 @@ export const actions = {
 		const { id } = Object.fromEntries(await request.formData());
 
 		try {
-			const existingVote = await locals.pb.records.getFullList('votes', 1, {
+			const existingVote = await locals.pb.collection('votes').getFullList(1, {
 				filter: `user = "${locals.user.id}" && project = "${id}"`,
 				sort: '-created'
 			});
 			if (existingVote.length < 1) {
-				const newVote = await locals.pb.records.create('votes', {
+				const newVote = await locals.pb.collection('votes').create({
 					user: locals.user.id,
 					project: id
 				});
 			} else {
 				const vote = serializeNonPOJOs(existingVote[0]);
-				await locals.pb.records.delete('votes', vote.id);
+				await locals.pb.collection('votes').delete(vote.id);
 			}
 		} catch (err) {
 			console.log('Error:', err);

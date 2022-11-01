@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 import { zfd } from 'zod-form-data';
 import { serialize } from 'object-to-formdata';
 import { error, redirect, invalid } from '@sveltejs/kit';
@@ -18,7 +18,7 @@ export const actions = {
 		try {
 			formObj = projectSchema.parse(await request.formData());
 			formObj.user = locals.user.id;
-			console.log(formObj);
+
 			if (formObj.thumbnail.size === 0) {
 				console.log('empty');
 				const { thumbnail, ...rest } = formObj;
@@ -28,32 +28,32 @@ export const actions = {
 			}
 
 			try {
-				const updatedRecord = await locals.pb.records.update(
-					'projects',
-					params.projectId,
-					formData
-				);
+				const updatedRecord = await locals.pb
+					.collection('projects')
+					.update(params.projectId, formData);
 			} catch (err) {
 				console.log('Error:', err);
 				throw error(500, 'Something went wrong during project submission');
 			}
 		} catch (err) {
-			if (err?.status === 500) {
-				throw error(500, 'Something went wrong during project submission');
-			}
-			const { fieldErrors: errors } = err.flatten();
+			if (err instanceof ZodError) {
+				const { fieldErrors: errors } = err.flatten();
 
-			return invalid(400, {
-				data: formObj,
-				errors
-			});
+				return invalid(400, {
+					data: formObj,
+					errors
+				});
+			} else {
+				console.log('Error:', err);
+				throw error(500, 'Something went wrong');
+			}
 		}
 
 		throw redirect(303, '/my/projects');
 	},
 	delete: async ({ locals, params }) => {
 		try {
-			await locals.pb.records.update('projects', params.projectId, {
+			await locals.pb.collection('projects').update(params.projectId, {
 				thumbnail: null
 			});
 		} catch (err) {
