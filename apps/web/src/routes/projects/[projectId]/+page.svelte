@@ -6,6 +6,7 @@
 	import { getImageURL } from '$lib/helpers';
 	export let data;
 	export let form;
+	console.log(data.showEdit, data.editId);
 </script>
 
 <div class="flex flex-col w-full min-w-full">
@@ -74,7 +75,7 @@
 	</div>
 	<div class="flex flex-col mt-8 w-full space-y-8">
 		{#each data.comments as comment}
-			<div class="flex w-full space-x-4">
+			<div class="flex w-full space-x-4" id={comment.id}>
 				<div class="avatar h-max">
 					<div class="w-12 rounded-full">
 						<img
@@ -86,7 +87,8 @@
 				<div class="flex flex-col">
 					<p class="font-bold">{comment.expand.user.name}</p>
 					<div class="mt-2">
-						{#if form?.showEdit && form?.editId === comment.id}
+						{#if data?.showEdit && data?.editId === comment.id}
+							<a href="#{comment.id}" class="hidden">Anchor</a>
 							<form action="?/editComment" method="POST" class="flex ">
 								<input
 									type="text"

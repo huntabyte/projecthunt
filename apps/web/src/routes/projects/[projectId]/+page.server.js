@@ -3,14 +3,14 @@ import { DefaultProject } from '$lib/_server_utils';
 import { zfd } from 'zod-form-data';
 import { z, ZodError } from 'zod';
 import { ClientResponseError } from 'pocketbase';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 const commentSchema = zfd.formData({
 	content: z.string().min(2).max(240).trim(),
 	project: z.string()
 });
 
-export const load = ({ locals, params }) => {
+export const load = ({ locals, params, url }) => {
 	const getProject = async (projectId) => {
 		const project = serializeNonPOJOs(
 			await locals.pb.collection('projects').getOne(projectId, {
@@ -38,7 +38,9 @@ export const load = ({ locals, params }) => {
 
 	return {
 		project: getProject(params.projectId),
-		comments: getComments(params.projectId)
+		comments: getComments(params.projectId),
+		showEdit: url.searchParams.get('showEdit'),
+		editId: url.searchParams.get('editId')
 	};
 };
 
@@ -86,11 +88,8 @@ export const actions = {
 			success: true
 		};
 	},
-	showEdit: async ({ request }) => {
+	showEdit: async ({ request, params }) => {
 		const { editId } = Object.fromEntries(await request.formData());
-		return {
-			showEdit: true,
-			editId
-		};
+		throw redirect(303, `/projects/${params.projectId}?showEdit=true&editId=${editId}#${editId}`);
 	}
 };
