@@ -1,5 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { ClientResponseError } from 'pocketbase';
+import { serializeNonPOJOs } from '$lib/helpers';
+import { DefaultProject } from '$lib/_server_utils';
 
 export const getProjects = async (locals, page = 1, perPage = 100) => {
 	try {

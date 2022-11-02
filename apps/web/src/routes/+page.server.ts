@@ -1,33 +1,15 @@
 import { serializeNonPOJOs } from '$lib/helpers';
-import { DefaultProject } from '$lib/_server_utils';
 import { error } from '@sveltejs/kit';
+import { getProjects } from '$lib/api';
+import type { PageServerLoad, Action, ActionData, Actions } from './$types';
 
-export const load = ({ locals }) => {
-	const getProjects = async () => {
-		let projects = serializeNonPOJOs(
-			await locals.pb.collection('projects').getList(1, 15, {
-				sort: '-created',
-				expand: 'votes(project)'
-			})
-		);
-		projects.items = projects.items.map((project) => {
-			if (project.expand?.['votes(project)']) {
-				project = { ...DefaultProject, ...project };
-				return project;
-			}
-			project.expand['votes(project)'] = [];
-			project = { ...DefaultProject, ...project };
-			return project;
-		});
-		return projects;
-	};
-
+export const load: PageServerLoad = ({ locals }) => {
 	return {
-		projects: getProjects()
+		projects: getProjects(locals)
 	};
 };
 
-export const actions = {
+export const actions: Actions = {
 	vote: async ({ request, locals }) => {
 		const { id } = Object.fromEntries(await request.formData());
 

@@ -4,14 +4,14 @@ import { zfd } from 'zod-form-data';
 import { z, ZodError } from 'zod';
 import { ClientResponseError } from 'pocketbase';
 import { error, invalid, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
+import type { Comment } from '$lib/types';
+import { createCommentDto, updateCommentDto } from '$lib/schemas';
 
-const commentSchema = zfd.formData({
-	id: z.string().optional(),
-	content: z.string().min(2).max(240).trim()
-});
 
-export const load = ({ locals, params, url }) => {
-	const getProject = async (projectId) => {
+
+export const load: PageServerLoad = ({ locals, params, url }) => {
+	const getProject = async (projectId: string) => {
 		const project = serializeNonPOJOs(
 			await locals.pb.collection('projects').getOne(projectId, {
 				expand: 'votes(project)'
@@ -25,7 +25,7 @@ export const load = ({ locals, params, url }) => {
 		return { ...DefaultProject, ...project };
 	};
 
-	const getComments = async (projectId) => {
+	const getComments = async (projectId: string) => {
 		const comments = serializeNonPOJOs(
 			await locals.pb.collection('comments').getFullList(undefined, {
 				filter: `project = "${projectId}"`,
@@ -44,7 +44,7 @@ export const load = ({ locals, params, url }) => {
 	};
 };
 
-export const actions = {
+export const actions: Actions = {
 	vote: async ({ request, locals }) => {
 		const { id } = Object.fromEntries(await request.formData());
 
@@ -71,7 +71,7 @@ export const actions = {
 			project: params.projectId
 		};
 		try {
-			commentObj = { ...commentSchema.parse(await request.formData()), ...commentObj };
+			commentObj = { ...createCommentDto.parse(await request.formData()), ...commentObj };
 			await locals.pb.collection('comments').create(commentObj);
 		} catch (err) {
 			console.log('Error:', err);
@@ -91,14 +91,21 @@ export const actions = {
 		};
 	},
 	updateComment: async ({ request, locals, params }) => {
-		let commentObj = {
+		let commentObj: Partial<Comment> = {
 			user: locals.user.id,
 			project: params.projectId
 		};
-		try {
-			commentObj = { ...commentSchema.parse(await request.formData()), ...commentObj };
 
-			await locals.pb.collection('comments').update(commentObj.id, commentObj);
+		try {
+			commentObj = { ...updateCommentDto.parse(await request.formData()), ...commentObj };
+
+      if (!commentObj.id) {
+        return invalid(400, {
+          data: commentObj,
+        })
+      }
+
+			await locals.pb.collection('comments').update(commentObj.id , commentObj);
 		} catch (err) {
 			console.log('Error:', err);
 			if (err instanceof ZodError) {
@@ -117,9 +124,9 @@ export const actions = {
 		};
 	},
 	deleteComment: async ({ request, locals }) => {
-		const { id } = Object.fromEntries(await request.formData());
+		const { id } = Object.fromEntries(await request.formData())
 		try {
-			await locals.pb.collection('comments').delete(id);
+			await locals.pb.collection('comments').delete(id as string);
 			return {
 				success: true
 			};

@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
 	import { getImageURL } from '$lib/helpers';
-	export let data;
-	export let form;
+	import type { ActionData, PageData } from './$types';
+	export let data: PageData;
+	export let form: ActionData;
 </script>
 
 <div class="flex flex-col w-full h-full p-2">

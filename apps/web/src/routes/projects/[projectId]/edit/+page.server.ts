@@ -2,22 +2,21 @@ import { z, ZodError } from 'zod';
 import { zfd } from 'zod-form-data';
 import { serialize } from 'object-to-formdata';
 import { error, redirect, invalid } from '@sveltejs/kit';
+import type { Actions } from './$types';
+import type { ProjectDto } from '$lib/types';
+import { projectDto } from '$lib/schemas';
+import { ClientResponseError } from 'pocketbase';
 
-const projectSchema = zfd.formData({
-	name: z.string().min(1).max(40).trim(),
-	tagline: z.string().min(1).max(60).trim(),
-	url: z.string().url(),
-	description: z.string().min(1).max(240).trim(),
-	thumbnail: z.any()
-});
 
-export const actions = {
+
+
+export const actions: Actions = {
 	update: async ({ request, locals, params }) => {
-		let formObj;
+		let formObj: ProjectDto;
 		let formData;
 		try {
-			formObj = projectSchema.parse(await request.formData());
 			formObj.user = locals.user.id;
+			formObj = projectDto.parse(await request.formData());
 
 			if (formObj.thumbnail.size === 0) {
 				console.log('empty');
@@ -57,8 +56,10 @@ export const actions = {
 				thumbnail: null
 			});
 		} catch (err) {
-			console.log('Error:', err);
-			throw error(err.status, 'Something went wrong');
+      if (err instanceof ClientResponseError) {
+        throw error(err.status, err.data.message)
+      }
+			throw error(500, 'Something went wrong');
 		}
 		return {
 			success: true

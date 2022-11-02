@@ -2,8 +2,11 @@ import { error, redirect } from '@sveltejs/kit';
 import { serializeNonPOJOs } from '$lib/helpers';
 import { DefaultProject } from '$lib/_server_utils';
 import { ClientResponseError } from 'pocketbase';
+import type { Actions, PageServerLoad } from './$types';
+import type { Project } from '$lib/types';
 
-export const load = ({ locals }) => {
+
+export const load: PageServerLoad = ({ locals }) => {
 	if (!locals.pb.authStore.isValid) {
 		throw error(401, 'Unauthorized');
 	}
@@ -15,13 +18,17 @@ export const load = ({ locals }) => {
 					filter: `user = "${locals.user.id}"`
 				})
 			);
-			projects.map((project) => {
+			projects.map((project: Project) => {
 				return { ...DefaultProject, ...project };
 			});
 			return projects;
 		} catch (err) {
-			console.log('Error:', err);
-			throw error(err.status, err.message);
+			if (err instanceof ClientResponseError) {
+        throw error(err.status, err.message);
+      }
+      else {
+        throw error(500, 'Something went wrong fetching projects')
+      }
 		}
 	};
 
@@ -30,12 +37,12 @@ export const load = ({ locals }) => {
 	};
 };
 
-export const actions = {
+export const actions: Actions = {
 	deleteProject: async ({ request, locals }) => {
 		const { id } = Object.fromEntries(await request.formData());
 
 		try {
-			await locals.pb.collection('projects').delete(id);
+			await locals.pb.collection('projects').delete(id as string);
 		} catch (err) {
 			console.log('Error:', err);
 			if (err instanceof ClientResponseError) {

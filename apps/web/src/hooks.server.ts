@@ -7,7 +7,9 @@ export const handle = async ({ event, resolve }) => {
 
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = serializeNonPOJOs(event.locals.pb.authStore.model);
-	}
+	} else {
+    event.locals.user = undefined
+  }
 
 	const response = await resolve(event);
 
