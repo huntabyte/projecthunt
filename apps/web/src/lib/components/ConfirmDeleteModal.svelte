@@ -1,5 +1,7 @@
-<script>
-	export let project;
+<script lang="ts">
+	import type { Project } from '$lib/types';
+
+	export let project: Project;
 </script>
 
 <label for="confirmDelete" class="btn btn-error btn-outline">Delete</label>

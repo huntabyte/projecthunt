@@ -55,7 +55,10 @@ export const actions: Actions = {
 			});
 
 			if (existingVote.length < 1) {
-				await locals.pb.collection('votes').create();
+				await locals.pb.collection('votes').create({
+          user: locals.user.id,
+          project: id
+        });
 			} else {
 				const vote = serializeNonPOJOs(existingVote[0]);
 				await locals.pb.collection('votes').delete(vote.id);

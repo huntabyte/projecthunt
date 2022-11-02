@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
 	import FaComment from 'svelte-icons/fa/FaComment.svelte';
 	import { getImageURL } from '$lib/helpers';
 	import ProjectVoteForm from './ProjectVoteForm.svelte';
+	import type { Project } from '$lib/types';
 
-	export let project;
+	export let project: Project;
 </script>
 
 <div class="bg-base-100 w-full h-28 p-4 flex items-center justify-between">

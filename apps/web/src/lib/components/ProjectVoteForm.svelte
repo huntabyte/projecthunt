@@ -1,10 +1,13 @@
-<script>
+<script lang="ts">
 	import { enhance, applyAction } from '$app/forms';
 	import { page } from '$app/stores';
+	import type { Project, Vote } from '$lib/types';
 	import FaCaretUp from 'svelte-icons/fa/FaCaretUp.svelte';
-	export let project;
+	export let project: Project;
 	let hasVoted = Boolean(
-		project.expand?.['votes(project)'].find((vote) => vote.user === $page?.data?.profile?.userId)
+		project.expand?.['votes(project)'].find(
+			(vote: Vote) => vote.user === $page?.data?.profile?.userId
+		)
 	);
 </script>
 
