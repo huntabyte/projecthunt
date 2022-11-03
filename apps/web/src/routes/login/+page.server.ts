@@ -1,8 +1,7 @@
+import { validateData } from '$lib/helpers';
 import { loginUserDto } from '$lib/schemas';
-import type { LoginUserDto } from '$lib/types';
-import { error, redirect } from '@sveltejs/kit';
-import { ClientResponseError } from 'pocketbase';
-import { ZodError } from 'zod';
+import { error, invalid, redirect } from '@sveltejs/kit';
+import type { ClientResponseError } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ locals }) => {
@@ -13,23 +12,19 @@ export const load: PageServerLoad = ({ locals }) => {
 
 export const actions: Actions = {
 	login: async ({ request, locals }) => {
-    let formData = Object.fromEntries(await request.formData())
+		const { formData, errors } = await validateData(request, loginUserDto);
 
-    try {
-      let loginUser = loginUserDto.parse(formData)
-      await locals.pb.collection('users').authWithPassword(loginUser.email, loginUser.password);
-
+		if (errors) {
+			return invalid(400, {
+				data: formData,
+				errors: errors.fieldErrors
+			});
+		}
+		try {
+			await locals.pb.collection('users').authWithPassword(formData.email, formData.password);
 		} catch (err) {
-			if (err instanceof ZodError) {
-        return {
-          error: true,
-          email: formData.email
-        }
-      }
-      if (err instanceof ClientResponseError) {
-        throw error(err.status, err.data.message)
-      }
-      throw error(500, 'Something went wrong logging in.')
+			const e = err as ClientResponseError;
+			throw error(e.status, e.data.message);
 		}
 		throw redirect(303, '/');
 	}

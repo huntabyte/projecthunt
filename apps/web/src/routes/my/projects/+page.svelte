@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
 	import MyProjectItem from '$lib/components/MyProjectItem.svelte';
+	import type { PageData } from './$types';
 
-	export let data;
+	export let data: PageData;
 </script>
 
 <h2 class="text-3xl font-bold">My Projects</h2>

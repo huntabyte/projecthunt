@@ -1,23 +1,25 @@
-<script>
+<script lang="ts">
 	import { enhance, applyAction } from '$app/forms';
 	import ProjectVoteForm from '$lib/components/ProjectVoteForm.svelte';
 	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
 
 	import { getImageURL } from '$lib/helpers';
-	export let form;
-	export let data;
+	import type { ActionData, PageData } from './$types';
+	export let form: ActionData;
+	export let data: PageData;
 
-	const toggleEdit = (id) => {
+	let showEdit: boolean;
+	const toggleEdit = (id: string) => {
 		showEdit = true;
 		editId = id;
 	};
 
-	const toggleDropdown = (id, bool) => {
+	const toggleDropdown = (id: string, bool: boolean) => {
 		dropdown.id = id;
 		dropdown.hidden = bool;
 	};
 
-	$: showEdit = data?.showEdit;
+	$: showEdit = Boolean(data?.showEdit);
 	$: editId = data?.editId;
 	$: dropdown = {
 		id: '',
@@ -55,7 +57,7 @@
 	<div class="flex mt-4 w-full  items-center space-x-4">
 		<div class="avatar">
 			<div class="w-12 rounded-full">
-				<img src="https://ui-avatars.com/api/?name={data.user.name}" alt="User Avatar" />
+				<img src="https://ui-avatars.com/api/?name={data?.user?.name}" alt="User Avatar" />
 			</div>
 		</div>
 		<form
@@ -75,6 +77,8 @@
 			}}
 		>
 			<div class="w-full">
+				<input type="hidden" name="user" value={data?.user?.id} />
+				<input type="hidden" name="project" value={data?.project?.id} />
 				<input
 					type="text"
 					placeholder="What do you think?"
@@ -152,7 +156,7 @@
 									? 'hidden'
 									: ''}"
 							>
-								{#if data.user.id === comment.user}
+								{#if data?.user?.id === comment.user}
 									<li>
 										<form
 											action="?/showEdit"
@@ -172,7 +176,7 @@
 										</form>
 									</li>
 								{/if}
-								{#if data.user.id === comment.user || data.user.id === data.project.user}
+								{#if data?.user?.id === comment.user || data?.user?.id === data.project.user}
 									<li>
 										<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
 											<input type="hidden" name="id" value={comment.id} />
@@ -184,7 +188,7 @@
 										</form>
 									</li>
 								{/if}
-								{#if data.user.id !== comment.user}
+								{#if data?.user?.id !== comment.user}
 									<li><a>Report</a></li>
 								{/if}
 							</ul>

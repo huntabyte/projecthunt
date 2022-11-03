@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import '../app.postcss';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
+	import type { PageData } from './$types';
 
-	export let data;
+	export let data: PageData;
 </script>
 
 <div class="h-full w-full min-h-screen bg-base-100">

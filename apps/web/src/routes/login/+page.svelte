@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 </script>
 

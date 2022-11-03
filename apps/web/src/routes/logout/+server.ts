@@ -2,12 +2,11 @@ import type { User } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
+const DefaultUser: User = <User>{};
 
-const DefaultUser: User = <User>{}
-
-export const POST: RequestHandler  = ({ locals }) => {
+export const POST: RequestHandler = ({ locals }) => {
 	locals.pb.authStore.clear();
-	locals.user = DefaultUser
+	locals.user = DefaultUser;
 
 	throw redirect(303, '/');
 };
