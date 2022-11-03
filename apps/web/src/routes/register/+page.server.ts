@@ -1,8 +1,10 @@
 import { registerUserDto } from '$lib/schemas';
-import { error, redirect } from '@sveltejs/kit';
+import { error, invalid, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { ClientResponseError } from 'pocketbase';
-import { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
+import { validateData } from '$lib/helpers';
+import type { RegisterUserDto } from '$lib/types';
 
 export const load: PageServerLoad = ({ locals }) => {
 	if (locals.pb.authStore.isValid) {
@@ -10,9 +12,18 @@ export const load: PageServerLoad = ({ locals }) => {
 	}
 };
 
+
+
 export const actions: Actions = {
 	register: async ({ locals, request }) => {
-		const formData = registerUserDto.parse(await request.formData())
+		const { formData, errors } = await validateData(request, registerUserDto)
+
+    if (errors) {
+      return invalid(400, {
+        data: formData,
+        errors: errors.fieldErrors
+      })
+    }
 
 		try {
 			await locals.pb.collection('users').create(formData);

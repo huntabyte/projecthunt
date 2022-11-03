@@ -30,3 +30,5 @@ export const registerUserDto = zfd.formData({
   password: z.string().min(6).max(64),
   passwordConfirm: z.string().min(6).max(64),
 })
+
+export type registerUserErrors = z.inferFlattenedErrors<typeof registerUserDto>;
