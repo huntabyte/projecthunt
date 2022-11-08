@@ -82,10 +82,17 @@
 				<input
 					type="text"
 					placeholder="What do you think?"
-					class="input input-ghost w-full"
+					class="input input-ghost w-full mb-2"
 					name="content"
 					value={form?.data?.content ?? ''}
 				/>
+				{#if form?.errors?.content}
+					{#each form?.errors?.content as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
 			<div class="ml-4">
 				<button type="submit" class="btn btn-primary">Comment</button>
@@ -125,12 +132,21 @@
 								}}
 							>
 								<input type="hidden" value={comment.id} name="id" />
-								<input
-									type="text"
-									value={comment.content}
-									class="input input-bordered input-primary"
-									name="content"
-								/>
+								<div class="flex flex-col">
+									<input
+										type="text"
+										value={comment.content}
+										class="input input-bordered input-primary"
+										name="content"
+									/>
+									{#if form?.updateErrors?.content}
+										{#each form?.updateErrors?.content as error}
+											<label for="name" class="label py-0">
+												<div class="label-text-alt text-error">{error}</div>
+											</label>
+										{/each}
+									{/if}
+								</div>
 								<button class="btn ml-2">Update</button>
 							</form>
 						{:else}
@@ -189,7 +205,7 @@
 									</li>
 								{/if}
 								{#if data?.user?.id !== comment.user}
-									<li><a>Report</a></li>
+									<li><a href="/">Report</a></li>
 								{/if}
 							</ul>
 						</div>

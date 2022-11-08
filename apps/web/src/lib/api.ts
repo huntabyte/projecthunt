@@ -1,7 +1,7 @@
 import { error, invalid, redirect } from '@sveltejs/kit';
 import { ClientResponseError } from 'pocketbase';
 import { serializeNonPOJOs, validateData } from '$lib/helpers';
-import type { Comment, Project, Vote } from '$lib/types';
+import type { Comment, CommentActionData, Project, Vote } from '$lib/types';
 import { createCommentDto, createProjectDto, updateCommentDto } from '$lib/schemas';
 import { serialize } from 'object-to-formdata';
 
@@ -132,7 +132,10 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 	return comments;
 };
 
-export const createComment = async (locals: App.Locals, request: Request) => {
+export const createComment = async (
+	locals: App.Locals,
+	request: Request
+): Promise<CommentActionData> => {
 	const { formData, errors } = await validateData(request, createCommentDto);
 
 	if (errors) {
@@ -144,6 +147,9 @@ export const createComment = async (locals: App.Locals, request: Request) => {
 
 	try {
 		await locals.pb.collection('comments').create(formData);
+		return {
+			success: true
+		};
 	} catch (err) {
 		console.log('Error:', err);
 
@@ -153,18 +159,24 @@ export const createComment = async (locals: App.Locals, request: Request) => {
 	}
 };
 
-export const updateComment = async (locals: App.Locals, request: Request) => {
+export const updateComment = async (
+	locals: App.Locals,
+	request: Request
+): Promise<CommentActionData> => {
 	const { formData, errors } = await validateData(request, updateCommentDto);
 
 	if (errors) {
 		return invalid(400, {
-			data: formData,
-			errors: errors.fieldErrors
+			updateData: formData,
+			updateErrors: errors.fieldErrors
 		});
 	}
 
 	try {
 		await locals.pb.collection('comments').update(formData.id, formData);
+		return {
+			success: true
+		};
 	} catch (err) {
 		console.log('Error:', err);
 		const e = err as ClientResponseError;

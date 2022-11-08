@@ -39,3 +39,11 @@ type UpdateCommentDto = z.infer<updateCommentDto>;
 type CreateCommentDto = z.infer<createCommentDto>;
 type RegisterUserDto = z.infer<registerUserDto>;
 type LoginUserDto = z.infer<loginUserDto>;
+
+interface CommentActionData {
+	data?: CreateCommentDto;
+	errors?: z.inferFlattenedErrors<typeof createCommentDto>['fieldErrors'];
+	updateData?: UpdateCommentDto;
+	updateErrors?: z.inferFlattenedErrors<typeof updateCommentDto>['fieldErrors'];
+	success?: boolean;
+}

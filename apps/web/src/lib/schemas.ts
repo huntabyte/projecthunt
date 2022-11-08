@@ -54,8 +54,13 @@ export const createCommentDto = z.object({
 	user: z.string()
 });
 
-export const updateCommentDto = createCommentDto.extend({
-	id: z.string({ required_error: 'An ID must be passed with the comment to update it' })
+export const updateCommentDto = z.object({
+	id: z.string({ required_error: 'An ID must be passed with the comment to update it' }),
+	content: z
+		.string()
+		.min(2, { message: 'Comment must be at least 2 characters' })
+		.max(240, { message: 'Comment must be less than 241 characters' })
+		.trim()
 });
 
 export const loginUserDto = z.object({
