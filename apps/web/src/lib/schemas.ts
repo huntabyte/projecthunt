@@ -104,4 +104,6 @@ export const registerUserDto = z
 		}
 	});
 
+export const resetPasswordDto = loginUserDto.pick({ email: true });
+
 export type registerUserErrors = z.inferFlattenedErrors<typeof registerUserDto>;

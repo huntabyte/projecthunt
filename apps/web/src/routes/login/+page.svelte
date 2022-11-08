@@ -34,6 +34,14 @@
 				</label>
 				<input type="password" name="password" class="input input-bordered w-full max-w-xs" />
 			</div>
+			<div class="w-full max-w-xs">
+				<a
+					href="/reset-password"
+					class="font-medium text-primary hover:cursor-pointer hover:underline"
+				>
+					Forgot Password?
+				</a>
+			</div>
 			<div class="w-full max-w-xs pt-3 pb-2">
 				<button class="btn btn-primary w-full max-w-xs">Login</button>
 			</div>
