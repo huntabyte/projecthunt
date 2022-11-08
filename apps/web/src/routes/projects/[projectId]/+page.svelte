@@ -38,17 +38,13 @@
 			</div>
 		</div>
 	</div>
-	<h1 class="text-2xl font-bold mt-4">{data.project.name}</h1>
+	<a href={data.project.url} class="text-2xl font-bold mt-4">{data.project.name}</a>
 	<div class="flex justify-between mt-2">
 		<p class="text-2xl font-light">{data.project.tagline}</p>
-		<div class="flex space-x-2">
-			<a
-				href={data.project.url}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="btn btn-outline btn-lg">Visit</a
-			>
-			<ProjectVoteForm project={data.project} />
+		<div class="flex ">
+			<div class="h-10 w-10">
+				<ProjectVoteForm project={data.project} variant="heart" />
+			</div>
 		</div>
 	</div>
 	<div class="mt-4 space-y-4">

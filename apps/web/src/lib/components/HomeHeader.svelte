@@ -7,9 +7,9 @@
 	</h1>
 	<div class="w-full flex flex-col">
 		<p class="text-sm w-3/4">
-			Lorem ipsum dolor, sit amet consectetur adipisicing elit. Numquam fugit voluptate consectetur
-			rerum ad hic molestiae, earum beatae expedita architecto odio officiis iure ab ex perferendis
-			esse dignissimos nam magnam.
+			ProjectHunt is a place where you can discover new projects and then talk to the people who
+			made them. You can search for projects that interest you, or just browse to see if something
+			catches your eye.
 		</p>
 		<a href="/projects/new" class="btn btn-primary self-end mt-6">Post Your Project</a>
 	</div>
