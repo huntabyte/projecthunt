@@ -16,10 +16,10 @@ export const getImageURL = (
 };
 
 export const validateData = async <T extends z.ZodTypeAny>(
-	request: Request,
+	formData: FormData,
 	schema: T
 ): Promise<{ formData: z.infer<T>; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
-	const body = Object.fromEntries(await request.formData());
+	const body = Object.fromEntries(formData);
 
 	try {
 		const formData = schema.parse(body);

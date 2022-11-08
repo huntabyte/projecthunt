@@ -69,7 +69,7 @@
 								<a href="/">Profile</a>
 							</li>
 							<li><a href="/my/projects">My Projects</a></li>
-							<li><a href="/">Settings</a></li>
+							<li><a href="/my/settings/profile">Settings</a></li>
 							<li>
 								<form action="/logout" method="POST">
 									<button type="submit">Logout</button>

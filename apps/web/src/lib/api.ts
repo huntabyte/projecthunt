@@ -92,12 +92,19 @@ export const updateProject = async (
 	projectId: string,
 	redirectTo: string
 ) => {
-	const { formData, errors } = await validateData(request, createProjectDto);
+	let data = await request.formData();
+
+	if (data.get('thumbnail') === '') {
+		data.delete('thumbnail');
+	}
+
+	const { formData, errors } = await validateData(data, createProjectDto);
 	let serializedFormData: FormData;
+	const { thumbnail, ...rest } = formData;
 
 	if (errors) {
 		return invalid(400, {
-			data: formData,
+			data: rest,
 			errors: errors.fieldErrors
 		});
 	}
@@ -136,7 +143,7 @@ export const createComment = async (
 	locals: App.Locals,
 	request: Request
 ): Promise<CommentActionData> => {
-	const { formData, errors } = await validateData(request, createCommentDto);
+	const { formData, errors } = await validateData(await request.formData(), createCommentDto);
 
 	if (errors) {
 		return invalid(400, {
@@ -163,7 +170,7 @@ export const updateComment = async (
 	locals: App.Locals,
 	request: Request
 ): Promise<CommentActionData> => {
-	const { formData, errors } = await validateData(request, updateCommentDto);
+	const { formData, errors } = await validateData(await request.formData(), updateCommentDto);
 
 	if (errors) {
 		return invalid(400, {

@@ -13,7 +13,7 @@ export const load: PageServerLoad = ({ locals }) => {
 
 export const actions: Actions = {
 	login: async ({ request, locals }): Promise<LoginActionData> => {
-		const { formData, errors } = await validateData(request, loginUserDto);
+		const { formData, errors } = await validateData(await request.formData(), loginUserDto);
 
 		if (errors) {
 			return invalid(400, {

@@ -5,7 +5,6 @@
 
 	import { getImageURL } from '$lib/helpers';
 	import type { ActionData, PageData } from './$types';
-	import { USER } from '$env/static/private';
 	export let form: ActionData;
 	export let data: PageData;
 

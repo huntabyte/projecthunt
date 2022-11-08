@@ -26,21 +26,26 @@ export const createProjectDto = z.object({
 		.min(1, { message: 'Description is required' })
 		.max(240, { message: 'Description must be less than 240 characters' })
 		.trim(),
-	thumbnail: z.instanceof(Blob).superRefine((val, ctx) => {
-		if (val.size < 10000 || val.size > 2000000) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: 'Thumbnail must be between 10KB & 2MB'
-			});
-		}
+	thumbnail: z
+		.instanceof(Blob)
+		.optional()
+		.superRefine((val, ctx) => {
+			if (val) {
+				if (val.size < 10000 || val.size > 2000000) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Thumbnail must be between 10KB & 2MB'
+					});
+				}
 
-		if (!imageTypes.includes(val.type)) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: "Unsupported file type. Supported formats: jpeg, jpg, png, web, svg, gif'"
-			});
-		}
-	}),
+				if (!imageTypes.includes(val.type)) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: "Unsupported file type. Supported formats: jpeg, jpg, png, web, svg, gif'"
+					});
+				}
+			}
+		}),
 	user: z.string().optional()
 });
 
@@ -103,6 +108,35 @@ export const registerUserDto = z
 			});
 		}
 	});
+
+export const updateUserProfileDto = z.object({
+	name: z
+		.string({ required_error: 'Name is required.' })
+		.min(2, { message: 'Name must be at least 2 characters' })
+		.max(64, { message: 'Name must be less than 64 characters' })
+		.trim()
+		.optional(),
+	avatar: z
+		.instanceof(Blob)
+		.optional()
+		.superRefine((val, ctx) => {
+			if (val) {
+				if (val.size < 10000 || val.size > 2000000) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Avatar must be between 10KB & 2MB'
+					});
+				}
+
+				if (!imageTypes.includes(val.type)) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: "Unsupported file type. Supported formats: jpeg, jpg, png, web, svg, gif'"
+					});
+				}
+			}
+		})
+});
 
 export const resetPasswordDto = loginUserDto.pick({ email: true });
 

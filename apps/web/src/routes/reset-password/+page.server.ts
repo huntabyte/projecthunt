@@ -5,7 +5,7 @@ import type { ClientResponseError } from 'pocketbase';
 
 export const actions: Actions = {
 	resetPassword: async ({ request, locals }) => {
-		const { formData, errors } = await validateData(request, resetPasswordDto);
+		const { formData, errors } = await validateData(await request.formData(), resetPasswordDto);
 
 		if (errors) {
 			return invalid(400, {

@@ -13,7 +13,7 @@ export const load: PageServerLoad = ({ locals }) => {
 
 export const actions: Actions = {
 	register: async ({ locals, request }) => {
-		const { formData, errors } = await validateData(request, registerUserDto);
+		const { formData, errors } = await validateData(await request.formData(), registerUserDto);
 
 		if (errors) {
 			console.log(errors.fieldErrors);

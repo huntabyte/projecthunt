@@ -73,3 +73,8 @@ interface UpdateProjectActionData {
 	errors?: z.inferFlattenedErrors<typeof createProjectDto>['fieldErrors'];
 	success?: boolean;
 }
+
+interface NavigationItem {
+	title: string;
+	href: string;
+}
