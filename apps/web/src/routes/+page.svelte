@@ -1,13 +1,15 @@
 <script lang="ts">
+	import HomeDiscover from '$lib/components/HomeDiscover.svelte';
+	import HomeHeader from '$lib/components/HomeHeader.svelte';
 	import ProjectListItem from '$lib/components/ProjectListItem.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
 
-<h1 class="text-3xl font-bold">Your next favorite project👋</h1>
-
 <div class="w-full mt-4 space-y-6">
+	<HomeHeader />
+	<HomeDiscover projects={data.projects.items} />
 	{#each data.projects.items as project}
 		<ProjectListItem {project} />
 	{/each}

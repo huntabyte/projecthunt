@@ -82,7 +82,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="h-full w-full xl:container mx-auto mt-8 px-8">
+	<div class="h-full w-full lg:container mx-auto mt-8 px-8 max-w-xl">
 		<slot />
 	</div>
 </div>

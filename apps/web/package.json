@@ -35,6 +35,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "object-to-formdata": "^4.4.2",
     "pocketbase": "^0.8.0-rc1",
     "zod": "^3.19.1",

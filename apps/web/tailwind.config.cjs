@@ -5,7 +5,7 @@ const config = {
 		extend: {}
 	},
 
-	plugins: [require('daisyui')]
+	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio')]
 };
 
 module.exports = config;
