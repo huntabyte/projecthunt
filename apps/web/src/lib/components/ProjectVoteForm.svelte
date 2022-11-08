@@ -5,9 +5,7 @@
 	import FaCaretUp from 'svelte-icons/fa/FaCaretUp.svelte';
 	export let project: Project;
 	let hasVoted = Boolean(
-		project.expand?.['votes(project)'].find(
-			(vote: Vote) => vote.user === $page?.data?.profile?.userId
-		)
+		project.expand?.['votes(project)'].find((vote: Vote) => vote.user === $page?.data?.user?.id)
 	);
 </script>
 
