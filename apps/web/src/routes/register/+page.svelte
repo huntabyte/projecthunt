@@ -24,13 +24,15 @@
 				<input
 					type="text"
 					name="name"
-					class="input input-bordered w-full max-w-xs"
+					class="input input-bordered w-full max-w-xs mb-2"
 					value={form?.data?.name ?? ''}
 				/>
 				{#if form?.errors?.name}
-					<label for="name" class="label">
-						<span class="label-text-alt text-error">{form?.errors?.name}</span>
-					</label>
+					{#each form?.errors?.name as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
 				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
@@ -40,24 +42,28 @@
 				<input
 					type="email"
 					name="email"
-					class="input input-bordered w-full max-w-xs"
+					class="input input-bordered w-full max-w-xs mb-2"
 					value={form?.data?.email ?? ''}
 				/>
 				{#if form?.errors?.email}
-					<label for="name" class="label">
-						<span class="label-text-alt text-error">{form?.errors?.email}</span>
-					</label>
+					{#each form?.errors?.email as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
 				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
 				<label for="password" class="label font-medium pb-1">
 					<span class="label-text">Password</span>
 				</label>
-				<input type="password" name="password" class="input input-bordered w-full max-w-xs" />
+				<input type="password" name="password" class="input input-bordered w-full max-w-xs mb-2" />
 				{#if form?.errors?.password}
-					<label for="name" class="label">
-						<span class="label-text-alt text-error">{form?.errors?.password}</span>
-					</label>
+					{#each form?.errors?.password as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
 				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
@@ -67,12 +73,14 @@
 				<input
 					type="password"
 					name="passwordConfirm"
-					class="input input-bordered w-full max-w-sm"
+					class="input input-bordered w-full max-w-sm mb-2"
 				/>
 				{#if form?.errors?.passwordConfirm}
-					<label for="name" class="label">
-						<span class="label-text-alt text-error">{form?.errors?.passwordConfirm}</span>
-					</label>
+					{#each form?.errors?.passwordConfirm as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
 				{/if}
 			</div>
 			<div class="w-full max-w-xs pt-3">

@@ -16,6 +16,7 @@ export const actions: Actions = {
 		const { formData, errors } = await validateData(request, registerUserDto);
 
 		if (errors) {
+			console.log(errors.fieldErrors);
 			return invalid(400, {
 				data: formData,
 				errors: errors.fieldErrors

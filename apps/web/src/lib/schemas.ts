@@ -25,11 +25,38 @@ export const loginUserDto = zfd.formData({
 	password: z.string()
 });
 
-export const registerUserDto = zfd.formData({
-	name: z.string().min(2).max(64).trim(),
-	email: z.string().email(),
-	password: z.string().min(6).max(64),
-	passwordConfirm: z.string().min(6).max(64)
-});
+export const registerUserDto = zfd
+	.formData({
+		name: z
+			.string({ required_error: 'Name is required.' })
+			.min(2, { message: 'Name must be at least 2 characters' })
+			.max(64, { message: 'Name must be less than 64 characters' })
+			.trim(),
+		email: z
+			.string({ required_error: 'Email is required' })
+			.email({ message: 'Email must be a valid email.' }),
+		password: z
+			.string({ required_error: 'Password is required' })
+			.min(6, { message: 'Password must be at least 6 characters' })
+			.max(64, { message: 'Password must be less than 64 characters' }),
+		passwordConfirm: z
+			.string({ required_error: 'Password is required' })
+			.min(6, { message: 'Password must be at least 6 characters' })
+			.max(64, { message: 'Password must be less than 64 characters' })
+	})
+	.superRefine(({ passwordConfirm, password }, ctx) => {
+		if (passwordConfirm !== password) {
+			ctx.addIssue({
+				code: 'custom',
+				message: 'Password and Confirm Password must match',
+				path: ['password']
+			});
+			ctx.addIssue({
+				code: 'custom',
+				message: 'Password and Confirm Password must match',
+				path: ['passwordConfirm']
+			});
+		}
+	});
 
 export type registerUserErrors = z.inferFlattenedErrors<typeof registerUserDto>;
