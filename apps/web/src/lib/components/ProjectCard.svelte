@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getImageURL } from '$lib/helpers';
 	import type { Project } from '$lib/types';
-	import FaComment from 'svelte-icons/fa/FaComment.svelte';
-	import FaRegHeart from 'svelte-icons/fa/FaRegHeart.svelte';
+	import FaRegComment from 'svelte-icons/fa/FaRegComment.svelte';
+	import ProjectVoteForm from './ProjectVoteForm.svelte';
 
 	export let project: Project;
 </script>
@@ -15,18 +15,21 @@
 			alt="Shoes"
 		/>
 	</figure>
-	<div class="card-body">
-		<h2 class="card-title">
+	<div class="card-body gap-0">
+		<a href="/projects/{project.id}" class="card-title">
 			{project.name}
-		</h2>
+		</a>
 		<p>{project.tagline}</p>
-		<div class="card-actions justify-end">
-			<div class="flex items-center">
-				<span class="mr-2 font-medium">0</span>
+		<div class="card-actions justify-end space-x-2">
+			<div class="flex items-center space-x-2">
 				<div class="w-5 h-5">
-					<FaRegHeart />
+					<FaRegComment />
+				</div>
+				<div>
+					<p class="text-sm font-medium">0</p>
 				</div>
 			</div>
+			<ProjectVoteForm {project} variant="heart" />
 		</div>
 	</div>
 </div>

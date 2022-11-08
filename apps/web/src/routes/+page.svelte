@@ -10,7 +10,4 @@
 <div class="w-full mt-4 space-y-6">
 	<HomeHeader />
 	<HomeDiscover projects={data.projects.items} />
-	{#each data.projects.items as project}
-		<ProjectListItem {project} />
-	{/each}
 </div>
