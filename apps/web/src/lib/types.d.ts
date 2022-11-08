@@ -47,3 +47,10 @@ interface CommentActionData {
 	updateErrors?: z.inferFlattenedErrors<typeof updateCommentDto>['fieldErrors'];
 	success?: boolean;
 }
+
+interface LoginActionData {
+	data?: LoginUserDto;
+	errors?: z.inferFlattenedErrors<typeof registerUserDto>['fieldErrors'];
+	notVerified?: boolean;
+	invalidCredentials?: boolean;
+}

@@ -25,6 +25,7 @@ export const actions: Actions = {
 
 		try {
 			await locals.pb.collection('users').create(formData);
+			await locals.pb.collection('users').requestVerification(formData.email);
 		} catch (err) {
 			console.log('Error:', err);
 			if (err instanceof ClientResponseError) {
