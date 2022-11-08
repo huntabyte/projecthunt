@@ -6,8 +6,8 @@
 	export let data: PageData;
 </script>
 
-<div class="h-full w-full min-h-screen bg-base-100">
-	<div class="bg-base-100 border-b-2">
+<div class="min-h-full">
+	<div class="bg-base-100 border-b">
 		<div class="navbar xl:container mx-auto bg-base-100 px-4">
 			<div class="navbar-start">
 				<div class="dropdown">
@@ -43,14 +43,17 @@
 				</div>
 				<a
 					href="/"
-					class="h-12 w-12 text-xl  text-base-100 hover:cursor-pointer bg-primary rounded-md"
+					class="h-12 w-12 text-xl text-base-100 hover:cursor-pointer bg-primary rounded-md"
 				>
 					<DiCode />
 				</a>
 			</div>
-			<div class="navbar-end space-x-2">
+			<div class="navbar-end space-x-4">
 				{#if data.user}
-					<a href="/projects/new" class="btn btn-primary">Submit</a>
+					<a
+						href="/projects/new"
+						class="text-primary font-bold hover:cursor-pointer hover:underline">Add Project</a
+					>
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">
 							<div class="w-10 rounded-full">
