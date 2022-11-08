@@ -5,6 +5,7 @@
 
 	import { getImageURL } from '$lib/helpers';
 	import type { ActionData, PageData } from './$types';
+	import { USER } from '$env/static/private';
 	export let form: ActionData;
 	export let data: PageData;
 
@@ -50,51 +51,59 @@
 	<div class="mt-4 space-y-4">
 		<p class="text-lg">{data.project.description}</p>
 	</div>
-	<div class="flex mt-4 w-full  items-center space-x-4">
-		<div class="avatar">
-			<div class="w-12 rounded-full">
-				<img src="https://ui-avatars.com/api/?name={data?.user?.name}" alt="User Avatar" />
+	{#if data.user}
+		<div class="flex mt-4 w-full  items-center space-x-4">
+			<div class="avatar">
+				<div class="w-12 rounded-full">
+					<img src="https://ui-avatars.com/api/?name={data?.user?.name}" alt="User Avatar" />
+				</div>
 			</div>
+			<form
+				action="?/createComment"
+				method="POST"
+				class="flex w-full justify-between max-w-lg"
+				use:enhance={({ form }) => {
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							form.reset();
+						}
+						if (result.type === 'invalid') {
+							await applyAction(result);
+						}
+						update();
+					};
+				}}
+			>
+				<div class="w-full">
+					<input type="hidden" name="user" value={data?.user?.id} />
+					<input type="hidden" name="project" value={data?.project?.id} />
+					<input
+						type="text"
+						placeholder="What do you think?"
+						class="input input-ghost w-full mb-2"
+						name="content"
+						value={form?.data?.content ?? ''}
+					/>
+					{#if form?.errors?.content}
+						{#each form?.errors?.content as error}
+							<label for="name" class="label py-0">
+								<div class="label-text-alt text-error">{error}</div>
+							</label>
+						{/each}
+					{/if}
+				</div>
+				<div class="ml-4">
+					<button type="submit" class="btn btn-primary">Comment</button>
+				</div>
+			</form>
 		</div>
-		<form
-			action="?/createComment"
-			method="POST"
-			class="flex w-full justify-between max-w-lg"
-			use:enhance={({ form }) => {
-				return async ({ result, update }) => {
-					if (result.type === 'success') {
-						form.reset();
-					}
-					if (result.type === 'invalid') {
-						await applyAction(result);
-					}
-					update();
-				};
-			}}
-		>
-			<div class="w-full">
-				<input type="hidden" name="user" value={data?.user?.id} />
-				<input type="hidden" name="project" value={data?.project?.id} />
-				<input
-					type="text"
-					placeholder="What do you think?"
-					class="input input-ghost w-full mb-2"
-					name="content"
-					value={form?.data?.content ?? ''}
-				/>
-				{#if form?.errors?.content}
-					{#each form?.errors?.content as error}
-						<label for="name" class="label py-0">
-							<div class="label-text-alt text-error">{error}</div>
-						</label>
-					{/each}
-				{/if}
-			</div>
-			<div class="ml-4">
-				<button type="submit" class="btn btn-primary">Comment</button>
-			</div>
-		</form>
-	</div>
+	{:else}
+		<div class="flex mt-4 w-full  items-center space-x-4">
+			<a href="/login" class="font-medium text-primary hover:cursor-pointer hover:underline">
+				Login to join the conversation
+			</a>
+		</div>
+	{/if}
 	<div class="flex flex-col mt-8 w-full space-y-8">
 		{#each data.comments as comment}
 			<div class="flex w-full space-x-4" id={comment.id}>
