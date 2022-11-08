@@ -7,7 +7,7 @@
 	export let project: Project;
 </script>
 
-<div class="card card-compact bg-base-100 shadow-xl ">
+<div class="card card-compact bg-base-100 shadow-lg ">
 	<figure class="h-48 ">
 		<img
 			class="object-cover object-center w-full h-full"
