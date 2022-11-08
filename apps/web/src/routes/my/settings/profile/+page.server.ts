@@ -7,8 +7,14 @@ import type { ClientResponseError } from 'pocketbase';
 
 export const actions: Actions = {
 	update: async ({ request, locals }) => {
-		const { formData, errors } = await validateData(await request.formData(), updateUserProfileDto);
+		let data = await request.formData();
+		const userAvatar = data.get('avatar') as Blob;
 
+		if (userAvatar.size === 0) {
+			data.delete('avatar');
+		}
+
+		const { formData, errors } = await validateData(data, updateUserProfileDto);
 		const { avatar, ...rest } = formData;
 
 		if (errors) {

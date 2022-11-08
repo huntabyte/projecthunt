@@ -3,6 +3,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 	import type { PageData } from './$types';
+	import { getImageURL } from '$lib/helpers';
 
 	export let data: PageData;
 </script>
@@ -59,7 +60,12 @@
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">
 							<div class="w-10 rounded-full">
-								<img src="https://ui-avatars.com/api/?name={data.user.name}" alt="User " />
+								<img
+									src={data.user?.avatar
+										? getImageURL(data?.user?.collectionName, data?.user?.id, data?.user?.avatar)
+										: `https://ui-avatars.com/api/?name=${data.user.name}`}
+									alt="User "
+								/>
 							</div>
 						</button>
 						<ul
