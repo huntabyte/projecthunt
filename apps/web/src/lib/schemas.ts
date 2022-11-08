@@ -1,32 +1,72 @@
-import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 
+const imageTypes = [
+	'image/jpeg',
+	'image/jpg',
+	'image/png',
+	'image/webp',
+	'image/svg+xml',
+	'image/gif'
+];
+
 export const createProjectDto = z.object({
-	name: z.string().min(1).max(40).trim(),
-	tagline: z.string().min(1).max(60).trim(),
-	url: z.string().url(),
-	description: z.string().min(1).max(240).trim(),
-	thumbnail: z.instanceof(Blob).optional(),
+	name: z
+		.string({ required_error: 'Name is required' })
+		.min(1, { message: 'Name is required' })
+		.max(40, { message: 'Name must be 40 characters or less' })
+		.trim(),
+	tagline: z
+		.string({ required_error: 'Tagline is required' })
+		.min(1, { message: 'Tagline is required' })
+		.max(60, { message: 'Tagline must be 60 characters or less' })
+		.trim(),
+	url: z.string({ required_error: 'URL is required' }).url({ message: 'URL must be a valid URL.' }),
+	description: z
+		.string({ required_error: 'Description is required' })
+		.min(1, { message: 'Description is required' })
+		.max(240, { message: 'Description must be less than 240 characters' })
+		.trim(),
+	thumbnail: z.instanceof(Blob).superRefine((val, ctx) => {
+		if (val.size < 10000 || val.size > 2000000) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Thumbnail must be between 10KB & 2MB'
+			});
+		}
+
+		if (!imageTypes.includes(val.type)) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Unsupported file type. Supported formats: jpeg, jpg, png, web, svg, gif'"
+			});
+		}
+	}),
 	user: z.string().optional()
 });
 
 export const createCommentDto = z.object({
-	content: z.string().min(2).max(240).trim(),
+	content: z
+		.string()
+		.min(2, { message: 'Comment must be at least 2 characters' })
+		.max(240, { message: 'Comment must be less than 241 characters' })
+		.trim(),
 	project: z.string(),
 	user: z.string()
 });
 
 export const updateCommentDto = createCommentDto.extend({
-	id: z.string()
+	id: z.string({ required_error: 'An ID must be passed with the comment to update it' })
 });
 
-export const loginUserDto = zfd.formData({
-	email: z.string().email(),
-	password: z.string()
+export const loginUserDto = z.object({
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email({ message: 'Email must be a valid email.' }),
+	password: z.string({ required_error: 'Password is required' })
 });
 
-export const registerUserDto = zfd
-	.formData({
+export const registerUserDto = z
+	.object({
 		name: z
 			.string({ required_error: 'Name is required.' })
 			.min(2, { message: 'Name must be at least 2 characters' })

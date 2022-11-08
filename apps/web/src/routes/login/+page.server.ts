@@ -23,8 +23,15 @@ export const actions: Actions = {
 		try {
 			await locals.pb.collection('users').authWithPassword(formData.email, formData.password);
 		} catch (err) {
+			console.log('Error: ', err);
 			const e = err as ClientResponseError;
-			throw error(e.status, e.data.message);
+
+			const { password, ...rest } = formData;
+
+			return {
+				data: rest,
+				invalidCredentials: true
+			};
 		}
 		throw redirect(303, '/');
 	}

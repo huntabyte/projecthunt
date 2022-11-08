@@ -1,4 +1,8 @@
 <script lang="ts">
+	import type { ActionData, PageData } from './$types';
+
+	export let form: ActionData;
+	export let data: PageData;
 </script>
 
 <div class="flex flex-col items-center h-full w-full pt-12">
@@ -17,32 +21,92 @@
 				<label for="name" class="label font-medium pb-1">
 					<span class="label-text">Name</span>
 				</label>
-				<input type="text" name="name" class="input input-bordered w-full max-w-xs" />
+				<input
+					type="text"
+					name="name"
+					class="input input-bordered w-full max-w-xs mb-2"
+					value={form?.data?.name ?? ''}
+				/>
+				{#if form?.errors?.name}
+					{#each form?.errors?.name as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
 				<label for="tagline" class="label font-medium pb-1">
 					<span class="label-text">Tagline</span>
 				</label>
-				<input type="text" name="tagline" class="input input-bordered w-full max-w-xs" />
+				<input
+					type="text"
+					name="tagline"
+					class="input input-bordered w-full max-w-xs mb-2"
+					value={form?.data?.tagline ?? ''}
+				/>
+				{#if form?.errors?.tagline}
+					{#each form?.errors?.tagline as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
 				<label for="url" class="label font-medium pb-1">
 					<span class="label-text">URL</span>
 				</label>
-				<input type="text" name="url" class="input input-bordered w-full max-w-xs" />
+				<input
+					type="text"
+					name="url"
+					class="input input-bordered w-full max-w-xs mb-2"
+					value={form?.data?.url ?? ''}
+				/>
+				{#if form?.errors?.url}
+					{#each form?.errors?.url as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
 				<label for="description" class="label font-medium pb-1">
 					<span class="label-text">Description</span>
 				</label>
-				<textarea name="description" class="textarea textarea-bordered h-24" />
+				<textarea
+					name="description"
+					class="textarea textarea-bordered h-24 resize-none mb-2"
+					value={form?.data?.description ?? ''}
+				/>
+				{#if form?.errors?.description}
+					{#each form?.errors?.description as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
 			<div class="form-control w-full max-w-xs">
 				<label for="thumbnail" class="label font-medium pb-1">
 					<span class="label-text">Thumbnail</span>
 				</label>
-				<input type="file" name="thumbnail" />
+				<input
+					type="file"
+					name="thumbnail"
+					class="file-input file-input-bordered file-input-secondary w-full max-w-xs file-input-md mb-2"
+					accept="image/*"
+				/>
+				{#if form?.errors?.thumbnail}
+					{#each form?.errors?.thumbnail as error}
+						<label for="name" class="label py-0">
+							<div class="label-text-alt text-error">{error}</div>
+						</label>
+					{/each}
+				{/if}
 			</div>
+			<input type="hidden" name="user" value={data?.user?.id} />
 			<div class="w-full max-w-xs pt-3">
 				<button class="btn btn-primary w-full max-w-xs">Add Project</button>
 			</div>
