@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 </script>
 
 <div class="w-full grid grid-cols-2 content-start">

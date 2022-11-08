@@ -2,12 +2,13 @@ import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { ClientResponseError } from 'pocketbase';
 import { updateProject } from '$lib/api';
+import type { UpdateProjectActionData } from '$lib/types';
 
 export const actions: Actions = {
-	update: async ({ request, locals, params }) => {
+	update: async ({ request, locals, params }): Promise<UpdateProjectActionData> => {
 		return await updateProject(locals, request, params.projectId, `/my/projects`);
 	},
-	delete: async ({ locals, params }) => {
+	delete: async ({ locals, params }): Promise<UpdateProjectActionData> => {
 		try {
 			await locals.pb.collection('projects').update(params.projectId, {
 				thumbnail: null

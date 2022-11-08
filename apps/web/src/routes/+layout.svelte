@@ -1,11 +1,13 @@
 <script lang="ts">
 	import '../app.postcss';
+	import { Toaster } from 'svelte-french-toast';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
 
+<Toaster />
 <div class="min-h-full">
 	<div class="bg-base-100 border-b">
 		<div class="navbar xl:container mx-auto bg-base-100 px-4">

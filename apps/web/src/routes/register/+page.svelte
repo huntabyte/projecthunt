@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
+	import toast from 'svelte-french-toast';
+	import { applyAction, enhance } from '$app/forms';
 	export let form: ActionData;
 </script>
 
@@ -15,7 +17,21 @@
 		Or <a href="/login" class="text-primary font-medium hover:cursor-pointer">sign in</a> if you already
 		have an account.
 	</p>
-	<form method="POST" action="?/register" class="flex flex-col items-center space-y-2 w-full mt-4">
+	<form
+		method="POST"
+		action="?/register"
+		class="flex flex-col items-center space-y-2 w-full mt-4"
+		use:enhance={() => {
+			return async ({ result, update }) => {
+				if (result.type === 'invalid' || result.type === 'error') {
+					await applyAction(result);
+				} else {
+					toast.success('Success! Please verify your email before you can login!');
+					await update();
+				}
+			};
+		}}
+	>
 		<div class="form-control w-full max-w-md">
 			<label for="name" class="label font-medium pb-1">
 				<span class="label-text">Name</span>
@@ -83,7 +99,7 @@
 			{/if}
 		</div>
 		<div class="w-full max-w-md pt-3">
-			<button class="btn btn-primary w-full max-w-md">Register</button>
+			<button type="submit" class="btn btn-primary w-full max-w-md">Register</button>
 		</div>
 	</form>
 </div>

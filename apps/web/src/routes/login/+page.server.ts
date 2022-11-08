@@ -1,7 +1,7 @@
 import { validateData } from '$lib/helpers';
 import { loginUserDto } from '$lib/schemas';
 import type { LoginActionData } from '$lib/types';
-import { error, invalid, redirect } from '@sveltejs/kit';
+import { invalid, redirect } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 

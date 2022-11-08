@@ -1,6 +1,12 @@
 import type { Record } from 'pocketbase';
 import type { z } from 'zod';
-import { projectDto, updateCommentDto, createCommentDto, resetPasswordDto } from '$lib/schemas';
+import {
+	projectDto,
+	updateCommentDto,
+	createCommentDto,
+	resetPasswordDto,
+	createProjectDto
+} from '$lib/schemas';
 import { registerUserDto, loginUserDto } from './schemas';
 
 interface User extends Record {
@@ -59,5 +65,11 @@ interface LoginActionData {
 interface ResetPasswordActionData {
 	data?: ResetPasswordDto;
 	errors?: z.inferFlattenedErrors<typeof resetPasswordDto>['fieldErrors'];
+	success?: boolean;
+}
+
+interface UpdateProjectActionData {
+	data?: CreateProjectDto;
+	errors?: z.inferFlattenedErrors<typeof createProjectDto>['fieldErrors'];
 	success?: boolean;
 }
