@@ -8,12 +8,14 @@ const config = {
 		},
 		extend: {
 			height: {
+				104: '26rem',
+				112: '28rem',
 				128: '32rem'
 			}
 		}
 	},
 
-	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio'), require('@tailwindcss/forms')]
+	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio')]
 };
 
 module.exports = config;

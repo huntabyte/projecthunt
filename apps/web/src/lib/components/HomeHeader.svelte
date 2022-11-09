@@ -3,7 +3,7 @@
 	import HeaderImage from './svg/HeaderImage.svelte';
 </script>
 
-<div class="lg:h-128 lg:flex lg:items-center">
+<div class="lg:h-104 lg:flex lg:items-center">
 	<div class="w-full text-center lg:text-left lg:w-1/2 lg:-mt-8">
 		<h1 class="text-3xl font-normal leading-normal md:text-5xl ">
 			Discover, discuss, and build <span class="font-bold">community</span> around your next

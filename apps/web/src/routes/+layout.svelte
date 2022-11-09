@@ -11,7 +11,7 @@
 </script>
 
 <Toaster />
-<div class="min-h-screen w-full">
+<div class="min-h-screen h-full w-full">
 	<div class="bg-base-100 border-b w-full">
 		<div class="navbar mx-auto bg-base-100 lg:px-8 px-4 w-full max-w-screen-2xl container py-5 ">
 			<div class="navbar-start">
@@ -69,7 +69,7 @@
 							/>
 						</button>
 						<ul
-							class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+							class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 font-medium uppercase "
 						>
 							<li>
 								<a href="/">Profile</a>
@@ -78,7 +78,7 @@
 							<li><a href="/my/settings/profile">Settings</a></li>
 							<li>
 								<form action="/logout" method="POST">
-									<button type="submit">Logout</button>
+									<button type="submit" class="uppercase">Logout</button>
 								</form>
 							</li>
 						</ul>
@@ -93,5 +93,5 @@
 	<div class="h-full w-full mx-auto py-10 lg:px-8 px-4 max-w-screen-2xl container ">
 		<slot />
 	</div>
-	<Footer />
 </div>
+<Footer />

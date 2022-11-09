@@ -66,7 +66,9 @@
 				</label>
 				<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
 					<label for="avatar" class="absolute -bottom-0.5 -right-0.5 hover:cursor-pointer">
-						<span class="btn btn-circle btn-sm btn-secondary">
+						<span
+							class="btn btn-circle btn-sm btn-secondary transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-200"
+						>
 							<div class="w-4 h-4 ">
 								<FaPencilAlt />
 							</div>

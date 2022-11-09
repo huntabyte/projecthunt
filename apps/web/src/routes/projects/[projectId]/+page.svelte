@@ -28,7 +28,7 @@
 	};
 </script>
 
-<div class="flex flex-col w-full ">
+<div class="flex flex-col w-full max-w-screen-lg mx-auto">
 	<div class="flex">
 		<div class="avatar">
 			<div class="w-20 rounded">
