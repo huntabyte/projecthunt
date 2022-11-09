@@ -1,5 +1,7 @@
 import type { z, ZodError } from 'zod';
 
+const { randomBytes } = await import('node:crypto');
+
 const POCKETBASE_HOST = 'localhost:8090';
 
 export const serializeNonPOJOs = <T>(obj: T): T => {
@@ -38,6 +40,6 @@ export const validateData = async <T extends z.ZodTypeAny>(
 };
 
 export const generateUsername = (name: string): string => {
-	const id = crypto.randomBytes(6).toString('hex');
-	return `${name}${id}`;
+	const id = randomBytes(2).toString('hex');
+	return `${name.slice(0, 5)}${id}`;
 };

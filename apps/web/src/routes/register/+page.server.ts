@@ -3,7 +3,8 @@ import { error, invalid, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { ClientResponseError } from 'pocketbase';
 import { ZodError } from 'zod';
-import { validateData } from '$lib/utils';
+import { generateUsername, validateData } from '$lib/utils';
+import { usernameExists } from '$lib/helpers';
 
 export const load: PageServerLoad = ({ locals }) => {
 	if (locals.pb.authStore.isValid) {
@@ -23,8 +24,15 @@ export const actions: Actions = {
 			});
 		}
 
+		let username = generateUsername(formData.name.split(' ').join('')).toLowerCase();
+		console.log(username);
+
+		do {
+			username = generateUsername(formData.name.split(' ').join(''));
+		} while (await usernameExists(locals.pb, username));
+
 		try {
-			await locals.pb.collection('users').create(formData);
+			await locals.pb.collection('users').create({ username, ...formData });
 			await locals.pb.collection('users').requestVerification(formData.email);
 		} catch (err) {
 			console.log('Error:', err);

@@ -79,6 +79,7 @@ export const registerUserDto = z
 	.object({
 		name: z
 			.string({ required_error: 'Name is required.' })
+			.regex(/^[a-zA-Z\s]*$/, { message: 'Name can only contain letters and spaces.' })
 			.min(2, { message: 'Name must be at least 2 characters' })
 			.max(64, { message: 'Name must be less than 64 characters' })
 			.trim(),
