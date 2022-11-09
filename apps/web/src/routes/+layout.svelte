@@ -9,9 +9,9 @@
 </script>
 
 <Toaster />
-<div class="min-h-full">
-	<div class="bg-base-100 border-b">
-		<div class="navbar xl:container mx-auto bg-base-100 px-4">
+<div class="min-h-full w-full">
+	<div class="bg-base-100 border-b w-full">
+		<div class="navbar mx-auto bg-base-100 lg:px-8 px-4 w-full max-w-screen-2xl lg:container ">
 			<div class="navbar-start">
 				<div class="dropdown">
 					<button class="btn btn-ghost md:hidden">
@@ -90,7 +90,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="h-full w-full lg:container mx-auto mt-8 px-8 max-w-xl">
+	<div class="h-full w-full mx-auto mt-8 lg:px-8 px-4 max-w-screen-2xl lg:container ">
 		<slot />
 	</div>
 </div>
