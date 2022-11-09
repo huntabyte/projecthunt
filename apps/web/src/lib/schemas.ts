@@ -138,6 +138,8 @@ export const updateUserProfileDto = z.object({
 		})
 });
 
+export const updateEmailDto = loginUserDto.pick({ email: true });
+
 export const resetPasswordDto = loginUserDto.pick({ email: true });
 
 export type registerUserErrors = z.inferFlattenedErrors<typeof registerUserDto>;

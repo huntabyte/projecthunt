@@ -22,6 +22,7 @@
 			</li>
 		{/each}
 	</ul>
-
-	<slot />
+	<div class="mt-4 w-full">
+		<slot />
+	</div>
 </div>
