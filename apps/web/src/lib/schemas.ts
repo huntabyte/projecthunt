@@ -142,4 +142,35 @@ export const updateEmailDto = loginUserDto.pick({ email: true });
 
 export const resetPasswordDto = loginUserDto.pick({ email: true });
 
+export const updatePasswordDto = z
+	.object({
+		oldPassword: z
+			.string({ required_error: 'Current password is required.' })
+			.min(6, { message: 'Passwords must be at least 2 characters' })
+			.max(64, { message: 'Passwords must be less than 64 characters' })
+			.trim(),
+		password: z
+			.string({ required_error: 'Password is required' })
+			.min(6, { message: 'Password must be at least 6 characters' })
+			.max(64, { message: 'Password must be less than 64 characters' }),
+		passwordConfirm: z
+			.string({ required_error: 'Password is required' })
+			.min(6, { message: 'Password must be at least 6 characters' })
+			.max(64, { message: 'Password must be less than 64 characters' })
+	})
+	.superRefine(({ passwordConfirm, password }, ctx) => {
+		if (passwordConfirm !== password) {
+			ctx.addIssue({
+				code: 'custom',
+				message: 'New Password and Confirm New Password must match',
+				path: ['password']
+			});
+			ctx.addIssue({
+				code: 'custom',
+				message: 'New Password and Confirm New Password must match',
+				path: ['passwordConfirm']
+			});
+		}
+	});
+
 export type registerUserErrors = z.inferFlattenedErrors<typeof registerUserDto>;

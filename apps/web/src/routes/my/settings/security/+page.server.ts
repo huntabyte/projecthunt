@@ -1,31 +1,28 @@
 import { validateData } from '$lib/helpers';
-import { updateEmailDto } from '$lib/schemas';
+import { updatePasswordDto } from '$lib/schemas';
 import { error, invalid } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import type { ClientResponseError } from 'pocketbase';
 
 export const actions: Actions = {
-	updateEmail: async ({ request, locals }) => {
-		const { formData, errors } = await validateData(await request.formData(), updateEmailDto);
+	updatePassword: async ({ request, locals }) => {
+		const { formData, errors } = await validateData(await request.formData(), updatePasswordDto);
 
 		if (errors) {
 			return invalid(400, {
-				data: formData,
-				errors: errors.fieldErrors
+				errors
 			});
 		}
-
 		try {
-			await locals.pb.collection('users').requestEmailChange(formData.email);
+			await locals.pb.collection('users').update(locals?.user?.id as string, formData);
 		} catch (err) {
-			console.log('Error: ', err);
 			const e = err as ClientResponseError;
+			console.log('Error: ', e.data.data);
 			throw error(e.status, e.data.message);
 		}
 
 		return {
-			success: true,
-			data: formData
+			success: true
 		};
 	}
 };
