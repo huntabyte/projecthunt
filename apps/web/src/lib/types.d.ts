@@ -5,14 +5,18 @@ import {
 	updateCommentDto,
 	createCommentDto,
 	resetPasswordDto,
-	createProjectDto
+	createProjectDto,
+	registerUserDto,
+	loginUserDto,
+	updateEmailDto
 } from '$lib/schemas';
-import { registerUserDto, loginUserDto } from './schemas';
+import { updateUsernameDto } from '$lib/schemas';
 
 interface User extends Record {
 	id: string;
 	name: string;
 	avatar?: string;
+	username: string;
 }
 
 interface Project extends Record {
@@ -46,6 +50,8 @@ type CreateCommentDto = z.infer<createCommentDto>;
 type RegisterUserDto = z.infer<registerUserDto>;
 type LoginUserDto = z.infer<loginUserDto>;
 type ResetPasswordDto = z.infer<resetPasswordDto>;
+type UpdateEmailDto = z.infer<updateEmailDto>;
+type UpdateUsernameDto = z.infer<updateUsernameDto>;
 
 interface CommentActionData {
 	data?: CreateCommentDto;
@@ -71,6 +77,18 @@ interface ResetPasswordActionData {
 interface UpdateProjectActionData {
 	data?: CreateProjectDto;
 	errors?: z.inferFlattenedErrors<typeof createProjectDto>['fieldErrors'];
+	success?: boolean;
+}
+
+type UpdateEmailErrors = z.inferFlattenedErrors<typeof updateEmailDto>['fieldErrors'];
+type UpdateUsernameErrors = z.inferFlattenedErrors<typeof updateUsernameDto>['fieldErrors'];
+
+interface UpdateAccountActionData {
+	data?: UpdateEmailDto | UpdateUsernameDto;
+	errors?: {
+		emailErrors?: UpdateEmailErrors;
+		usernameErrors?: UpdateUsernameErrors;
+	};
 	success?: boolean;
 }
 

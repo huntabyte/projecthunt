@@ -6,7 +6,7 @@ import type { Actions } from './$types';
 import type { ClientResponseError } from 'pocketbase';
 
 export const actions: Actions = {
-	update: async ({ request, locals }) => {
+	updateProfile: async ({ request, locals }) => {
 		let data = await request.formData();
 		const userAvatar = data.get('avatar') as Blob;
 

@@ -5,10 +5,18 @@
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import toast from 'svelte-french-toast';
 	import { invalidateAll } from '$app/navigation';
+	import Input from '$lib/components/form/Input.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	export let data: PageData;
 	export let form: ActionData;
 
 	export let loading = false;
+
+	let checked: boolean;
+	let usernameDisabled: boolean;
+
+	$: checked = false;
+	$: usernameDisabled = true;
 
 	const showPreview = (event: Event) => {
 		const target = event.target as HTMLInputElement;
@@ -45,7 +53,7 @@
 	<div class="w-full ">
 		<form
 			method="POST"
-			action="?/update"
+			action="?/updateProfile"
 			class="flex flex-col space-y-2 w-full"
 			enctype="multipart/form-data"
 			use:enhance={submitUpdateProfile}
@@ -84,24 +92,13 @@
 					on:change={showPreview}
 				/>
 			</div>
-			<div class="form-control w-full max-w-lg">
-				<label for="name" class="label font-medium pb-1">
-					<span class="label-text">Name</span>
-				</label>
-				<input
-					type="text"
-					name="name"
-					class="input input-bordered w-full max-w-lg mb-2"
-					value={form?.data?.name ?? data.user?.name}
-				/>
-				{#if form?.errors?.name}
-					{#each form?.errors?.name as error}
-						<label for="name" class="label py-0">
-							<div class="label-text-alt text-error">{error}</div>
-						</label>
-					{/each}
-				{/if}
-			</div>
+			<Input
+				id="name"
+				label="Name"
+				value={form?.data?.name ?? data.user?.name}
+				required
+				errors={form?.errors?.name}
+			/>
 
 			<div class="w-full max-w-lg pt-3">
 				<button class="btn btn-primary w-full max-w-lg">Update Profile</button>

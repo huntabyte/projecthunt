@@ -139,6 +139,14 @@ export const updateUserProfileDto = z.object({
 		})
 });
 
+export const updateUsernameDto = z.object({
+	username: z
+		.string({ required_error: 'Username is required.' })
+		.min(3, { message: 'Username is too short (minimum is 3 characters)' })
+		.max(24, { message: 'Username is too long (maximum is 24 characters)' })
+		.trim()
+});
+
 export const updateEmailDto = loginUserDto.pick({ email: true });
 
 export const resetPasswordDto = loginUserDto.pick({ email: true });

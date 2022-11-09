@@ -3,7 +3,7 @@
 	export let checked: boolean = false;
 </script>
 
-<label for={label} class=" btn btn-primary">
+<label for={label}>
 	<slot name="trigger" />
 </label>
 
