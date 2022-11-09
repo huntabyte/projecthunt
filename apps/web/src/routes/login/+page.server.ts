@@ -1,4 +1,4 @@
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 import { loginUserDto } from '$lib/schemas';
 import type { LoginActionData } from '$lib/types';
 import { invalid, redirect } from '@sveltejs/kit';

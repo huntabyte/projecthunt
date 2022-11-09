@@ -36,3 +36,8 @@ export const validateData = async <T extends z.ZodTypeAny>(
 		};
 	}
 };
+
+export const generateUsername = (name: string): string => {
+	const id = crypto.randomBytes(6).toString('hex');
+	return `${name}${id}`;
+};

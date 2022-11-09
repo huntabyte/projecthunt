@@ -2,7 +2,7 @@ import { serialize } from 'object-to-formdata';
 import { error, invalid, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import type { ClientResponseError } from 'pocketbase';
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 import { createProjectDto } from '$lib/schemas';
 import type { Project } from '$lib/types';
 

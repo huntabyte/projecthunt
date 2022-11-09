@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
 	export let data: PageData;
 	export let form: ActionData;

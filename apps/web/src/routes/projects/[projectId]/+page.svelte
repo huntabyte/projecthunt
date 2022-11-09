@@ -3,7 +3,7 @@
 	import ProjectVoteForm from '$lib/components/ProjectVoteForm.svelte';
 	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
 
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
 	export let form: ActionData;
 	export let data: PageData;

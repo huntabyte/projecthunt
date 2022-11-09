@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FaComment from 'svelte-icons/fa/FaComment.svelte';
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import ProjectVoteForm from './ProjectVoteForm.svelte';
 	import type { Project } from '$lib/types';
 

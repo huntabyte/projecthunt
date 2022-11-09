@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import { serializeNonPOJOs } from '$lib/helpers';
+import { serializeNonPOJOs } from '$lib/utils';
 import type { User } from '$lib/types';
 import type { Handle } from '@sveltejs/kit';
 
@@ -10,8 +10,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = serializeNonPOJOs<User>(event.locals.pb.authStore.model as User);
 	} else {
-    event.locals.user = undefined
-  }
+		event.locals.user = undefined;
+	}
 
 	const response = await resolve(event);
 

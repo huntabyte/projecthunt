@@ -1,4 +1,4 @@
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 import { resetPasswordDto } from '$lib/schemas';
 import { error, invalid, type Actions } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';

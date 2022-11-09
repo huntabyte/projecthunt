@@ -1,4 +1,4 @@
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 import { updatePasswordDto } from '$lib/schemas';
 import { error, invalid } from '@sveltejs/kit';
 import type { Actions } from './$types';

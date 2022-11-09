@@ -1,4 +1,4 @@
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 import { updateUserProfileDto } from '$lib/schemas';
 import { error, invalid } from '@sveltejs/kit';
 import { serialize } from 'object-to-formdata';

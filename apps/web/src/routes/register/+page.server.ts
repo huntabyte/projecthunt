@@ -3,7 +3,7 @@ import { error, invalid, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { ClientResponseError } from 'pocketbase';
 import { ZodError } from 'zod';
-import { validateData } from '$lib/helpers';
+import { validateData } from '$lib/utils';
 
 export const load: PageServerLoad = ({ locals }) => {
 	if (locals.pb.authStore.isValid) {

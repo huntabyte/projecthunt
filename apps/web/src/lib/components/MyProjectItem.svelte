@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FaComment from 'svelte-icons/fa/FaComment.svelte';
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import type { Project } from '$lib/types';
 	import ConfirmDeleteModal from '$lib/components/ConfirmDeleteModal.svelte';
 

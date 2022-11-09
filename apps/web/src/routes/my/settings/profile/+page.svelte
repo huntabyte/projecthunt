@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FaPencilAlt from 'svelte-icons/fa/FaPencilAlt.svelte';
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import toast from 'svelte-french-toast';

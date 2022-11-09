@@ -3,7 +3,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 	import type { PageData } from './$types';
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 
 	export let data: PageData;
 </script>

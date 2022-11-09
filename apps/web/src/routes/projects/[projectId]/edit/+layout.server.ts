@@ -1,4 +1,4 @@
-import { serializeNonPOJOs } from '$lib/helpers';
+import { serializeNonPOJOs } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import type { Project } from '$lib/types';

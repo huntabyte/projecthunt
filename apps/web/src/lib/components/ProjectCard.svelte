@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getImageURL } from '$lib/helpers';
+	import { getImageURL } from '$lib/utils';
 	import type { Project } from '$lib/types';
 	import FaRegComment from 'svelte-icons/fa/FaRegComment.svelte';
 	import ProjectVoteForm from './ProjectVoteForm.svelte';

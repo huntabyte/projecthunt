@@ -1,6 +1,6 @@
 import { error, invalid, redirect } from '@sveltejs/kit';
 import { ClientResponseError } from 'pocketbase';
-import { serializeNonPOJOs, validateData } from '$lib/helpers';
+import { serializeNonPOJOs, validateData } from '$lib/utils';
 import type { Comment, CommentActionData, Project, Vote } from '$lib/types';
 import { createCommentDto, createProjectDto, updateCommentDto } from '$lib/schemas';
 import { serialize } from 'object-to-formdata';
