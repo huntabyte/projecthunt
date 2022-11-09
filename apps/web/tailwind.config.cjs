@@ -3,13 +3,17 @@ const config = {
 
 	theme: {
 		fontFamily: {
-			sans: ['Work Sans', 'system-ui', 'sans-serif'],
-			serif: ['Merriweather', 'ui-serif', 'serif']
+			sans: ['Roboto', 'system-ui', 'sans-serif'],
+			heading: ['Roboto Condensed', 'Roboto', 'sans-serif']
 		},
-		extend: {}
+		extend: {
+			height: {
+				128: '32rem'
+			}
+		}
 	},
 
-	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio')]
+	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio'), require('@tailwindcss/forms')]
 };
 
 module.exports = config;

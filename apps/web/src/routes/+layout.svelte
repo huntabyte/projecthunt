@@ -4,14 +4,16 @@
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 	import type { PageData } from './$types';
 	import { getImageURL } from '$lib/utils';
+	import Footer from '$lib/components/Footer.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
 
 	export let data: PageData;
 </script>
 
 <Toaster />
-<div class="min-h-full w-full">
+<div class="min-h-screen w-full">
 	<div class="bg-base-100 border-b w-full">
-		<div class="navbar mx-auto bg-base-100 lg:px-8 px-4 w-full max-w-screen-2xl lg:container ">
+		<div class="navbar mx-auto bg-base-100 lg:px-8 px-4 w-full max-w-screen-2xl container py-5 ">
 			<div class="navbar-start">
 				<div class="dropdown">
 					<button class="btn btn-ghost md:hidden">
@@ -58,15 +60,13 @@
 						class="text-primary font-medium hover:cursor-pointer hover:underline">Add Project</a
 					>
 					<div class="dropdown dropdown-end">
-						<button class="btn btn-ghost btn-circle avatar">
-							<div class="w-10 rounded-full">
-								<img
-									src={data.user?.avatar
-										? getImageURL(data?.user?.collectionName, data?.user?.id, data?.user?.avatar)
-										: `https://ui-avatars.com/api/?name=${data.user.name}`}
-									alt="User "
-								/>
-							</div>
+						<button
+							class="btn btn-ghost btn-circle flex items-center justify-center w-full h-full group hover:bg-primary group-hover:scale-110 transition-all ease-in-out delay-50 duration-200"
+						>
+							<Avatar
+								classes="w-12 h-12 group-hover:scale-105 transition-all ease-in-out delay-50 duration-200"
+								user={data.user}
+							/>
 						</button>
 						<ul
 							class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
@@ -90,7 +90,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="h-full w-full mx-auto mt-8 lg:px-8 px-4 max-w-screen-2xl lg:container ">
+	<div class="h-full w-full mx-auto py-10 lg:px-8 px-4 max-w-screen-2xl container ">
 		<slot />
 	</div>
+	<Footer />
 </div>
