@@ -55,7 +55,7 @@
 				{#if data.user}
 					<a
 						href="/projects/new"
-						class="text-primary font-bold hover:cursor-pointer hover:underline">Add Project</a
+						class="text-primary font-medium hover:cursor-pointer hover:underline">Add Project</a
 					>
 					<div class="dropdown dropdown-end">
 						<button class="btn btn-ghost btn-circle avatar">

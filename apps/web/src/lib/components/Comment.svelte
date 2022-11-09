@@ -4,6 +4,7 @@
 	import type { Comment } from '$lib/types';
 	import { getImageURL } from '$lib/utils';
 	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
+	import Avatar from './Avatar.svelte';
 
 	export let comment: Comment;
 	export let showEdit: boolean;
@@ -20,22 +21,12 @@
 </script>
 
 <div class="flex w-full space-x-4" id={comment.id}>
-	<div class="avatar h-max">
-		<div class="w-12 rounded-full">
-			<img
-				src={comment.expand.user?.avatar
-					? getImageURL(
-							comment.expand.user?.collectionName,
-							comment.expand.user?.id,
-							comment.expand.user?.avatar
-					  )
-					: `https://ui-avatars.com/api/?name=${comment.expand.user?.name}`}
-				alt="User Avatar"
-			/>
-		</div>
-	</div>
+	<Avatar user={comment.expand.user} />
 	<div class="flex flex-col">
-		<p class="font-bold">{comment.expand.user.name}</p>
+		<div class="flex items-center space-x-2">
+			<p class="font-bold">{comment.expand.user.name}</p>
+			<p class="font-light opacity-90">@{comment.expand.user.username}</p>
+		</div>
 		<div class="mt-2">
 			{#if showEdit && editId === comment.id}
 				<a href="#{comment.id}" class="hidden absolute -top-20">Anchor</a>
@@ -77,10 +68,10 @@
 				<p>{comment.content}</p>
 			{/if}
 		</div>
-		<div class="flex space-x-4 mt-2 text-sm font-medium items-center ">
-			<p>Upvote</p>
-			<p>Reply</p>
-			<p>Share</p>
+		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
+			<span class="hover:cursor-pointer hover:underline">Upvote</span>
+			<span class="hover:cursor-pointer hover:underline">Reply</span>
+			<span class="hover:cursor-pointer hover:underline">Share</span>
 			<div class="dropdown dropdown-top ">
 				<button
 					class="btn btn-ghost btn-circle btn-xs"
