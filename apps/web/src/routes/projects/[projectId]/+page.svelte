@@ -5,6 +5,7 @@
 
 	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
+	import Comment from '$lib/components/Comment.svelte';
 	export let form: ActionData;
 	export let data: PageData;
 
@@ -27,7 +28,7 @@
 	};
 </script>
 
-<div class="flex flex-col w-full min-w-full">
+<div class="flex flex-col w-full ">
 	<div class="flex">
 		<div class="avatar">
 			<div class="w-20 rounded">
@@ -38,7 +39,9 @@
 			</div>
 		</div>
 	</div>
-	<a href={data.project.url} class="text-2xl font-bold mt-4">{data.project.name}</a>
+	<a href={data.project.url} class="text-2xl font-bold mt-4 hover:underline max-w-max"
+		>{data.project.name}</a
+	>
 	<div class="flex justify-between mt-2">
 		<p class="text-2xl font-light">{data.project.tagline}</p>
 		<div class="flex ">
@@ -54,7 +57,12 @@
 		<div class="flex mt-4 w-full  items-center space-x-4">
 			<div class="avatar">
 				<div class="w-12 rounded-full">
-					<img src="https://ui-avatars.com/api/?name={data?.user?.name}" alt="User Avatar" />
+					<img
+						src={data.user?.avatar
+							? getImageURL(data.user?.collectionName, data.user?.id, data.user?.avatar)
+							: `https://ui-avatars.com/api/?name=${data?.user?.name}`}
+						alt="User Avatar"
+					/>
 				</div>
 			</div>
 			<form
@@ -105,117 +113,7 @@
 	{/if}
 	<div class="flex flex-col mt-8 w-full space-y-8">
 		{#each data.comments as comment}
-			<div class="flex w-full space-x-4" id={comment.id}>
-				<div class="avatar h-max">
-					<div class="w-12 rounded-full">
-						<img
-							src="https://ui-avatars.com/api/?name={comment.expand.user.name}"
-							alt="User Avatar"
-						/>
-					</div>
-				</div>
-				<div class="flex flex-col">
-					<p class="font-bold">{comment.expand.user.name}</p>
-					<div class="mt-2">
-						{#if showEdit && editId === comment.id}
-							<a href="#{comment.id}" class="hidden absolute -top-20">Anchor</a>
-							<form
-								action="?/updateComment"
-								method="POST"
-								class="flex"
-								use:enhance={({ form }) => {
-									return async ({ result, update }) => {
-										if (result.type === 'success') {
-											form.reset();
-										}
-										if (result.type === 'invalid') {
-											await applyAction(result);
-										}
-										update();
-									};
-								}}
-							>
-								<input type="hidden" value={comment.id} name="id" />
-								<div class="flex flex-col">
-									<input
-										type="text"
-										value={comment.content}
-										class="input input-bordered input-primary"
-										name="content"
-									/>
-									{#if form?.updateErrors?.content}
-										{#each form?.updateErrors?.content as error}
-											<label for="name" class="label py-0">
-												<div class="label-text-alt text-error">{error}</div>
-											</label>
-										{/each}
-									{/if}
-								</div>
-								<button class="btn ml-2">Update</button>
-							</form>
-						{:else}
-							<p>{comment.content}</p>
-						{/if}
-					</div>
-					<div class="flex space-x-4 mt-2 text-sm font-medium items-center ">
-						<p>Upvote</p>
-						<p>Reply</p>
-						<p>Share</p>
-						<div class="dropdown dropdown-top ">
-							<button
-								class="btn btn-ghost btn-circle btn-xs"
-								on:click={() => toggleDropdown(comment.id, false)}
-							>
-								<div class="w-4 h-4">
-									<FaEllipsisV />
-								</div>
-							</button>
-							<ul
-								class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 {dropdown.id ===
-									comment.id && dropdown.hidden
-									? 'hidden'
-									: ''}"
-							>
-								{#if data?.user?.id === comment.user}
-									<li>
-										<form
-											action="?/showEdit"
-											class="w-full"
-											method="POST"
-											use:enhance={({ cancel }) => {
-												toggleEdit(comment.id);
-												cancel();
-											}}
-										>
-											<input type="hidden" name="editId" value={comment.id} />
-											<button
-												type="submit"
-												class="w-full text-start"
-												on:click={() => toggleDropdown(comment.id, true)}>Edit</button
-											>
-										</form>
-									</li>
-								{/if}
-								{#if data?.user?.id === comment.user || data?.user?.id === data.project.user}
-									<li>
-										<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
-											<input type="hidden" name="id" value={comment.id} />
-											<button
-												type="submit"
-												class="w-full text-start"
-												on:click={() => toggleDropdown(comment.id, true)}>Delete</button
-											>
-										</form>
-									</li>
-								{/if}
-								{#if data?.user?.id !== comment.user}
-									<li><a href="/">Report</a></li>
-								{/if}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
+			<Comment {toggleEdit} {toggleDropdown} {dropdown} {showEdit} {editId} {comment} />
 		{/each}
 	</div>
 </div>
