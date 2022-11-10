@@ -1,4 +1,4 @@
-import { createCommentDto, createReplyDto, updateCommentDto } from '$lib/schemas';
+import { createCommentDto, createReplyDto, updateCommentDto, updateReplyDto } from '$lib/schemas';
 import type { Comment, CommentActionData, ReplyActionData } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
@@ -102,6 +102,31 @@ export const createReply = async (
 
 		const e = err as ClientResponseError;
 
+		throw error(e.status, e.data.message);
+	}
+};
+
+export const updateReply = async (
+	locals: App.Locals,
+	request: Request
+): Promise<ReplyActionData> => {
+	const { formData, errors } = await validateData(await request.formData(), updateReplyDto);
+
+	if (errors) {
+		return invalid(400, {
+			updateData: formData,
+			updateErrors: errors.fieldErrors
+		});
+	}
+
+	try {
+		await locals.pb.collection('comment_replies').update(formData.id, formData);
+		return {
+			success: true
+		};
+	} catch (err) {
+		console.log('Error:', err);
+		const e = err as ClientResponseError;
 		throw error(e.status, e.data.message);
 	}
 };

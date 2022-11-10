@@ -1,7 +1,13 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getProject, vote } from '$lib/services/projects';
-import { createComment, createReply, getComments, updateComment } from '$lib/services/comments';
+import {
+	createComment,
+	createReply,
+	getComments,
+	updateComment,
+	updateReply
+} from '$lib/services/comments';
 import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals, params, url }) => {
@@ -35,5 +41,17 @@ export const actions: Actions = {
 	},
 	createReply: async ({ request, locals }) => {
 		return await createReply(locals, request);
+	},
+	updateReply: async ({ request, locals }) => {
+		return await updateReply(locals, request);
+	},
+	deleteReply: async ({ request, locals, params }) => {
+		const { id } = Object.fromEntries(await request.formData());
+		return await deleteRecord(
+			locals,
+			'comment_replies',
+			id as string,
+			`/projects/${params.projectId}`
+		);
 	}
 };

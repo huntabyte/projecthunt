@@ -26,7 +26,7 @@
 	const timestamp = generateRelativeDate(new Date(reply.created));
 </script>
 
-<div class="flex w-full space-x-4 my-4" id={reply.id}>
+<div class="flex w-full space-x-4 mt-4" id={reply.id}>
 	<Avatar user={reply.expand.user} />
 	<div class="flex flex-col w-full">
 		<div class="flex items-center space-x-2">
@@ -37,7 +37,7 @@
 			{#if showEdit && editId === reply.id}
 				<a href="#{reply.id}" class="hidden absolute -top-20">Anchor</a>
 				<form
-					action="?/updateComment"
+					action="?/updateReply"
 					method="POST"
 					class="flex"
 					use:enhance={({ form }) => {
