@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getProject, vote } from '$lib/services/projects';
-import { createComment, getComments, updateComment } from '$lib/services/comments';
+import { createComment, createReply, getComments, updateComment } from '$lib/services/comments';
 import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals, params, url }) => {
@@ -32,8 +32,8 @@ export const actions: Actions = {
 	showEdit: async ({ request, params }) => {
 		const { editId } = Object.fromEntries(await request.formData());
 		throw redirect(303, `/projects/${params.projectId}?showEdit=true&editId=${editId}#${editId}`);
+	},
+	createReply: async ({ request, locals }) => {
+		return await createReply(locals, request);
 	}
 };
-// createReply: async ({ request, locals }) => {
-// 	return await createReply(locals, request);
-// }

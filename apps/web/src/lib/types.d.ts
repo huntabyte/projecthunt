@@ -8,7 +8,8 @@ import {
 	createProjectDto,
 	registerUserDto,
 	loginUserDto,
-	updateEmailDto
+	updateEmailDto,
+	updateReplyDto
 } from '$lib/schemas';
 import { updateUsernameDto } from '$lib/schemas';
 import { createReplyDto } from './schemas';
@@ -42,12 +43,13 @@ interface Comment extends Record {
 	content: string;
 	expand: {
 		user: User;
+		'comment_replies(comment)': Reply[];
 	};
 }
 
 interface Reply extends Record {
 	user: string;
-	reply: string;
+	content: string;
 	expand: {
 		user: User;
 	};
@@ -69,6 +71,14 @@ interface CommentActionData {
 	errors?: z.inferFlattenedErrors<typeof createCommentDto>['fieldErrors'];
 	updateData?: UpdateCommentDto;
 	updateErrors?: z.inferFlattenedErrors<typeof updateCommentDto>['fieldErrors'];
+	success?: boolean;
+}
+
+interface ReplyActionData {
+	data?: CreateReplyDto;
+	errors?: z.inferFlattenedErrors<typeof createReplyDto>['fieldErrors'];
+	updateData?: UpdateReplyDto;
+	updateErrors?: z.inferFlattenedErrors<typeof updateReplyDto>['fieldErrors'];
 	success?: boolean;
 }
 

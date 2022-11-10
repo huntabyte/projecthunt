@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
-	import type { Comment } from '$lib/types';
+	import type { Comment, Reply } from '$lib/types';
 	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
 	import Avatar from './Avatar.svelte';
 	import { generateRelativeDate } from '$lib/utils';
-	import Reply from '$lib/components/Reply.svelte';
 	import CommentReplyForm from '$lib/components/CommentReplyForm.svelte';
 
 	export let comment: Comment;
+	export let reply: Reply;
 	export let showEdit: boolean;
 	export let editId: string | null;
 	export let toggleDropdown: Function;
@@ -20,19 +20,19 @@
 	}
 
 	export let dropdown: Dropdown;
-	const timestamp = generateRelativeDate(new Date(comment.created));
+	const timestamp = generateRelativeDate(new Date(reply.created));
 </script>
 
-<div class="flex w-full space-x-4" id={comment.id}>
-	<Avatar user={comment.expand.user} />
+<div class="flex w-full space-x-4" id={reply.id}>
+	<Avatar user={reply.expand.user} />
 	<div class="flex flex-col w-full">
 		<div class="flex items-center space-x-2">
-			<p class="font-bold">{comment.expand.user.name}</p>
-			<p class="font-light opacity-90">@{comment.expand.user.username}</p>
+			<p class="font-bold">{reply.expand.user.name}</p>
+			<p class="font-light opacity-90">@{reply.expand.user.username}</p>
 		</div>
 		<div class="mt-2">
-			{#if showEdit && editId === comment.id}
-				<a href="#{comment.id}" class="hidden absolute -top-20">Anchor</a>
+			{#if showEdit && editId === reply.id}
+				<a href="#{reply.id}" class="hidden absolute -top-20">Anchor</a>
 				<form
 					action="?/updateComment"
 					method="POST"
@@ -49,11 +49,11 @@
 						};
 					}}
 				>
-					<input type="hidden" value={comment.id} name="id" />
+					<input type="hidden" value={reply.id} name="id" />
 					<div class="flex flex-col">
 						<input
 							type="text"
-							value={comment.content}
+							value={reply.content}
 							class="input input-bordered input-primary"
 							name="content"
 						/>
@@ -68,7 +68,7 @@
 					<button class="btn ml-2">Update</button>
 				</form>
 			{:else}
-				<p>{comment.content}</p>
+				<p>{reply.content}</p>
 			{/if}
 		</div>
 		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
@@ -79,7 +79,7 @@
 			<div class="dropdown dropdown-top ">
 				<button
 					class="btn btn-ghost btn-circle btn-xs"
-					on:click={() => toggleDropdown(comment.id, false)}
+					on:click={() => toggleDropdown(reply.id, false)}
 				>
 					<div class="w-4 h-4">
 						<FaEllipsisH />
@@ -87,53 +87,48 @@
 				</button>
 				<ul
 					class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 {dropdown.id ===
-						comment.id && dropdown.hidden
+						reply.id && dropdown.hidden
 						? 'hidden'
 						: ''}"
 				>
-					{#if $page.data?.user?.id === comment.user}
+					{#if $page.data?.user?.id === reply.user}
 						<li>
 							<form
 								action="?/showEdit"
 								class="w-full"
 								method="POST"
 								use:enhance={({ cancel }) => {
-									toggleEdit(comment.id);
+									toggleEdit(reply.id);
 									cancel();
 								}}
 							>
-								<input type="hidden" name="editId" value={comment.id} />
+								<input type="hidden" name="editId" value={reply.id} />
 								<button
 									type="submit"
 									class="w-full text-start"
-									on:click={() => toggleDropdown(comment.id, true)}>Edit</button
+									on:click={() => toggleDropdown(reply.id, true)}>Edit</button
 								>
 							</form>
 						</li>
 					{/if}
-					{#if $page.data?.user?.id === comment.user || $page.data?.user?.id === $page.data.project.user}
+					{#if $page.data?.user?.id === reply.user || $page.data?.user?.id === $page.data.project.user}
 						<li>
-							<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
-								<input type="hidden" name="id" value={comment.id} />
+							<form action="?/deleteReply" class="w-full" method="POST" use:enhance>
+								<input type="hidden" name="id" value={reply.id} />
 								<button
 									type="submit"
 									class="w-full text-start"
-									on:click={() => toggleDropdown(comment.id, true)}>Delete</button
+									on:click={() => toggleDropdown(reply.id, true)}>Delete</button
 								>
 							</form>
 						</li>
 					{/if}
-					{#if $page.data?.user?.id !== comment.user}
+					{#if $page.data?.user?.id !== reply.user}
 						<li><a href="/">Report</a></li>
 					{/if}
 				</ul>
 			</div>
 		</div>
 		<CommentReplyForm {comment} />
-		{#if comment.expand['comment_replies(comment)'].length > 0}
-			{#each comment.expand['comment_replies(comment)'] as reply}
-				<Reply {comment} {reply} {showEdit} {toggleDropdown} {editId} {toggleEdit} {dropdown} />
-			{/each}
-		{/if}
 	</div>
 </div>
