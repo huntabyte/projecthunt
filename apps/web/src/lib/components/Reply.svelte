@@ -13,6 +13,9 @@
 	export let editId: string | null;
 	export let toggleDropdown: Function;
 	export let toggleEdit: Function;
+	let showReply: boolean;
+
+	$: showReply = false;
 
 	interface Dropdown {
 		id: string;
@@ -23,7 +26,7 @@
 	const timestamp = generateRelativeDate(new Date(reply.created));
 </script>
 
-<div class="flex w-full space-x-4" id={reply.id}>
+<div class="flex w-full space-x-4 my-4" id={reply.id}>
 	<Avatar user={reply.expand.user} />
 	<div class="flex flex-col w-full">
 		<div class="flex items-center space-x-2">
@@ -73,7 +76,10 @@
 		</div>
 		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
 			<span class="hover:cursor-pointer hover:underline opacity-80">Upvote</span>
-			<span class="hover:cursor-pointer hover:underline opacity-80">Reply</span>
+			<button
+				class="hover:cursor-pointer hover:underline opacity-80"
+				on:click={() => (showReply = !showReply)}>Reply</button
+			>
 			<span class="hover:cursor-pointer hover:underline opacity-80">Share</span>
 			<span class="opacity-80">{timestamp}</span>
 			<div class="dropdown dropdown-top ">
@@ -129,6 +135,8 @@
 				</ul>
 			</div>
 		</div>
-		<CommentReplyForm {comment} />
+		{#if showReply}
+			<CommentReplyForm {comment} />
+		{/if}
 	</div>
 </div>

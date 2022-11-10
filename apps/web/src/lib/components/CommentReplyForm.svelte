@@ -7,7 +7,7 @@
 	export let comment: Comment;
 </script>
 
-<div class="flex mt-4 w-full  items-center space-x-4">
+<div class="flex w-full items-center space-x-4 mt-4">
 	<div class="avatar">
 		<div class="w-12 rounded-full">
 			<img
