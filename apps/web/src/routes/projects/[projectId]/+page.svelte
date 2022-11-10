@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance, applyAction } from '$app/forms';
 	import ProjectVoteForm from '$lib/components/ProjectVoteForm.svelte';
-	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
 
 	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';

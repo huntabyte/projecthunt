@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { ClientResponseError } from 'pocketbase';
-import { updateProject } from '$lib/api';
+import { updateProject } from '$lib/services/projects';
 import type { UpdateProjectActionData } from '$lib/types';
 
 export const actions: Actions = {

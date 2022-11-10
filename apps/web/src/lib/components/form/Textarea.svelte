@@ -6,7 +6,7 @@
 	export let disabled: boolean = false;
 	export let required: boolean = false;
 
-	export let errors: string[];
+	export let errors: string[] = [];
 </script>
 
 <div class="form-control w-full max-w-lg">

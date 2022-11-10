@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteRecord, getUsersProjects } from '$lib/api';
+import { getUsersProjects } from '$lib/services/projects';
+import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals }) => {
 	if (!locals.pb.authStore.isValid) {

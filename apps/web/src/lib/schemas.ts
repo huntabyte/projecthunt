@@ -51,18 +51,37 @@ export const createProjectDto = z.object({
 
 export const createCommentDto = z.object({
 	content: z
-		.string()
+		.string({ required_error: 'Content is required' })
 		.min(2, { message: 'Comment must be at least 2 characters' })
 		.max(240, { message: 'Comment must be less than 241 characters' })
 		.trim(),
-	project: z.string(),
-	user: z.string()
+	project: z.string({ required_error: 'Project is required' }),
+	user: z.string({ required_error: 'User is required' })
 });
 
 export const updateCommentDto = z.object({
 	id: z.string({ required_error: 'An ID must be passed with the comment to update it' }),
 	content: z
-		.string()
+		.string({ required_error: 'Content is required' })
+		.min(2, { message: 'Comment must be at least 2 characters' })
+		.max(240, { message: 'Comment must be less than 241 characters' })
+		.trim()
+});
+
+export const createReplyDto = z.object({
+	content: z
+		.string({ required_error: 'Content is required' })
+		.min(2, { message: 'Comment must be at least 2 characters' })
+		.max(240, { message: 'Comment must be less than 241 characters' })
+		.trim(),
+	user: z.string(),
+	comment: z.string()
+});
+
+export const updateReplyDto = z.object({
+	id: z.string({ required_error: 'An ID must be passed with the reply to update it' }),
+	content: z
+		.string({ required_error: 'Content is required' })
 		.min(2, { message: 'Comment must be at least 2 characters' })
 		.max(240, { message: 'Comment must be less than 241 characters' })
 		.trim()

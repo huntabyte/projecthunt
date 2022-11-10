@@ -11,6 +11,7 @@ import {
 	updateEmailDto
 } from '$lib/schemas';
 import { updateUsernameDto } from '$lib/schemas';
+import { createReplyDto } from './schemas';
 
 interface User extends Record {
 	id: string;
@@ -44,6 +45,14 @@ interface Comment extends Record {
 	};
 }
 
+interface Reply extends Record {
+	user: string;
+	reply: string;
+	expand: {
+		user: User;
+	};
+}
+
 type ProjectDto = z.infer<projectDto>;
 type UpdateCommentDto = z.infer<updateCommentDto>;
 type CreateCommentDto = z.infer<createCommentDto>;
@@ -52,6 +61,8 @@ type LoginUserDto = z.infer<loginUserDto>;
 type ResetPasswordDto = z.infer<resetPasswordDto>;
 type UpdateEmailDto = z.infer<updateEmailDto>;
 type UpdateUsernameDto = z.infer<updateUsernameDto>;
+type CreateReplyDto = z.infer<createReplyDto>;
+type UpdateReplyDto = z.infer<updateReplyDto>;
 
 interface CommentActionData {
 	data?: CreateCommentDto;

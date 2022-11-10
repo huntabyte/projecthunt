@@ -1,5 +1,7 @@
 import type { z, ZodError } from 'zod';
 
+import { differenceInDays, formatDistanceToNowStrict } from 'date-fns';
+
 const { randomBytes } = await import('node:crypto');
 
 const POCKETBASE_HOST = 'localhost:8090';
@@ -42,4 +44,17 @@ export const validateData = async <T extends z.ZodTypeAny>(
 export const generateUsername = (name: string): string => {
 	const id = randomBytes(2).toString('hex');
 	return `${name.slice(0, 5)}${id}`;
+};
+
+export const generateRelativeDate = (date: Date) => {
+	const options = {
+		month: 'short',
+		day: 'numeric'
+	};
+
+	if (differenceInDays(new Date(), date) >= 1) {
+		return date.toLocaleString('en-US', options as Intl.DateTimeFormatOptions);
+	}
+
+	return formatDistanceToNowStrict(date, { addSuffix: true });
 };

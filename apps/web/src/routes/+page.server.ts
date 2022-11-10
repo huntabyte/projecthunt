@@ -1,4 +1,4 @@
-import { getProjects, vote } from '$lib/api';
+import { getProjects, vote } from '$lib/services/projects';
 import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = ({ locals }) => {

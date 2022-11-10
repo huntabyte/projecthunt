@@ -2,9 +2,9 @@
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
 	import type { Comment } from '$lib/types';
-	import { getImageURL } from '$lib/utils';
-	import FaEllipsisV from 'svelte-icons/fa/FaEllipsisV.svelte';
+	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
 	import Avatar from './Avatar.svelte';
+	import { generateRelativeDate, getImageURL } from '$lib/utils';
 
 	export let comment: Comment;
 	export let showEdit: boolean;
@@ -18,11 +18,12 @@
 	}
 
 	export let dropdown: Dropdown;
+	const timestamp = generateRelativeDate(new Date(comment.created));
 </script>
 
 <div class="flex w-full space-x-4" id={comment.id}>
 	<Avatar user={comment.expand.user} />
-	<div class="flex flex-col">
+	<div class="flex flex-col w-full">
 		<div class="flex items-center space-x-2">
 			<p class="font-bold">{comment.expand.user.name}</p>
 			<p class="font-light opacity-90">@{comment.expand.user.username}</p>
@@ -69,16 +70,17 @@
 			{/if}
 		</div>
 		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
-			<span class="hover:cursor-pointer hover:underline">Upvote</span>
-			<span class="hover:cursor-pointer hover:underline">Reply</span>
-			<span class="hover:cursor-pointer hover:underline">Share</span>
+			<span class="hover:cursor-pointer hover:underline opacity-80">Upvote</span>
+			<span class="hover:cursor-pointer hover:underline opacity-80">Reply</span>
+			<span class="hover:cursor-pointer hover:underline opacity-80">Share</span>
+			<span class="opacity-80">{timestamp}</span>
 			<div class="dropdown dropdown-top ">
 				<button
 					class="btn btn-ghost btn-circle btn-xs"
 					on:click={() => toggleDropdown(comment.id, false)}
 				>
 					<div class="w-4 h-4">
-						<FaEllipsisV />
+						<FaEllipsisH />
 					</div>
 				</button>
 				<ul
@@ -124,6 +126,60 @@
 					{/if}
 				</ul>
 			</div>
+		</div>
+
+		<div class="flex mt-4 w-full  items-center space-x-4">
+			<div class="avatar">
+				<div class="w-12 rounded-full">
+					<img
+						src={$page.data.user?.avatar
+							? getImageURL(
+									$page.data.user?.collectionName,
+									$page.data.user?.id,
+									$page.data.user?.avatar
+							  )
+							: `https://ui-avatars.com/api/?name=${$page.data?.user?.name}`}
+						alt="User Avatar"
+					/>
+				</div>
+			</div>
+			<form
+				action="?/createReply"
+				method="POST"
+				class="flex w-full justify-between max-w-lg"
+				use:enhance={({ form }) => {
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							form.reset();
+						}
+						if (result.type === 'invalid') {
+							await applyAction(result);
+						}
+						update();
+					};
+				}}
+			>
+				<div class="w-full">
+					<input type="hidden" name="user" value={$page.data?.user?.id} />
+					<input type="hidden" name="project" value={$page.data?.project?.id} />
+					<input
+						type="text"
+						class="input input-bordered w-full mb-2"
+						name="reply"
+						value={$page.form?.data?.reply ?? `@${comment.expand.user.username}`}
+					/>
+					{#if $page.form?.errors?.reply}
+						{#each $page.form?.errors?.reply as error}
+							<label for="name" class="label py-0">
+								<div class="label-text-alt text-error">{error}</div>
+							</label>
+						{/each}
+					{/if}
+				</div>
+				<div class="ml-4">
+					<button type="submit" class="btn btn-outline">Reply</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

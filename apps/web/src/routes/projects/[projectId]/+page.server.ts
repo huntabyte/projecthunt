@@ -1,14 +1,8 @@
-import type { ClientResponseError } from 'pocketbase';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import {
-	createComment,
-	deleteRecord,
-	getComments,
-	getProject,
-	updateComment,
-	vote
-} from '$lib/api';
+import { getProject, vote } from '$lib/services/projects';
+import { createComment, getComments, updateComment } from '$lib/services/comments';
+import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals, params, url }) => {
 	return {
@@ -40,3 +34,6 @@ export const actions: Actions = {
 		throw redirect(303, `/projects/${params.projectId}?showEdit=true&editId=${editId}#${editId}`);
 	}
 };
+// createReply: async ({ request, locals }) => {
+// 	return await createReply(locals, request);
+// }
