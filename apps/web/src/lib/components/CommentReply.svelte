@@ -136,7 +136,7 @@
 			</div>
 		</div>
 		{#if showReply}
-			<CommentReplyForm {comment} />
+			<CommentReplyForm {comment} bind:showReply />
 		{/if}
 	</div>
 </div>

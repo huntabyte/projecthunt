@@ -5,7 +5,7 @@
 	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
 	import Avatar from './Avatar.svelte';
 	import { generateRelativeDate } from '$lib/utils';
-	import Reply from '$lib/components/Reply.svelte';
+	import CommentReply from '$lib/components/CommentReply.svelte';
 	import CommentReplyForm from '$lib/components/CommentReplyForm.svelte';
 
 	export let comment: Comment;
@@ -136,11 +136,19 @@
 			</div>
 		</div>
 		{#if showReply}
-			<CommentReplyForm {comment} />
+			<CommentReplyForm {comment} bind:showReply />
 		{/if}
 		{#if comment.expand['comment_replies(comment)'].length > 0}
 			{#each comment.expand['comment_replies(comment)'] as reply}
-				<Reply {comment} {reply} {showEdit} {toggleDropdown} {editId} {toggleEdit} {dropdown} />
+				<CommentReply
+					{comment}
+					{reply}
+					{showEdit}
+					{toggleDropdown}
+					{editId}
+					{toggleEdit}
+					{dropdown}
+				/>
 			{/each}
 		{/if}
 	</div>

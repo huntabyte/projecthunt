@@ -5,6 +5,7 @@
 	import type { Comment } from '$lib/types';
 
 	export let comment: Comment;
+	export let showReply: boolean;
 </script>
 
 <div class="flex w-full items-center space-x-4 mt-4">
@@ -30,6 +31,7 @@
 			return async ({ result, update }) => {
 				if (result.type === 'success') {
 					form.reset();
+					showReply = false;
 				}
 				if (result.type === 'invalid') {
 					await applyAction(result);
