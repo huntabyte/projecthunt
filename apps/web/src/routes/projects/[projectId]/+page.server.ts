@@ -1,13 +1,13 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getProject, vote } from '$lib/services/projects';
+import { getProject, vote } from '$lib/services/ProjectService';
 import {
 	createComment,
 	createReply,
 	getComments,
 	updateComment,
 	updateReply
-} from '$lib/services/comments';
+} from '$lib/services/CommentService';
 import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals, params, url }) => {

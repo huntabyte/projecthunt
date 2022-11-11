@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getUsersProjects } from '$lib/services/projects';
+import { getUsersProjects } from '$lib/services/ProjectService';
 import { deleteRecord } from '$lib/services/base';
 
 export const load: PageServerLoad = ({ locals }) => {
