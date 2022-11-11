@@ -5,8 +5,7 @@ import {
 	createComment,
 	createReply,
 	getComments,
-	updateComment,
-	updateReply
+	updateComment
 } from '$lib/services/CommentService';
 import { deleteRecord } from '$lib/services/base';
 
@@ -42,9 +41,7 @@ export const actions: Actions = {
 	createReply: async ({ request, locals }) => {
 		return await createReply(locals, request);
 	},
-	updateReply: async ({ request, locals }) => {
-		return await updateReply(locals, request);
-	},
+
 	deleteReply: async ({ request, locals, params }) => {
 		const { id } = Object.fromEntries(await request.formData());
 		return await deleteRecord(

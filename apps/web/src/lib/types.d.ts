@@ -43,15 +43,16 @@ interface Comment extends Record {
 	content: string;
 	expand: {
 		user: User;
-		'comment_replies(comment)': Reply[];
+		'comment_replies(comment)'?: CommentReply[];
+		reply?: Comment;
 	};
 }
 
-interface Reply extends Record {
-	user: string;
-	content: string;
+interface CommentReply extends Record {
+	comment: string;
+	reply: string;
 	expand: {
-		user: User;
+		reply: Comment;
 	};
 }
 

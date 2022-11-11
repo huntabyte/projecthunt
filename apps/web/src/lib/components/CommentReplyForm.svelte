@@ -3,6 +3,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { getImageURL } from '$lib/utils';
 	import type { Comment } from '$lib/types';
+	import { invalidateAll } from '$app/navigation';
 
 	export let comment: Comment;
 	export let showReply: boolean;
@@ -32,6 +33,7 @@
 				if (result.type === 'success') {
 					form.reset();
 					showReply = false;
+					await invalidateAll();
 				}
 				if (result.type === 'invalid') {
 					await applyAction(result);
@@ -42,7 +44,8 @@
 	>
 		<div class="w-full">
 			<input type="hidden" name="user" value={$page.data?.user?.id} />
-			<input type="hidden" name="comment" value={comment.id} />
+			<input type="hidden" name="parentId" value={comment.id} />
+			<input type="hidden" name="project" value={$page.data?.project?.id} />
 			<input
 				type="text"
 				class="input input-bordered w-full mb-2"

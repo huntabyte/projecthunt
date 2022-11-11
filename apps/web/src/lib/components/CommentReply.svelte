@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
-	import type { Comment, Reply } from '$lib/types';
+	import type { Comment } from '$lib/types';
 	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
 	import Avatar from './Avatar.svelte';
 	import { generateRelativeDate } from '$lib/utils';
 	import CommentReplyForm from '$lib/components/CommentReplyForm.svelte';
 
 	export let comment: Comment;
-	export let reply: Reply;
+	export let reply: Comment;
 	export let showEdit: boolean;
 	export let editId: string | null;
 	export let toggleDropdown: Function;
@@ -37,7 +37,7 @@
 			{#if showEdit && editId === reply.id}
 				<a href="#{reply.id}" class="hidden absolute -top-20">Anchor</a>
 				<form
-					action="?/updateReply"
+					action="?/updateComment"
 					method="POST"
 					class="flex"
 					use:enhance={({ form }) => {

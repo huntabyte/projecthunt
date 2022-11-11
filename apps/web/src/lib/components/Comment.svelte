@@ -138,11 +138,11 @@
 		{#if showReply}
 			<CommentReplyForm {comment} bind:showReply />
 		{/if}
-		{#if comment.expand['comment_replies(comment)'].length > 0}
+		{#if comment.expand?.['comment_replies(comment)']}
 			{#each comment.expand['comment_replies(comment)'] as reply}
 				<CommentReply
 					{comment}
-					{reply}
+					reply={reply.expand.reply}
 					{showEdit}
 					{toggleDropdown}
 					{editId}

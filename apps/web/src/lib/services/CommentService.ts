@@ -1,17 +1,31 @@
-import { createCommentDto, createReplyDto, updateCommentDto, updateReplyDto } from '$lib/schemas';
+import { createCommentDto, createReplyDto, updateCommentDto } from '$lib/schemas';
 import type { Comment, CommentActionData, ReplyActionData } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
-import type { ClientResponseError } from 'pocketbase';
+import { ClientResponseError } from 'pocketbase';
 
 export const getComments = async (locals: App.Locals, projectId: string) => {
 	try {
-		let comments = serializeNonPOJOs<Comment[]>(
-			await locals.pb.collection('comments').getFullList<Comment>(undefined, {
-				filter: `project = "${projectId}"`,
-				expand: 'user, comment_replies(comment).user'
+		let commentReplies = serializeNonPOJOs<Comment[]>(
+			await locals.pb.collection('comment_replies').getFullList<Comment>(undefined, {
+				sort: '-created',
+				filter: `comment.project = "${projectId}"`,
+				expand: 'reply'
 			})
 		);
+
+		const replyIdFilter = commentReplies
+			.map((commentReply) => `id != "${commentReply.expand?.reply?.id}"`)
+			.join(' || ');
+
+		let comments = serializeNonPOJOs<Comment[]>(
+			await locals.pb.collection('comments').getFullList<Comment>(undefined, {
+				sort: '-created',
+				filter: `project = "${projectId}" && (${replyIdFilter})`,
+				expand: 'user, comment_replies(comment).reply.user'
+			})
+		);
+
 		comments = comments.map((comment) => {
 			if (comment.expand?.['comment_replies(comment)']) {
 				return comment;
@@ -19,6 +33,7 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 			comment.expand['comment_replies(comment)'] = [];
 			return comment;
 		});
+		console.log(comments);
 		return comments;
 	} catch (err) {
 		console.log('Error: ', err);
@@ -83,7 +98,7 @@ export const createReply = async (
 	locals: App.Locals,
 	request: Request
 ): Promise<ReplyActionData> => {
-	const { formData, errors } = await validateData(await request.formData(), createReplyDto);
+	const { formData, errors } = await validateData(await request.formData(), createCommentDto);
 
 	if (errors) {
 		return invalid(400, {
@@ -91,42 +106,30 @@ export const createReply = async (
 			errors: errors.fieldErrors
 		});
 	}
+	let createdCommentId: string;
 
 	try {
-		await locals.pb.collection('comment_replies').create(formData);
-		return {
-			success: true
-		};
+		if (formData.parentId) {
+			const { id } = await locals.pb.collection('comments').create(formData);
+			createdCommentId = id;
+			await locals.pb
+				.collection('comment_replies')
+				.create({ comment: formData.parentId, reply: id });
+
+			return {
+				success: true
+			};
+		}
+
+		throw error(400, 'A reply must have a parentId');
 	} catch (err) {
 		console.log('Error:', err);
 
-		const e = err as ClientResponseError;
+		//TODO: Check ClientResponseError for failure to create reply, then delete comment before throwing
+		if (err instanceof ClientResponseError) {
+			throw error(err.status, err.data.message);
+		}
 
-		throw error(e.status, e.data.message);
-	}
-};
-
-export const updateReply = async (
-	locals: App.Locals,
-	request: Request
-): Promise<ReplyActionData> => {
-	const { formData, errors } = await validateData(await request.formData(), updateReplyDto);
-
-	if (errors) {
-		return invalid(400, {
-			updateData: formData,
-			updateErrors: errors.fieldErrors
-		});
-	}
-
-	try {
-		await locals.pb.collection('comment_replies').update(formData.id, formData);
-		return {
-			success: true
-		};
-	} catch (err) {
-		console.log('Error:', err);
-		const e = err as ClientResponseError;
-		throw error(e.status, e.data.message);
+		throw error(400, 'A reply must have a parent!');
 	}
 };
