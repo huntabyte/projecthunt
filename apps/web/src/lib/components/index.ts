@@ -15,6 +15,7 @@ import FileInput from './form/FileInput.svelte';
 import Input from './form/Input.svelte';
 import SearchInput from './form/SearchInput.svelte';
 import Textarea from './form/Textarea.svelte';
+import CommentVoteForm from './CommentVoteForm.svelte';
 
 export {
 	Avatar,
@@ -22,6 +23,7 @@ export {
 	CommentReply,
 	CommentReplyForm,
 	ConfirmDeleteModal,
+	CommentVoteForm,
 	Footer,
 	HomeDiscover,
 	HomeHeader,

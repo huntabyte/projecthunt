@@ -6,17 +6,25 @@ import { serialize } from 'object-to-formdata';
 import { ClientResponseError } from 'pocketbase';
 
 export const getProject = async (locals: App.Locals, id: string): Promise<Project> => {
-	const project = serializeNonPOJOs<Project>(
-		await locals.pb.collection('projects').getOne(id, {
-			expand: 'project_votes(project)'
-		})
-	);
-	if (project.expand?.['project_votes(project)']) {
-		return project;
-	}
-	project.expand['project_votes(project)'] = [];
+	try {
+		const project = serializeNonPOJOs<Project>(
+			await locals.pb.collection('projects').getOne(id, {
+				expand: 'project_votes(project)'
+			})
+		);
+		if (project.expand?.['project_votes(project)']) {
+			return project;
+		}
+		project.expand['project_votes(project)'] = [];
 
-	return project;
+		return project;
+	} catch (err) {
+		if (err instanceof ClientResponseError) {
+			throw error(err.status, err.data.message);
+		} else {
+			throw error(500, 'Something went wrong getting the project');
+		}
+	}
 };
 
 export const getProjects = async (locals: App.Locals, page = 1, perPage = 100) => {

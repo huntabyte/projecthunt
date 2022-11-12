@@ -5,7 +5,6 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	viewBox="0 0 400 300"
 	width="100%"
-	height="auto"
 	class="illustration styles_illustrationTablet__1DWOa"
 >
 	<defs>
