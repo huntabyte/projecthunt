@@ -37,7 +37,7 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 					let updatedReply;
 					commentReplies.forEach((reply) => {
 						if (reply.id === commentReply.id) {
-							if (reply.expand.reply.expand['comment_votes(comment)']) {
+							if (reply.expand?.reply?.expand['comment_votes(comment)']) {
 								updatedReply = reply;
 							} else {
 								reply.expand.reply.expand['comment_votes(comment)'] = [];
@@ -48,7 +48,7 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 					return updatedReply;
 				});
 			});
-			console.log(comments[0].expand['comment_replies(comment)'][0].expand);
+			// console.log(comments[0].expand['comment_replies(comment)'][0].expand);
 		} else {
 			comments = serializeNonPOJOs<Comment[]>(
 				await locals.pb.collection('comments').getFullList<Comment>(undefined, {
@@ -60,10 +60,12 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 		}
 
 		comments = comments.map((comment) => {
-			if (comment.expand?.['comment_replies(comment)']) {
-				return comment;
+			if (!comment.expand?.['comment_replies(comment)']) {
+				comment.expand['comment_replies(comment)'] = [];
 			}
-			comment.expand['comment_replies(comment)'] = [];
+			if (!comment.expand?.['comment_votes(comment)']) {
+				comment.expand['comment_votes(comment)'] = [];
+			}
 			return comment;
 		});
 
