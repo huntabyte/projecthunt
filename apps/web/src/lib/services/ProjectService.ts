@@ -1,5 +1,5 @@
 import { createProjectDto } from '$lib/schemas';
-import type { Project, Vote } from '$lib/types';
+import type { Project, ProjectVote } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid, redirect } from '@sveltejs/kit';
 import { serialize } from 'object-to-formdata';
@@ -131,7 +131,7 @@ export const updateProject = async (
 
 export const updateProjectVote = async (locals: App.Locals, projectId: string) => {
 	try {
-		const existingVote = await locals.pb.collection('project_votes').getFullList<Vote>(1, {
+		const existingVote = await locals.pb.collection('project_votes').getFullList<ProjectVote>(1, {
 			filter: `user = "${locals?.user?.id}" && project = "${projectId}"`,
 			sort: '-created'
 		});

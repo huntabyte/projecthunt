@@ -27,14 +27,19 @@ interface Project extends Record {
 	thumbnail?: string | undefined;
 	description: string;
 	expand: {
-		'project_votes(project)': Vote[];
+		'project_votes(project)': ProjectVote[];
 	};
 	user: string;
 }
 
-interface Vote extends Record {
+interface ProjectVote extends Record {
 	user: string;
 	project: string;
+}
+
+interface CommentVote extends Record {
+	user: string;
+	comment: string;
 }
 
 interface Comment extends Record {

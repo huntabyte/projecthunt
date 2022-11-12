@@ -1,8 +1,7 @@
 import { createCommentDto, updateCommentDto } from '$lib/schemas';
-import type { Comment, CommentActionData, ReplyActionData } from '$lib/types';
+import type { Comment, CommentActionData, CommentVote, ReplyActionData } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
-import { ptBR } from 'date-fns/locale';
 import { ClientResponseError } from 'pocketbase';
 
 export const getComments = async (locals: App.Locals, projectId: string) => {
@@ -14,13 +13,11 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 				expand: 'reply'
 			})
 		);
-		// console.log(commentReplies);
 
 		const replyIdFilter = commentReplies
 			.map((commentReply) => `id != "${commentReply.expand?.reply?.id}"`)
 			.join(' && ');
 
-		// console.log(replyIdFilter);
 		let comments;
 
 		if (replyIdFilter) {
@@ -174,5 +171,26 @@ export const deleteComment = async (locals: App.Locals, id: string) => {
 		} else {
 			throw error(500, 'Something went wrong while deleting your comment.');
 		}
+	}
+};
+
+export const updateProjectVote = async (locals: App.Locals, commentId: string) => {
+	try {
+		const existingVote = await locals.pb.collection('comment_votes').getFullList<CommentVote>(1, {
+			filter: `user = "${locals?.user?.id}" && comment = "${commentId}"`,
+			sort: '-created'
+		});
+		if (existingVote.length < 1) {
+			await locals.pb.collection('project_votes').create({
+				user: locals?.user?.id,
+				comment: commentId
+			});
+		} else {
+			const vote = serializeNonPOJOs(existingVote[0]);
+			await locals.pb.collection('comment_votes').delete(vote.id);
+		}
+	} catch (err) {
+		console.log('Error:', err);
+		throw error(500, 'Something went wrong with voting.');
 	}
 };
