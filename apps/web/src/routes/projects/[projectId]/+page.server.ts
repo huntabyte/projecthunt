@@ -4,6 +4,7 @@ import { getProject, vote } from '$lib/services/ProjectService';
 import {
 	createComment,
 	createReply,
+	deleteComment,
 	getComments,
 	updateComment
 } from '$lib/services/CommentService';
@@ -30,9 +31,9 @@ export const actions: Actions = {
 	updateComment: async ({ request, locals }) => {
 		return await updateComment(locals, request);
 	},
-	deleteComment: async ({ request, locals, params }) => {
+	deleteComment: async ({ request, locals }) => {
 		const { id } = Object.fromEntries(await request.formData());
-		return await deleteRecord(locals, 'comments', id as string, `/projects/${params.projectId}`);
+		return await deleteComment(locals, id as string);
 	},
 	showEdit: async ({ request, params }) => {
 		const { editId } = Object.fromEntries(await request.formData());

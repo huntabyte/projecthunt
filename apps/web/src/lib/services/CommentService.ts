@@ -1,7 +1,8 @@
-import { createCommentDto, createReplyDto, updateCommentDto } from '$lib/schemas';
+import { createCommentDto, updateCommentDto } from '$lib/schemas';
 import type { Comment, CommentActionData, ReplyActionData } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
+import { ptBR } from 'date-fns/locale';
 import { ClientResponseError } from 'pocketbase';
 
 export const getComments = async (locals: App.Locals, projectId: string) => {
@@ -13,18 +14,32 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 				expand: 'reply'
 			})
 		);
+		// console.log(commentReplies);
 
 		const replyIdFilter = commentReplies
 			.map((commentReply) => `id != "${commentReply.expand?.reply?.id}"`)
-			.join(' || ');
+			.join(' && ');
 
-		let comments = serializeNonPOJOs<Comment[]>(
-			await locals.pb.collection('comments').getFullList<Comment>(undefined, {
-				sort: '-created',
-				filter: `project = "${projectId}" && (${replyIdFilter})`,
-				expand: 'user, comment_replies(comment).reply.user'
-			})
-		);
+		// console.log(replyIdFilter);
+		let comments;
+
+		if (replyIdFilter) {
+			comments = serializeNonPOJOs<Comment[]>(
+				await locals.pb.collection('comments').getFullList<Comment>(undefined, {
+					sort: '-created',
+					filter: `project = "${projectId}" && (${replyIdFilter})`,
+					expand: 'user, comment_replies(comment).reply.user'
+				})
+			);
+		} else {
+			comments = serializeNonPOJOs<Comment[]>(
+				await locals.pb.collection('comments').getFullList<Comment>(undefined, {
+					sort: '-created',
+					filter: `project = "${projectId}"`,
+					expand: 'user, comment_replies(comment).reply.user'
+				})
+			);
+		}
 
 		comments = comments.map((comment) => {
 			if (comment.expand?.['comment_replies(comment)']) {
@@ -33,7 +48,7 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 			comment.expand['comment_replies(comment)'] = [];
 			return comment;
 		});
-		console.log(comments);
+
 		return comments;
 	} catch (err) {
 		console.log('Error: ', err);
@@ -131,5 +146,33 @@ export const createReply = async (
 		}
 
 		throw error(400, 'A reply must have a parent!');
+	}
+};
+
+export const deleteComment = async (locals: App.Locals, id: string) => {
+	try {
+		const comment = serializeNonPOJOs<Comment>(
+			await locals.pb.collection('comments').getOne(id as string, {
+				expand: 'comment_replies(comment).reply'
+			})
+		);
+
+		console.log(comment.expand['comment_replies(comment)']);
+
+		if (comment.expand['comment_replies(comment)']) {
+			if (comment.expand['comment_replies(comment)'].length > 0) {
+				for (const commentReply of comment.expand['comment_replies(comment)']) {
+					await locals.pb.collection('comments').delete(commentReply.expand.reply.id);
+				}
+			}
+		}
+
+		await locals.pb.collection('comments').delete(comment.id);
+	} catch (err) {
+		if (err instanceof ClientResponseError) {
+			throw error(err.status, err.data.message);
+		} else {
+			throw error(500, 'Something went wrong while deleting your comment.');
+		}
 	}
 };
