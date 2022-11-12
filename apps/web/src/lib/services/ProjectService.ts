@@ -8,13 +8,13 @@ import { ClientResponseError } from 'pocketbase';
 export const getProject = async (locals: App.Locals, id: string): Promise<Project> => {
 	const project = serializeNonPOJOs<Project>(
 		await locals.pb.collection('projects').getOne(id, {
-			expand: 'votes(project)'
+			expand: 'project_votes(project)'
 		})
 	);
-	if (project.expand?.['votes(project)']) {
+	if (project.expand?.['project_votes(project)']) {
 		return project;
 	}
-	project.expand['votes(project)'] = [];
+	project.expand['project_votes(project)'] = [];
 
 	return project;
 };
@@ -24,14 +24,14 @@ export const getProjects = async (locals: App.Locals, page = 1, perPage = 100) =
 		let projects = serializeNonPOJOs(
 			await locals.pb.collection('projects').getList<Project>(page, perPage, {
 				sort: '-created',
-				expand: 'votes(project)'
+				expand: 'project_votes(project)'
 			})
 		);
 		projects.items = projects.items.map((project) => {
-			if (project.expand?.['votes(project)']) {
+			if (project.expand?.['project_votes(project)']) {
 				return project;
 			}
-			project.expand['votes(project)'] = [];
+			project.expand['project_votes(project)'] = [];
 			return project;
 		});
 		return projects;
@@ -65,14 +65,14 @@ export const getAllProjects = async (locals: App.Locals) => {
 		let projects = serializeNonPOJOs(
 			await locals.pb.collection('projects').getFullList<Project>(999999999, {
 				sort: '-created',
-				expand: 'votes(project)'
+				expand: 'project_votes(project)'
 			})
 		);
 		projects = projects.map((project) => {
-			if (project.expand?.['votes(project)']) {
+			if (project.expand?.['project_votes(project)']) {
 				return project;
 			}
-			project.expand['votes(project)'] = [];
+			project.expand['project_votes(project)'] = [];
 			return project;
 		});
 		return projects;
@@ -131,18 +131,18 @@ export const updateProject = async (
 
 export const vote = async (locals: App.Locals, projectId: string) => {
 	try {
-		const existingVote = await locals.pb.collection('votes').getFullList<Vote>(1, {
+		const existingVote = await locals.pb.collection('project_votes').getFullList<Vote>(1, {
 			filter: `user = "${locals?.user?.id}" && project = "${projectId}"`,
 			sort: '-created'
 		});
 		if (existingVote.length < 1) {
-			await locals.pb.collection('votes').create({
+			await locals.pb.collection('project_votes').create({
 				user: locals?.user?.id,
 				project: projectId
 			});
 		} else {
 			const vote = serializeNonPOJOs(existingVote[0]);
-			await locals.pb.collection('votes').delete(vote.id);
+			await locals.pb.collection('project_votes').delete(vote.id);
 		}
 	} catch (err) {
 		console.log('Error:', err);

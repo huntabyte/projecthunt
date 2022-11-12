@@ -7,7 +7,9 @@
 	import FaHeart from 'svelte-icons/fa/FaHeart.svelte';
 	export let project: Project;
 	let hasVoted = Boolean(
-		project.expand?.['votes(project)'].find((vote: Vote) => vote.user === $page?.data?.user?.id)
+		project.expand?.['project_votes(project)'].find(
+			(vote: Vote) => vote.user === $page?.data?.user?.id
+		)
 	);
 	export let variant = 'default';
 </script>
@@ -41,7 +43,7 @@
 				<div class="h-6 w-6">
 					<FaCaretUp />
 				</div>
-				<div class="text-xs">{project?.expand?.['votes(project)'].length ?? ''}</div>
+				<div class="text-xs">{project?.expand?.['project_votes(project)'].length ?? ''}</div>
 			</button>
 		{:else}
 			<a
@@ -51,7 +53,7 @@
 				<div class="h-6 w-6">
 					<FaCaretUp />
 				</div>
-				<div class="text-xs">{project?.expand?.['votes(project)'].length ?? ''}</div>
+				<div class="text-xs">{project?.expand?.['project_votes(project)'].length ?? ''}</div>
 			</a>
 		{/if}
 	{:else if variant === 'heart'}
@@ -67,7 +69,9 @@
 						<FaRegHeart />
 					{/if}
 				</div>
-				<div class="font-medium text-sm">{project?.expand?.['votes(project)'].length ?? ''}</div>
+				<div class="font-medium text-sm">
+					{project?.expand?.['project_votes(project)'].length ?? ''}
+				</div>
 			</button>
 		{:else}
 			<a href="/login" class=" flex space-x-2 items-center justify-center ">
@@ -78,7 +82,9 @@
 						<FaRegHeart />
 					{/if}
 				</div>
-				<div class="font-medium text-sm">{project?.expand?.['votes(project)'].length ?? ''}</div>
+				<div class="font-medium text-sm">
+					{project?.expand?.['project_votes(project)'].length ?? ''}
+				</div>
 			</a>
 		{/if}
 	{/if}

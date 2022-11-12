@@ -27,7 +27,7 @@ interface Project extends Record {
 	thumbnail?: string | undefined;
 	description: string;
 	expand: {
-		'votes(project)': Vote[];
+		'project_votes(project)': Vote[];
 	};
 	user: string;
 }
