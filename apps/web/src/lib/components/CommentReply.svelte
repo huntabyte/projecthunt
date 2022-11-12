@@ -4,6 +4,7 @@
 	import type { Comment } from '$lib/types';
 	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
 	import Avatar from './Avatar.svelte';
+	import { CommentVoteForm } from '$lib/components';
 	import { generateRelativeDate } from '$lib/utils';
 	import CommentReplyForm from '$lib/components/CommentReplyForm.svelte';
 
@@ -75,7 +76,7 @@
 			{/if}
 		</div>
 		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
-			<span class="hover:cursor-pointer hover:underline opacity-80">Upvote</span>
+			<CommentVoteForm comment={reply} />
 			<button
 				class="hover:cursor-pointer hover:underline opacity-80"
 				on:click={() => (showReply = !showReply)}>Reply</button
@@ -119,7 +120,7 @@
 					{/if}
 					{#if $page.data?.user?.id === reply.user || $page.data?.user?.id === $page.data.project.user}
 						<li>
-							<form action="?/deleteReply" class="w-full" method="POST" use:enhance>
+							<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
 								<input type="hidden" name="id" value={reply.id} />
 								<button
 									type="submit"

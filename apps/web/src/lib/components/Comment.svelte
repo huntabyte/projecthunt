@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
-	import type { Comment } from '$lib/types';
 	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
-	import Avatar from './Avatar.svelte';
+
 	import { generateRelativeDate } from '$lib/utils';
-	import CommentReply from '$lib/components/CommentReply.svelte';
-	import CommentReplyForm from '$lib/components/CommentReplyForm.svelte';
+	import { Avatar, CommentReply, CommentReplyForm, CommentVoteForm } from '$lib/components';
+
+	import type { Comment } from '$lib/types';
 
 	export let comment: Comment;
 	export let showEdit: boolean;
@@ -75,7 +75,7 @@
 			{/if}
 		</div>
 		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
-			<span class="hover:cursor-pointer hover:underline opacity-80">Upvote</span>
+			<CommentVoteForm {comment} />
 			<button
 				class="hover:cursor-pointer hover:underline opacity-80"
 				on:click={() => (showReply = !showReply)}>Reply</button

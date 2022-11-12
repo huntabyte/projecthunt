@@ -49,6 +49,7 @@ interface Comment extends Record {
 	expand: {
 		user: User;
 		'comment_replies(comment)'?: CommentReply[];
+		'comment_votes(comment)': CommentVote[];
 		reply?: Comment;
 	};
 }
