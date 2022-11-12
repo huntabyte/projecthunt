@@ -3,9 +3,7 @@
 	import { Toaster } from 'svelte-french-toast';
 	import DiCode from 'svelte-icons/di/DiCode.svelte';
 	import type { PageData } from './$types';
-	import { getImageURL } from '$lib/utils';
-	import Footer from '$lib/components/Footer.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
+	import { Footer, Avatar } from '$lib/components';
 
 	export let data: PageData;
 </script>

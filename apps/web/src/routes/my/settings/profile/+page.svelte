@@ -5,8 +5,7 @@
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import toast from 'svelte-french-toast';
 	import { invalidateAll } from '$app/navigation';
-	import Input from '$lib/components/form/Input.svelte';
-	import Modal from '$lib/components/Modal.svelte';
+	import { Input } from '$lib/components';
 	export let data: PageData;
 	export let form: ActionData;
 

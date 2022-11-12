@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types';
-	import Modal from '$lib/components/Modal.svelte';
-	import Input from '$lib/components/form/Input.svelte';
+	import { Modal, Input } from '$lib/components';
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import toast from 'svelte-french-toast';
 	import { invalidateAll } from '$app/navigation';

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import HomeDiscover from '$lib/components/HomeDiscover.svelte';
-	import HomeHeader from '$lib/components/HomeHeader.svelte';
-	import ProjectListItem from '$lib/components/ProjectListItem.svelte';
+	import { HomeDiscover, HomeHeader } from '$lib/components';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
