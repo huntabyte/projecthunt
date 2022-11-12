@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getProject, vote } from '$lib/services/ProjectService';
+import { getProject, updateProjectVote } from '$lib/services/ProjectService';
 import {
 	createComment,
 	createReply,
@@ -20,10 +20,10 @@ export const load: PageServerLoad = ({ locals, params, url }) => {
 };
 
 export const actions: Actions = {
-	vote: async ({ request, locals }) => {
+	voteProject: async ({ request, locals }) => {
 		const { id } = Object.fromEntries(await request.formData());
 
-		return await vote(locals, id as string);
+		return await updateProjectVote(locals, id as string);
 	},
 	createComment: async ({ request, locals }) => {
 		return await createComment(locals, request);

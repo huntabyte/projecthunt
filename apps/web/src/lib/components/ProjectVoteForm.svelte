@@ -15,7 +15,7 @@
 </script>
 
 <form
-	action="?/vote"
+	action="?/voteProject"
 	method="POST"
 	use:enhance={({ form }) => {
 		return async ({ result, update }) => {

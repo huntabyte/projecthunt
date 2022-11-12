@@ -129,7 +129,7 @@ export const updateProject = async (
 	throw redirect(303, redirectTo);
 };
 
-export const vote = async (locals: App.Locals, projectId: string) => {
+export const updateProjectVote = async (locals: App.Locals, projectId: string) => {
 	try {
 		const existingVote = await locals.pb.collection('project_votes').getFullList<Vote>(1, {
 			filter: `user = "${locals?.user?.id}" && project = "${projectId}"`,
