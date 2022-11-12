@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { enhance, applyAction } from '$app/forms';
 	import { page } from '$app/stores';
-	import type { Project, Vote } from '$lib/types';
+	import type { Project, ProjectVote } from '$lib/types';
 	import FaCaretUp from 'svelte-icons/fa/FaCaretUp.svelte';
 	import FaRegHeart from 'svelte-icons/fa/FaRegHeart.svelte';
 	import FaHeart from 'svelte-icons/fa/FaHeart.svelte';
 	export let project: Project;
 	let hasVoted = Boolean(
 		project.expand?.['project_votes(project)'].find(
-			(vote: Vote) => vote.user === $page?.data?.user?.id
+			(vote: ProjectVote) => vote.user === $page?.data?.user?.id
 		)
 	);
 	export let variant = 'default';
