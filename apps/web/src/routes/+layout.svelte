@@ -88,7 +88,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="h-full w-full mx-auto py-10 lg:px-8 px-4 max-w-screen-2xl container ">
+	<div class="h-full w-full mx-auto py-4 lg:px-8 px-4 max-w-screen-2xl container ">
 		<slot />
 	</div>
 </div>

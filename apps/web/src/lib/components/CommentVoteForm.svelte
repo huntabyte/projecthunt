@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { Comment, CommentVote } from '$lib/types';
 
@@ -10,14 +10,29 @@
 			(vote: CommentVote) => vote.user === $page?.data?.user?.id
 		)
 	);
-	console.log(hasVoted);
 </script>
 
-<form action="?/voteComment" method="POST" use:enhance>
+<form
+	action="?/voteComment"
+	method="POST"
+	use:enhance={({ form }) => {
+		return async ({ result, update }) => {
+			if (result.type === 'success') {
+				form.reset();
+				hasVoted = !hasVoted;
+			}
+			if (result.type === 'invalid') {
+				await applyAction(result);
+			}
+			update();
+		};
+	}}
+>
 	<input type="hidden" name="id" value={comment.id} />
 	<button class="hover:cursor-pointer hover:underline opacity-80" type="submit">
-		<span class=""
-			>Upvote {comment.expand['comment_votes(comment)'].length > 0
+		<span class:text-primary={hasVoted}
+			>{hasVoted ? 'Upvoted' : 'Upvote'}
+			{comment.expand['comment_votes(comment)'].length > 0
 				? `(${comment.expand['comment_votes(comment)'].length})`
 				: ''}
 		</span>
