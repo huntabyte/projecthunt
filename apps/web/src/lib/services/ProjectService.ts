@@ -27,15 +27,16 @@ export const getProject = async (locals: App.Locals, id: string): Promise<Projec
 	}
 };
 
-export const getProjects = async (locals: App.Locals, page = 1, perPage = 100) => {
+export const getProjects = async (locals: App.Locals, filter: string = '') => {
 	try {
 		let projects = serializeNonPOJOs(
-			await locals.pb.collection('projects').getList<Project>(page, perPage, {
+			await locals.pb.collection('projects').getFullList<Project>(undefined, {
 				sort: '-created',
-				expand: 'project_votes(project)'
+				expand: 'project_votes(project)',
+				filter: filter
 			})
 		);
-		projects.items = projects.items.map((project) => {
+		projects = projects.map((project) => {
 			if (project.expand?.['project_votes(project)']) {
 				return project;
 			}

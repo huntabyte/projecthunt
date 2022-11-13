@@ -7,5 +7,5 @@
 
 <div class="w-full mt-4 space-y-6">
 	<HomeHeader />
-	<HomeDiscover projects={data.projects.items} />
+	<HomeDiscover projects={data.projects} />
 </div>

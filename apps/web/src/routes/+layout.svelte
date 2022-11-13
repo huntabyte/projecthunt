@@ -70,7 +70,7 @@
 							class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 font-medium uppercase "
 						>
 							<li>
-								<a href="/">Profile</a>
+								<a href="/@{data.user.username}">Profile</a>
 							</li>
 							<li><a href="/my/projects">My Projects</a></li>
 							<li><a href="/my/settings/profile">Settings</a></li>

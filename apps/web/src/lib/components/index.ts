@@ -16,9 +16,12 @@ import Input from './form/Input.svelte';
 import SearchInput from './form/SearchInput.svelte';
 import Textarea from './form/Textarea.svelte';
 import CommentVoteForm from './CommentVoteForm.svelte';
+import ProjectsGrid from './ProjectsGrid.svelte';
+import Button from './Button.svelte';
 
 export {
 	Avatar,
+	Button,
 	Comment,
 	CommentReply,
 	CommentReplyForm,
@@ -30,6 +33,7 @@ export {
 	Modal,
 	MyProjectItem,
 	ProjectCard,
+	ProjectsGrid,
 	ProjectListItem,
 	ProjectVoteForm,
 	FileInput,
