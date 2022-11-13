@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CommentIcon from 'virtual:icons/heroicons/chat-bubble-oval-left';
+	import { CommentIcon } from '$lib/components/icons';
 
 	import { getImageURL } from '$lib/utils';
 	import type { Project } from '$lib/types';
