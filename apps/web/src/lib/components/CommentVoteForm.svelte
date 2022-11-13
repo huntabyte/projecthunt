@@ -5,12 +5,12 @@
 
 	export let comment: Comment;
 
-	// let hasVoted = Boolean(
-	// 	comment.expand?.['comment_votes(comment)'].find(
-	// 		(vote: CommentVote) => vote.user === $page?.data?.user?.id
-	// 	)
-	// );
-	console.log(comment);
+	let hasVoted = Boolean(
+		comment.expand?.['comment_votes(comment)'].find(
+			(vote: CommentVote) => vote.user === $page?.data?.user?.id
+		)
+	);
+	console.log(hasVoted);
 </script>
 
 <form action="?/voteComment" method="POST" use:enhance>

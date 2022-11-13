@@ -45,7 +45,7 @@
 		<p class="text-2xl font-light">{data.project.tagline}</p>
 		<div class="flex ">
 			<div class="h-10 w-10">
-				<ProjectVoteForm project={data.project} variant="heart" />
+				<ProjectVoteForm project={data.project} />
 			</div>
 		</div>
 	</div>

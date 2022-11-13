@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
 	import type { Comment } from '$lib/types';
-	import FaEllipsisH from 'svelte-icons/fa/FaEllipsisH.svelte';
+	import EllipsisIcon from 'virtual:icons/heroicons/ellipsis-horizontal';
 	import Avatar from './Avatar.svelte';
 	import { CommentVoteForm } from '$lib/components';
 	import { generateRelativeDate } from '$lib/utils';
@@ -85,12 +85,10 @@
 			<span class="opacity-80">{timestamp}</span>
 			<div class="dropdown dropdown-top ">
 				<button
-					class="btn btn-ghost btn-circle btn-xs"
+					class="btn btn-ghost btn-circle btn-sm text-2xl"
 					on:click={() => toggleDropdown(reply.id, false)}
 				>
-					<div class="w-4 h-4">
-						<FaEllipsisH />
-					</div>
+					<EllipsisIcon />
 				</button>
 				<ul
 					class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 {dropdown.id ===

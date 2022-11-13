@@ -1,5 +1,6 @@
 <script lang="ts">
-	import FaComment from 'svelte-icons/fa/FaComment.svelte';
+	import CommentIcon from 'virtual:icons/heroicons/chat-bubble-oval-left';
+
 	import { getImageURL } from '$lib/utils';
 	import type { Project } from '$lib/types';
 	import ConfirmDeleteModal from '$lib/components/ConfirmDeleteModal.svelte';
@@ -22,9 +23,9 @@
 			<p>{project.tagline}</p>
 		</div>
 		<div class="flex items-center">
-			<div class="w-3 h-3">
-				<FaComment />
-			</div>
+			<span class="text-md">
+				<CommentIcon />
+			</span>
 			<div>
 				<p class="ml-1 text-sm font-medium">0</p>
 			</div>

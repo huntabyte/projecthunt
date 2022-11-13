@@ -49,7 +49,7 @@ interface Comment extends Record {
 	expand: {
 		user: User;
 		'comment_replies(comment)': CommentReply[] | undefined[];
-		'comment_votes(comment)': CommentVote[] | undefined[];
+		'comment_votes(comment)': CommentVote[];
 		reply?: Comment;
 	};
 }

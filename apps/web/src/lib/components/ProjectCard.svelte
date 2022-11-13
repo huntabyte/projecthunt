@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { getImageURL } from '$lib/utils';
 	import type { Project } from '$lib/types';
-	import FaRegComment from 'svelte-icons/fa/FaRegComment.svelte';
+	import CommentIcon from 'virtual:icons/heroicons/chat-bubble-oval-left';
+
 	import ProjectVoteForm from './ProjectVoteForm.svelte';
 
 	export let project: Project;
@@ -22,14 +23,16 @@
 		<p>{project.tagline}</p>
 		<div class="card-actions justify-end space-x-2">
 			<div class="flex items-center space-x-2">
-				<div class="w-5 h-5">
-					<FaRegComment />
+				<div class="w-5 h-5 flex items-center">
+					<span class="text-xl">
+						<CommentIcon />
+					</span>
 				</div>
 				<div>
 					<p class="text-sm font-medium">0</p>
 				</div>
 			</div>
-			<ProjectVoteForm {project} variant="heart" />
+			<ProjectVoteForm {project} />
 		</div>
 	</div>
 </div>
