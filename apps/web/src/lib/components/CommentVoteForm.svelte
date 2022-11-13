@@ -2,6 +2,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { Comment, CommentVote } from '$lib/types';
+	import { CommentVoteButton } from '$lib/components';
 
 	export let comment: Comment;
 
@@ -29,12 +30,5 @@
 	}}
 >
 	<input type="hidden" name="id" value={comment.id} />
-	<button class="hover:cursor-pointer hover:underline opacity-80" type="submit">
-		<span class:text-primary={hasVoted}
-			>{hasVoted ? 'Upvoted' : 'Upvote'}
-			{comment.expand['comment_votes(comment)'].length > 0
-				? `(${comment.expand['comment_votes(comment)'].length})`
-				: ''}
-		</span>
-	</button>
+	<CommentVoteButton {hasVoted} {comment} />
 </form>

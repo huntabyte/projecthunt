@@ -2,6 +2,7 @@ import Avatar from './Avatar.svelte';
 import Comment from './Comment.svelte';
 import CommentReply from './CommentReply.svelte';
 import CommentReplyForm from './CommentReplyForm.svelte';
+import CommentVoteButton from './CommentVoteButton.svelte';
 import ConfirmDeleteModal from './ConfirmDeleteModal.svelte';
 import Footer from './Footer.svelte';
 import HomeDiscover from './HomeDiscover.svelte';
@@ -26,8 +27,9 @@ export {
 	Comment,
 	CommentReply,
 	CommentReplyForm,
-	ConfirmDeleteModal,
 	CommentVoteForm,
+	CommentVoteButton,
+	ConfirmDeleteModal,
 	Footer,
 	HomeDiscover,
 	HomeHeader,
