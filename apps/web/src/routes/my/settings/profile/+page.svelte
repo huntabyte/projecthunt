@@ -6,6 +6,7 @@
 	import toast from 'svelte-french-toast';
 	import { invalidateAll } from '$app/navigation';
 	import { Input } from '$lib/components';
+	import Textarea from '$lib/components/form/Textarea.svelte';
 	export let data: PageData;
 	export let form: ActionData;
 
@@ -99,6 +100,36 @@
 				value={form?.data?.name ?? data.user?.name}
 				required
 				errors={form?.errors?.name}
+			/>
+			<Textarea
+				id="bio"
+				label="Bio"
+				value={form?.data?.bio ?? data.user?.bio}
+				errors={form?.errors?.name}
+			/>
+			<Input
+				id="website"
+				label="Personal Website"
+				value={form?.data?.website ?? data.user?.website}
+				errors={form?.errors?.website}
+			/>
+			<Input
+				id="twitter"
+				label="Twitter"
+				value={form?.data?.twitter ?? data.user?.twitter}
+				errors={form?.errors?.twitter}
+			/>
+			<Input
+				id="youtube"
+				label="YouTube"
+				value={form?.data?.youtube ?? data.user?.youtube}
+				errors={form?.errors?.youtube}
+			/>
+			<Input
+				id="github"
+				label="GitHub"
+				value={form?.data?.github ?? data.user?.github}
+				errors={form?.errors?.github}
 			/>
 
 			<div class="w-full max-w-lg pt-3">

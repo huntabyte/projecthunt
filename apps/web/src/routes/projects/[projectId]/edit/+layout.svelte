@@ -1,7 +1,19 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
+
+	const navigation = [
+		{
+			title: 'Main info',
+			href: `/projects/${data.project.id}/edit`
+		},
+		{
+			title: 'Images & Media',
+			href: `/projects/${data.project.id}/edit/images`
+		}
+	];
 </script>
 
 <div class="w-full h-full">
@@ -13,12 +25,16 @@
 </div>
 <div class="flex w-full h-full">
 	<ul class="menu w-96 rounded-box p-2 space-y-2">
-		<li class="w-5/6">
-			<a href="/projects/{data.project.id}/edit" class="active text-xl font-bold"> Main info </a>
-		</li>
-		<li class="w-5/6">
-			<a href="/projects/{data.project.id}/edit" class="text-xl font-bold"> Images & Media </a>
-		</li>
+		{#each navigation as navItem}
+			<li>
+				<a
+					href={navItem.href}
+					class="{$page.url.pathname === navItem.href ? 'active' : ''} text-xl font-bold"
+				>
+					{navItem.title}
+				</a>
+			</li>
+		{/each}
 	</ul>
 
 	<slot />

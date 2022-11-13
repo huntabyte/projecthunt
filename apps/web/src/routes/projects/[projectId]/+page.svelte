@@ -5,6 +5,7 @@
 	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
 	import Comment from '$lib/components/Comment.svelte';
+	import Carousel from '$lib/components/Carousel.svelte';
 	export let form: ActionData;
 	export let data: PageData;
 
@@ -51,6 +52,9 @@
 	</div>
 	<div class="mt-4 space-y-4">
 		<p class="text-lg">{data.project.description}</p>
+	</div>
+	<div class="mt-6">
+		<Carousel project={data.project} />
 	</div>
 	{#if data.user}
 		<div class="flex mt-4 w-full  items-center space-x-4">

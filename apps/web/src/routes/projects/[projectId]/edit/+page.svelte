@@ -82,7 +82,7 @@
 						</div>
 					{/if}
 				</label>
-				<input type="file" name="thumbnail" value="" />
+				<input type="file" name="thumbnail" id="thumbnail" value="" />
 			</div>
 			<div class="w-full max-w-lg pt-3">
 				<button class="btn btn-primary w-full max-w-lg">Edit Project</button>

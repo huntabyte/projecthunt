@@ -49,6 +49,32 @@ export const createProjectDto = z.object({
 	user: z.string().optional()
 });
 
+export const updateProjectImagesDto = z.object({
+	images: z.array(
+		z
+			.instanceof(Blob)
+			.optional()
+			.superRefine((val, ctx) => {
+				if (val) {
+					if (val.size < 10000 || val.size > 2000000) {
+						ctx.addIssue({
+							code: z.ZodIssueCode.custom,
+							message: 'Thumbnail must be between 10KB & 2MB'
+						});
+					}
+
+					if (!imageTypes.includes(val.type)) {
+						ctx.addIssue({
+							code: z.ZodIssueCode.custom,
+							message: "Unsupported file type. Supported formats: jpeg, jpg, png, webp, svg, gif'"
+						});
+					}
+				}
+			})
+	),
+	user: z.string().optional()
+});
+
 export const createCommentDto = z.object({
 	content: z
 		.string({ required_error: 'Content is required' })
@@ -147,7 +173,41 @@ export const updateUserProfileDto = z.object({
 					});
 				}
 			}
-		})
+		}),
+	bio: z
+		.string({ required_error: 'Bio is required.' })
+		.min(2, { message: 'Bio must be at least 2 characters' })
+		.max(64, { message: 'Bio must be less than 512 characters' })
+		.trim()
+		.optional(),
+	website: z
+		.string({ required_error: 'Website is required.' })
+		.url({ message: 'Website must be a valid URL' })
+		.min(2, { message: 'Bio must be at least 2 characters' })
+		.max(64, { message: 'Bio must be less than 512 characters' })
+		.trim()
+		.optional(),
+	twitter: z
+		.string({ required_error: 'Twitter is required.' })
+		.url({ message: 'Twitter must be a valid URL' })
+		.min(2, { message: 'Bio must be at least 2 characters' })
+		.max(64, { message: 'Bio must be less than 512 characters' })
+		.trim()
+		.optional(),
+	youtube: z
+		.string({ required_error: 'YouTube is required.' })
+		.url({ message: 'YouTube must be a valid URL' })
+		.min(2, { message: 'Bio must be at least 2 characters' })
+		.max(64, { message: 'Bio must be less than 512 characters' })
+		.trim()
+		.optional(),
+	github: z
+		.string({ required_error: 'GitHub is required.' })
+		.url({ message: 'GitHub must be a valid URL' })
+		.min(2, { message: 'Bio must be at least 2 characters' })
+		.max(64, { message: 'Bio must be less than 512 characters' })
+		.trim()
+		.optional()
 });
 
 export const updateUsernameDto = z.object({
