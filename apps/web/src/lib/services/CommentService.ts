@@ -18,7 +18,7 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 			.map((commentReply) => `id != "${commentReply.expand?.reply?.id}"`)
 			.join(' && ');
 
-		let comments;
+		let comments: Comment[];
 
 		if (replyIdFilter) {
 			comments = serializeNonPOJOs<Comment[]>(
@@ -36,19 +36,20 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 				]?.map((commentReply) => {
 					let updatedReply;
 					commentReplies.forEach((reply) => {
-						if (reply.id === commentReply.id) {
-							if (reply.expand?.reply?.expand['comment_votes(comment)']) {
-								updatedReply = reply;
-							} else {
-								reply.expand.reply.expand['comment_votes(comment)'] = [];
-								updatedReply = reply;
+						if (reply.id === commentReply?.id) {
+							if (reply.expand.reply) {
+								if (reply.expand?.reply?.expand['comment_votes(comment)']) {
+									updatedReply = reply;
+								} else {
+									reply.expand.reply.expand['comment_votes(comment)'] = [];
+									updatedReply = reply;
+								}
 							}
 						}
 					});
 					return updatedReply;
 				});
 			});
-			// console.log(comments[0].expand['comment_replies(comment)'][0].expand);
 		} else {
 			comments = serializeNonPOJOs<Comment[]>(
 				await locals.pb.collection('comments').getFullList<Comment>(undefined, {
@@ -180,7 +181,9 @@ export const deleteComment = async (locals: App.Locals, id: string) => {
 		if (comment.expand['comment_replies(comment)']) {
 			if (comment.expand['comment_replies(comment)'].length > 0) {
 				for (const commentReply of comment.expand['comment_replies(comment)']) {
-					await locals.pb.collection('comments').delete(commentReply.expand.reply.id);
+					if (commentReply) {
+						await locals.pb.collection('comments').delete(commentReply.expand.reply.id);
+					}
 				}
 			}
 		}
