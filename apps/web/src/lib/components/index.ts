@@ -17,6 +17,7 @@ import SearchInput from './form/SearchInput.svelte';
 import Textarea from './form/Textarea.svelte';
 import CommentVoteForm from './CommentVoteForm.svelte';
 import ProjectsGrid from './ProjectsGrid.svelte';
+import ProjectVoteButton from './ProjectVoteButton.svelte';
 import Button from './Button.svelte';
 
 export {
@@ -35,6 +36,7 @@ export {
 	ProjectCard,
 	ProjectsGrid,
 	ProjectListItem,
+	ProjectVoteButton,
 	ProjectVoteForm,
 	FileInput,
 	Input,

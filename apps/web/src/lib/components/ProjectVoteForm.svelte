@@ -2,8 +2,8 @@
 	import { enhance, applyAction } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { Project, ProjectVote } from '$lib/types';
-	import HeartOutlineIcon from 'virtual:icons/heroicons/heart';
-	import HeartIcon from 'virtual:icons/heroicons/heart-solid';
+
+	import { ProjectVoteButton } from '$lib/components';
 	export let project: Project;
 	let hasVoted = Boolean(
 		project.expand?.['project_votes(project)'].find(
@@ -30,38 +30,5 @@
 >
 	<input type="hidden" value={project.id} name="id" />
 
-	{#if $page?.data?.user}
-		<button
-			type="submit"
-			class="flex space-x-2 items-center justify-center {hasVoted ? 'text-primary' : 'text-base'}"
-		>
-			<div class="w-5 h-5 flex items-center">
-				<span class="text-xl">
-					{#if hasVoted}
-						<HeartIcon />
-					{:else}
-						<HeartOutlineIcon />
-					{/if}
-				</span>
-			</div>
-			<div class="font-medium text-sm">
-				{project?.expand?.['project_votes(project)'].length ?? ''}
-			</div>
-		</button>
-	{:else}
-		<a href="/login" class=" flex space-x-2 items-center justify-center ">
-			<div class="w-5 h-5 flex items-center">
-				<span class="text-xl">
-					{#if hasVoted}
-						<HeartIcon />
-					{:else}
-						<HeartOutlineIcon />
-					{/if}
-				</span>
-			</div>
-			<div class="font-medium text-sm">
-				{project?.expand?.['project_votes(project)'].length ?? ''}
-			</div>
-		</a>
-	{/if}
+	<ProjectVoteButton {hasVoted} {project} />
 </form>
