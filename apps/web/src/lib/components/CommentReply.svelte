@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
 	import type { Comment } from '$lib/types';
-	import EllipsisIcon from 'virtual:icons/heroicons/ellipsis-horizontal';
+	import { EllipsisIcon } from '$lib/components/icons';
 	import Avatar from './Avatar.svelte';
 	import { CommentVoteForm } from '$lib/components';
 	import { generateRelativeDate } from '$lib/utils';

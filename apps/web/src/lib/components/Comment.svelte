@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { applyAction, enhance } from '$app/forms';
-	import EllipsisIcon from 'virtual:icons/heroicons/ellipsis-horizontal';
+	import { EllipsisIcon } from '$lib/components/icons';
 
 	import { generateRelativeDate } from '$lib/utils';
 	import { Avatar, CommentReply, CommentReplyForm, CommentVoteForm } from '$lib/components';
@@ -138,15 +138,17 @@
 		{/if}
 		{#if comment.expand?.['comment_replies(comment)']}
 			{#each comment.expand['comment_replies(comment)'] as reply}
-				<CommentReply
-					{comment}
-					reply={reply.expand.reply}
-					{showEdit}
-					{toggleDropdown}
-					{editId}
-					{toggleEdit}
-					{dropdown}
-				/>
+				{#if reply}
+					<CommentReply
+						{comment}
+						reply={reply.expand.reply}
+						{showEdit}
+						{toggleDropdown}
+						{editId}
+						{toggleEdit}
+						{dropdown}
+					/>
+				{/if}
 			{/each}
 		{/if}
 	</div>
