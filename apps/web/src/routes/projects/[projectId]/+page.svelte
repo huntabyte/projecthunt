@@ -53,9 +53,11 @@
 	<div class="mt-4 space-y-4">
 		<p class="text-lg">{data.project.description}</p>
 	</div>
-	<div class="mt-6">
-		<Carousel project={data.project} />
-	</div>
+	{#if data.project.images.length > 0}
+		<div class="mt-6">
+			<Carousel project={data.project} />
+		</div>
+	{/if}
 	{#if data.user}
 		<div class="flex mt-4 w-full  items-center space-x-4">
 			<div class="avatar">

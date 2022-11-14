@@ -20,6 +20,7 @@ import CommentVoteForm from './CommentVoteForm.svelte';
 import ProjectsGrid from './ProjectsGrid.svelte';
 import ProjectVoteButton from './ProjectVoteButton.svelte';
 import Button from './Button.svelte';
+import ProfileSocialIcons from './ProfileSocialIcons.svelte';
 
 export {
 	Avatar,
@@ -34,6 +35,7 @@ export {
 	HomeDiscover,
 	HomeHeader,
 	Modal,
+	ProfileSocialIcons,
 	MyProjectItem,
 	ProjectCard,
 	ProjectsGrid,

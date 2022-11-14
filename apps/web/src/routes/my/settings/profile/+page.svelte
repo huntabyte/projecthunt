@@ -105,7 +105,7 @@
 				id="bio"
 				label="Bio"
 				value={form?.data?.bio ?? data.user?.bio}
-				errors={form?.errors?.name}
+				errors={form?.errors?.bio}
 			/>
 			<Input
 				id="website"

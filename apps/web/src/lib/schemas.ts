@@ -177,37 +177,42 @@ export const updateUserProfileDto = z.object({
 	bio: z
 		.string({ required_error: 'Bio is required.' })
 		.min(2, { message: 'Bio must be at least 2 characters' })
-		.max(64, { message: 'Bio must be less than 512 characters' })
+		.max(512, { message: 'Bio must be less than 512 characters' })
 		.trim()
-		.optional(),
+		.optional()
+		.or(z.literal('').optional()),
 	website: z
 		.string({ required_error: 'Website is required.' })
 		.url({ message: 'Website must be a valid URL' })
 		.min(2, { message: 'Bio must be at least 2 characters' })
-		.max(64, { message: 'Bio must be less than 512 characters' })
+		.max(96, { message: 'Bio must be less than 512 characters' })
 		.trim()
-		.optional(),
+		.optional()
+		.or(z.literal('').optional()),
 	twitter: z
 		.string({ required_error: 'Twitter is required.' })
 		.url({ message: 'Twitter must be a valid URL' })
 		.min(2, { message: 'Bio must be at least 2 characters' })
-		.max(64, { message: 'Bio must be less than 512 characters' })
+		.max(96, { message: 'Bio must be less than 512 characters' })
 		.trim()
-		.optional(),
+		.optional()
+		.or(z.literal('').optional()),
 	youtube: z
 		.string({ required_error: 'YouTube is required.' })
 		.url({ message: 'YouTube must be a valid URL' })
 		.min(2, { message: 'Bio must be at least 2 characters' })
-		.max(64, { message: 'Bio must be less than 512 characters' })
+		.max(96, { message: 'Bio must be less than 512 characters' })
 		.trim()
-		.optional(),
+		.optional()
+		.or(z.literal('').optional()),
 	github: z
 		.string({ required_error: 'GitHub is required.' })
 		.url({ message: 'GitHub must be a valid URL' })
 		.min(2, { message: 'Bio must be at least 2 characters' })
-		.max(64, { message: 'Bio must be less than 512 characters' })
+		.max(96, { message: 'Bio must be less than 512 characters' })
 		.trim()
 		.optional()
+		.or(z.literal('').optional())
 });
 
 export const updateUsernameDto = z.object({
