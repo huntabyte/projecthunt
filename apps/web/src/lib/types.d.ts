@@ -40,6 +40,9 @@ interface Project extends Record {
 interface ProjectVote extends Record {
 	user: string;
 	project: string;
+	expand: {
+		project: Project;
+	};
 }
 
 interface CommentVote extends Record {
