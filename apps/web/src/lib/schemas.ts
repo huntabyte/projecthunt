@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { zfd } from 'zod-form-data';
 
 const imageTypes = [
 	'image/jpeg',
@@ -49,30 +50,26 @@ export const createProjectDto = z.object({
 	user: z.string().optional()
 });
 
-export const updateProjectImagesDto = z.object({
-	images: z.array(
-		z
-			.instanceof(Blob)
-			.optional()
-			.superRefine((val, ctx) => {
-				if (val) {
-					if (val.size < 10000 || val.size > 2000000) {
-						ctx.addIssue({
-							code: z.ZodIssueCode.custom,
-							message: 'Thumbnail must be between 10KB & 2MB'
-						});
-					}
-
-					if (!imageTypes.includes(val.type)) {
-						ctx.addIssue({
-							code: z.ZodIssueCode.custom,
-							message: "Unsupported file type. Supported formats: jpeg, jpg, png, webp, svg, gif'"
-						});
-					}
+export const updateProjectImagesDto = zfd.formData({
+	images: zfd.repeatableOfType(
+		z.instanceof(Blob).superRefine((val, ctx) => {
+			if (val) {
+				if (val.size < 10000 || val.size > 2000000) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: 'Images must be between 10KB & 2MB'
+					});
 				}
-			})
-	),
-	user: z.string().optional()
+
+				if (!imageTypes.includes(val.type)) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: "Unsupported file type. Supported formats: jpeg, jpg, png, web, svg, gif'"
+					});
+				}
+			}
+		})
+	)
 });
 
 export const createCommentDto = z.object({

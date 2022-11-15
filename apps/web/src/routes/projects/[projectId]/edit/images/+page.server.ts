@@ -1,5 +1,5 @@
 import { updateProjectImagesDto } from '$lib/schemas';
-import { validateData } from '$lib/utils';
+import { validateData, validateFormData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
 import { serialize } from 'object-to-formdata';
 import type { ClientResponseError } from 'pocketbase';
@@ -7,11 +7,18 @@ import type { Actions } from './$types';
 
 export const actions: Actions = {
 	uploadImages: async ({ request, locals, params }) => {
-		const formData = await request.formData();
-		console.log(Object.fromEntries(formData));
+		const { formData, errors } = await validateFormData(
+			await request.formData(),
+			updateProjectImagesDto
+		);
 
 		try {
 			await locals.pb.collection('projects').update(params.projectId, formData);
+			if (errors) {
+				return {
+					errors: errors.fieldErrors
+				};
+			}
 		} catch (err) {
 			console.log('Error: ', err);
 			const e = err as ClientResponseError;

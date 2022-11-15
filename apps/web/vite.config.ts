@@ -8,7 +8,10 @@ const config: UserConfig = {
 		Icons({
 			compiler: 'svelte'
 		})
-	]
+	],
+	optimizeDeps: {
+		include: ['classnames']
+	}
 };
 
 export default config;

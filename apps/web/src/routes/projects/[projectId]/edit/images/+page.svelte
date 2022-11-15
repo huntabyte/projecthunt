@@ -1,9 +1,28 @@
 <script lang="ts">
-	import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
-	import { getImageURL } from '$lib/utils';
+	import Dropzone from 'svelte-file-dropzone';
 	import type { ActionData, PageData } from './$types';
 	export let data: PageData;
 	export let form: ActionData;
+
+	// let files;
+
+	// $: if (files) {
+	// 	console.log(files);
+	// 	for (const file of files) {
+	// 		console.log(`${file.name}: ${file.size} bytes`);
+	// 	}
+	// }
+
+	let files = {
+		accepted: [],
+		rejected: []
+	};
+
+	function handleFilesSelect(e) {
+		const { acceptedFiles, fileRejections } = e.detail;
+		files.accepted = [...files.accepted, ...acceptedFiles];
+		files.rejected = [...files.rejected, ...fileRejections];
+	}
 </script>
 
 <div class="flex flex-col w-full h-full p-2">
@@ -20,7 +39,8 @@
 			</p>
 			<div class="form-control w-full max-w-lg">
 				<label for="images" class="block text-sm font-medium">Images</label>
-				<div
+				<label
+					for="images"
 					class="mt-1 flex justify-center rounded-md border-2 border-dashed border-base-300 px-6 pt-5 pb-6"
 				>
 					<div class="space-y-1 text-center">
@@ -44,21 +64,27 @@
 								class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-focus"
 							>
 								<span>Upload images</span>
-								<input
+								<!-- <input
+									class="w-full min-h-full sr-only"
 									id="images"
 									name="images"
 									type="file"
 									accept="image/*"
-									class="sr-only"
 									multiple
-								/>
+								/> -->
 							</label>
 							<p class="pl-1">or drag and drop</p>
 						</div>
 						<p class="text-xs text-neutral">PNG, JPG, GIF up to 10MB</p>
 					</div>
-				</div>
+				</label>
 			</div>
+			<Dropzone on:drop={handleFilesSelect} name="images" />
+			<ol>
+				{#each files.accepted as item}
+					<li>{item.name}</li>
+				{/each}
+			</ol>
 
 			<div class="w-full max-w-lg pt-3">
 				<button class="btn btn-primary w-full max-w-lg">Edit Project</button>

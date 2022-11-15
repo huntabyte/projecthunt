@@ -5,7 +5,7 @@
 </script>
 
 <div class="w-full mt-6">
-	<h3 class="font-medium">Upvoted Projects</h3>
+	<h3 class="font-medium">Liked Projects</h3>
 	<div class="divider" />
 	<ProjectsGrid projects={data.projects} />
 </div>

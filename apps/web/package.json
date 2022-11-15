@@ -15,6 +15,7 @@
   "devDependencies": {
     "@iconify/json": "^2.1.136",
     "@playwright/test": "^1.25.0",
+    "@popperjs/core": "^2.11.6",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "^1.0.0-next.527",
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -22,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "autoprefixer": "^10.4.7",
+    "classnames": "^2.3.2",
     "daisyui": "^2.38.1",
     "date-fns": "^2.29.3",
     "eslint": "^8.16.0",
@@ -45,5 +47,8 @@
     "zod": "^3.19.1",
     "zod-form-data": "^1.2.2"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "svelte-file-dropzone": "^1.0.0"
+  }
 }

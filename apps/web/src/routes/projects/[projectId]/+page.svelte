@@ -5,7 +5,6 @@
 	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
 	import Comment from '$lib/components/Comment.svelte';
-	import Carousel from '$lib/components/Carousel.svelte';
 	export let form: ActionData;
 	export let data: PageData;
 
@@ -55,7 +54,7 @@
 	</div>
 	{#if data.project.images.length > 0}
 		<div class="mt-6">
-			<Carousel project={data.project} />
+			<!-- <Carousel project={data.project} /> -->
 		</div>
 	{/if}
 	{#if data.user}

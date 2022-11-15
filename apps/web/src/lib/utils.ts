@@ -1,6 +1,10 @@
 import type { z, ZodError } from 'zod';
+import { z as ZOD } from 'zod';
 
 import { differenceInDays, formatDistanceToNowStrict } from 'date-fns';
+import { serialize } from 'object-to-formdata';
+import { zfd } from 'zod-form-data';
+import { updateProjectImagesDto } from './schemas';
 
 const { randomBytes } = await import('node:crypto');
 
@@ -39,6 +43,53 @@ export const validateData = async <T extends z.ZodTypeAny>(
 			errors
 		};
 	}
+};
+
+interface SafeParseImages {
+	success: boolean;
+	error?: ZodError;
+	data?: {
+		images: Blob[];
+	};
+}
+
+export const validateFormData = async <T extends z.ZodTypeAny>(
+	formData: FormData,
+	schema: T
+): Promise<{ formData: FormData; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
+	const body = zfd
+		.formData({
+			images: zfd.repeatableOfType(ZOD.instanceof(Blob))
+		})
+		.safeParse(formData) as SafeParseImages;
+
+	let images = body?.data?.images;
+
+	const parsedImages = updateProjectImagesDto.safeParse({
+		images: body?.data?.images
+	}) as SafeParseImages;
+
+	if (!parsedImages.success) {
+		const badIndexes = parsedImages.error?.issues.map((issue) => {
+			return issue.path[1];
+		});
+
+		if (badIndexes) {
+			for (let i = badIndexes.length - 1; i >= 0; i--) {
+				images?.splice(badIndexes[i] as number, 1);
+			}
+		}
+	}
+
+	const imageFormData = new FormData();
+	images?.forEach((image) => {
+		imageFormData.append('images', image);
+	});
+
+	return {
+		formData: imageFormData,
+		errors: parsedImages.error?.flatten() ?? null
+	};
 };
 
 export const generateUsername = (name: string): string => {

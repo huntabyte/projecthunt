@@ -9,9 +9,10 @@ import {
 	registerUserDto,
 	loginUserDto,
 	updateEmailDto,
-	updateReplyDto
+	updateReplyDto,
+	updateUsernameDto,
+	updateProjectImagesDto
 } from '$lib/schemas';
-import { updateUsernameDto } from '$lib/schemas';
 import { createReplyDto } from './schemas';
 
 interface User extends Record {
@@ -80,6 +81,7 @@ type UpdateEmailDto = z.infer<updateEmailDto>;
 type UpdateUsernameDto = z.infer<updateUsernameDto>;
 type CreateReplyDto = z.infer<createReplyDto>;
 type UpdateReplyDto = z.infer<updateReplyDto>;
+type UpdateProjectImagesDto = z.infer<updateProjectImagesDto>;
 
 interface CommentActionData {
 	data?: CreateCommentDto;
