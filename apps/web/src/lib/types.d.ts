@@ -35,6 +35,7 @@ interface Project extends Record {
 	expand: {
 		'project_votes(project)': ProjectVote[];
 	};
+	images?: string[];
 	user: string;
 }
 

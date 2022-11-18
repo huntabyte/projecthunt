@@ -8,6 +8,11 @@
 	export let required: boolean = false;
 
 	export let errors: string[] = [];
+
+	interface $$Props extends svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['input']> {
+		name: string;
+		placeholder: string;
+	}
 </script>
 
 <div class="form-control w-full max-w-lg mb-2">

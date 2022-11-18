@@ -1,7 +1,7 @@
 import { updateProjectImagesDto } from '$lib/schemas';
-import { validateData, validateFormData } from '$lib/utils';
+import { getProject } from '$lib/services/ProjectService';
+import { validateFormData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
-import { serialize } from 'object-to-formdata';
 import type { ClientResponseError } from 'pocketbase';
 import type { Actions } from './$types';
 
@@ -27,6 +27,24 @@ export const actions: Actions = {
 
 		return {
 			success: true
+		};
+	},
+	deleteImage: async ({ request, locals, params }) => {
+		const { imageName } = Object.fromEntries(await request.formData());
+		console.log(imageName);
+
+		try {
+			await locals.pb.collection('projects').update(params.projectId, {
+				[`images.` + imageName]: null
+			});
+		} catch (err) {
+			console.log('Error: ', err);
+			const e = err as ClientResponseError;
+			throw error(e.status, e.message);
+		}
+
+		return {
+			sucess: true
 		};
 	}
 };

@@ -21,6 +21,7 @@ import ProjectsGrid from './ProjectsGrid.svelte';
 import ProjectVoteButton from './ProjectVoteButton.svelte';
 import Button from './Button.svelte';
 import ProfileSocialIcons from './ProfileSocialIcons.svelte';
+import Dropzone from './Dropzone/Dropzone.svelte';
 
 export {
 	Avatar,
@@ -31,6 +32,7 @@ export {
 	CommentVoteForm,
 	CommentVoteButton,
 	ConfirmDeleteModal,
+	Dropzone,
 	Footer,
 	HomeDiscover,
 	HomeHeader,

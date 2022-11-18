@@ -7,6 +7,8 @@ import CaretUpIcon from 'virtual:icons/fa/caret-up';
 import GitHubIcon from 'virtual:icons/ant-design/github-filled';
 import YouTubeIcon from 'virtual:icons/ant-design/youtube-filled';
 import TwitterIcon from 'virtual:icons/ant-design/twitter-outlined';
+import PencilOutlineIcon from 'virtual:icons/heroicons/pencil';
+import TrashOutlineIcon from 'virtual:icons/heroicons/trash';
 
 export {
 	HeartSolidIcon,
@@ -17,5 +19,7 @@ export {
 	CaretUpIcon,
 	GitHubIcon,
 	TwitterIcon,
-	YouTubeIcon
+	YouTubeIcon,
+	PencilOutlineIcon,
+	TrashOutlineIcon
 };

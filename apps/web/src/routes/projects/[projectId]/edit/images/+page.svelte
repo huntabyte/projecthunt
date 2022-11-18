@@ -1,28 +1,43 @@
 <script lang="ts">
-	import Dropzone from 'svelte-file-dropzone';
+	import { TrashOutlineIcon } from '$lib/components/icons';
+	import { Dropzone } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
+	import { getImageURL } from '$lib/utils';
+	import { enhance } from '$app/forms';
 	export let data: PageData;
 	export let form: ActionData;
-
-	// let files;
-
-	// $: if (files) {
-	// 	console.log(files);
-	// 	for (const file of files) {
-	// 		console.log(`${file.name}: ${file.size} bytes`);
-	// 	}
-	// }
 
 	let files = {
 		accepted: [],
 		rejected: []
 	};
 
-	function handleFilesSelect(e) {
+	let inputRef: HTMLInputElement;
+
+	const handleFilesSelect = (e: CustomEvent<any>) => {
 		const { acceptedFiles, fileRejections } = e.detail;
 		files.accepted = [...files.accepted, ...acceptedFiles];
 		files.rejected = [...files.rejected, ...fileRejections];
-	}
+	};
+
+	const handleDeleteImage = (idx: number) => {
+		const dt = new DataTransfer();
+		const { files: fileList } = inputRef;
+
+		if (!fileList) {
+			return;
+		}
+
+		for (let i = 0; i < fileList.length; i++) {
+			const file = fileList?.[i];
+
+			if (idx !== i) dt.items.add(file); // here you exclude the file. thus removing it.
+		}
+
+		inputRef.files = dt.files; // Assign the updates list
+
+		files.accepted = files.accepted.filter((file, i) => i != idx);
+	};
 </script>
 
 <div class="flex flex-col w-full h-full p-2">
@@ -37,54 +52,50 @@
 			<p class="mt-2 5 text-lg">
 				We recommend at least 3 images to properly showcase your project.
 			</p>
-			<div class="form-control w-full max-w-lg">
-				<label for="images" class="block text-sm font-medium">Images</label>
-				<label
-					for="images"
-					class="mt-1 flex justify-center rounded-md border-2 border-dashed border-base-300 px-6 pt-5 pb-6"
-				>
-					<div class="space-y-1 text-center">
-						<svg
-							class="mx-auto h-12 w-12 text-neutral"
-							stroke="currentColor"
-							fill="none"
-							viewBox="0 0 48 48"
-							aria-hidden="true"
-						>
-							<path
-								d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-						<div class="flex text-sm text-base-content">
-							<label
-								for="images"
-								class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-focus"
-							>
-								<span>Upload images</span>
-								<!-- <input
-									class="w-full min-h-full sr-only"
-									id="images"
-									name="images"
-									type="file"
-									accept="image/*"
-									multiple
-								/> -->
-							</label>
-							<p class="pl-1">or drag and drop</p>
+
+			<Dropzone on:drop={handleFilesSelect} name="images" bind:inputRef />
+			<div class="grid grid-cols-5 gap-4 w-full mt-4">
+				{#if data.project.images}
+					{#each data.project.images as item, idx}
+						<div class="relative">
+							<form action="?/deleteImage" method="POST" use:enhance>
+								<input type="hidden" value={item} name="imageName" />
+								<button
+									type="submit"
+									class="absolute -top-1 -right-1 hover:cursor-pointer btn btn-circle btn-sm btn-secondary transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-200 z-10"
+								>
+									<div class="w-4 h-4">
+										<TrashOutlineIcon />
+									</div>
+								</button>
+							</form>
+							<div class="w-full aspect-w-16 aspect-h-9">
+								<img
+									src={getImageURL(data.project.collectionName, data.project.id, item)}
+									alt="preview {idx}"
+									class="object-fit h-full"
+								/>
+							</div>
 						</div>
-						<p class="text-xs text-neutral">PNG, JPG, GIF up to 10MB</p>
+					{/each}
+				{/if}
+				{#each files.accepted as item, idx}
+					<div class="relative">
+						<button
+							type="button"
+							class="absolute -top-1 -right-1 hover:cursor-pointer btn btn-circle btn-sm btn-secondary transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-200 z-10"
+							on:click|preventDefault={() => handleDeleteImage(idx)}
+						>
+							<div class="w-4 h-4">
+								<TrashOutlineIcon />
+							</div>
+						</button>
+						<div class="w-full aspect-w-16 aspect-h-9">
+							<img src={URL.createObjectURL(item)} alt="preview {idx}" class="object-fit h-full" />
+						</div>
 					</div>
-				</label>
-			</div>
-			<Dropzone on:drop={handleFilesSelect} name="images" />
-			<ol>
-				{#each files.accepted as item}
-					<li>{item.name}</li>
 				{/each}
-			</ol>
+			</div>
 
 			<div class="w-full max-w-lg pt-3">
 				<button class="btn btn-primary w-full max-w-lg">Edit Project</button>
