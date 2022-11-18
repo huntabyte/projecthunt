@@ -18,7 +18,12 @@ const config = {
 		}
 	},
 
-	plugins: [require('daisyui'), require('@tailwindcss/aspect-ratio'), require('@tailwindcss/forms')]
+	plugins: [
+		require('daisyui'),
+		require('@tailwindcss/aspect-ratio'),
+		require('@tailwindcss/forms'),
+		require('flowbite/plugin')
+	]
 };
 
 module.exports = config;

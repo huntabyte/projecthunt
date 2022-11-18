@@ -3,7 +3,9 @@
 	import { Dropzone } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
 	import { getImageURL } from '$lib/utils';
-	import { enhance } from '$app/forms';
+	import { enhance, type SubmitFunction } from '$app/forms';
+	import toast from 'svelte-french-toast';
+	import { invalidateAll } from '$app/navigation';
 	export let data: PageData;
 	export let form: ActionData;
 
@@ -37,6 +39,24 @@
 		inputRef.files = dt.files; // Assign the updates list
 
 		files.accepted = files.accepted.filter((file, i) => i != idx);
+
+		toast.success('Deleted image!');
+	};
+
+	const handleUpdateImages: SubmitFunction = () => {
+		return async ({ result, update }) => {
+			switch (result.type) {
+				case 'success':
+					await invalidateAll();
+					files.accepted = [];
+					break;
+				case 'error':
+					toast.error(result.error.message);
+					break;
+				default:
+					await update();
+			}
+		};
 	};
 </script>
 
@@ -47,6 +67,7 @@
 			action="?/uploadImages"
 			class="flex flex-col space-y-2 w-full"
 			enctype="multipart/form-data"
+			use:enhance={handleUpdateImages}
 		>
 			<h3 class="text-3xl font-bold">Gallery</h3>
 			<p class="mt-2 5 text-lg">
@@ -54,6 +75,13 @@
 			</p>
 
 			<Dropzone on:drop={handleFilesSelect} name="images" bind:inputRef />
+			{#if form?.errors?.images}
+				{#each form.errors.images as error}
+					<label for="" class="label py-0">
+						<div class="label-text-alt text-error">{error}</div>
+					</label>
+				{/each}
+			{/if}
 			<div class="grid grid-cols-5 gap-4 w-full mt-4">
 				{#if data.project.images}
 					{#each data.project.images as item, idx}

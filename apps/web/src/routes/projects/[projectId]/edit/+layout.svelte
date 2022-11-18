@@ -18,8 +18,7 @@
 
 <div class="w-full h-full">
 	<div class="w-full h-full">
-		<h2 class="text-2xl font-bold">Project Name</h2>
-		<p class="mt-1.5">Status: Published</p>
+		<h2 class="text-2xl font-bold">{data.project.name}</h2>
 		<div class="divider" />
 	</div>
 </div>

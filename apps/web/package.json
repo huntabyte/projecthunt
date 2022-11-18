@@ -30,6 +30,8 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "file-selector": "^0.6.0",
+    "flowbite": "^1.5.4",
+    "flowbite-svelte": "^0.27.16",
     "object-to-formdata": "^4.4.2",
     "pocketbase": "^0.8.0-rc1",
     "postcss": "^8.4.14",

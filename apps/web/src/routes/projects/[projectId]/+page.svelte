@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance, applyAction } from '$app/forms';
 	import ProjectVoteForm from '$lib/components/ProjectVoteForm.svelte';
+	import { Carousel } from 'flowbite-svelte';
 
 	import { getImageURL } from '$lib/utils';
 	import type { ActionData, PageData } from './$types';
@@ -18,6 +19,18 @@
 		dropdown.id = id;
 		dropdown.hidden = bool;
 	};
+
+	let showThumbs = false;
+	let showCaptions = false;
+	let divClass = 'overflow-hidden relative h-56 rounded-lg sm:h-96 xl:h-128 ';
+	let images = data.project.images?.map((image, idx) => {
+		return {
+			imgurl: getImageURL(data.project.collectionId, data.project.id, image),
+			id: idx,
+			name: image,
+			attribution: ''
+		};
+	});
 
 	$: showEdit = Boolean(data?.showEdit);
 	$: editId = data?.editId;
@@ -52,10 +65,12 @@
 	<div class="mt-4 space-y-4">
 		<p class="text-lg">{data.project.description}</p>
 	</div>
-	{#if data.project.images.length > 0}
-		<div class="mt-6">
-			<!-- <Carousel project={data.project} /> -->
-		</div>
+	{#if images}
+		{#if images.length > 0}
+			<div class="mt-6">
+				<Carousel {images} loop {showCaptions} {showThumbs} duration={5000} {divClass} />
+			</div>
+		{/if}
 	{/if}
 	{#if data.user}
 		<div class="flex mt-4 w-full  items-center space-x-4">

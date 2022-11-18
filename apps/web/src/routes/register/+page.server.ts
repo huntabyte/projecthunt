@@ -17,7 +17,6 @@ export const actions: Actions = {
 		const { formData, errors } = await validateData(await request.formData(), registerUserDto);
 
 		if (errors) {
-			console.log(errors.fieldErrors);
 			return invalid(400, {
 				data: formData,
 				errors: errors.fieldErrors
@@ -25,7 +24,6 @@ export const actions: Actions = {
 		}
 
 		let username = generateUsername(formData.name.split(' ').join('')).toLowerCase();
-		console.log(username);
 
 		do {
 			username = generateUsername(formData.name.split(' ').join(''));

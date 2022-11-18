@@ -9,7 +9,6 @@ import type { Project } from '$lib/types';
 export const actions: Actions = {
 	create: async ({ request, locals }) => {
 		const { formData, errors } = await validateData(await request.formData(), createProjectDto);
-		console.log(typeof formData.thumbnail);
 		let projectId;
 		if (errors) {
 			const { thumbnail, ...rest } = formData;
