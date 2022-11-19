@@ -17,7 +17,7 @@ export const getImageURL = (
 	fileName: string | undefined,
 	size = '0x0'
 ) => {
-	return `http://${PUBLIC_PB_HOST}/api/files/${collection}/${recordId}/${fileName}?thumb=${size}`;
+	return `${PUBLIC_PB_HOST}/api/files/${collection}/${recordId}/${fileName}?thumb=${size}`;
 };
 
 export const validateData = async <T extends z.ZodTypeAny>(
