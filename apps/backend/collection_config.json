@@ -91,18 +91,39 @@
                         "80x80"
                     ]
                 }
+            },
+            {
+                "id": "fy0eps2r",
+                "name": "images",
+                "type": "file",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "maxSelect": 5,
+                    "maxSize": 2000000,
+                    "mimeTypes": [
+                        "image/jpg",
+                        "image/jpeg",
+                        "image/png",
+                        "image/svg+xml",
+                        "image/gif",
+                        "image/webp"
+                    ],
+                    "thumbs": []
+                }
             }
         ],
         "listRule": "",
         "viewRule": "",
         "createRule": "@request.auth.id != \"\" && @request.auth.id = @request.data.user",
         "updateRule": "@request.auth.id = user",
-        "deleteRule": null,
+        "deleteRule": "@request.auth.id = user",
         "options": {}
     },
     {
         "id": "iv4zns811w76oqs",
-        "name": "votes",
+        "name": "project_votes",
         "type": "base",
         "system": false,
         "schema": [
@@ -169,7 +190,7 @@
                 "options": {
                     "maxSelect": 1,
                     "collectionId": "systemprofiles0",
-                    "cascadeDelete": false
+                    "cascadeDelete": true
                 }
             },
             {
@@ -227,9 +248,77 @@
                         "image/jpeg",
                         "image/png",
                         "image/svg+xml",
-                        "image/gif"
+                        "image/gif",
+                        "image/webp"
                     ],
                     "thumbs": null
+                }
+            },
+            {
+                "id": "tded0ugg",
+                "name": "bio",
+                "type": "text",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "min": 2,
+                    "max": 512,
+                    "pattern": ""
+                }
+            },
+            {
+                "id": "qmp4cx29",
+                "name": "website",
+                "type": "url",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "exceptDomains": null,
+                    "onlyDomains": null
+                }
+            },
+            {
+                "id": "b1qoik6k",
+                "name": "twitter",
+                "type": "url",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "exceptDomains": null,
+                    "onlyDomains": [
+                        "twitter.com"
+                    ]
+                }
+            },
+            {
+                "id": "ak6hsbxu",
+                "name": "youtube",
+                "type": "url",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "exceptDomains": [],
+                    "onlyDomains": [
+                        "youtube.com"
+                    ]
+                }
+            },
+            {
+                "id": "vnbxdadh",
+                "name": "github",
+                "type": "url",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "exceptDomains": null,
+                    "onlyDomains": [
+                        "github.com"
+                    ]
                 }
             }
         ],
@@ -248,5 +337,85 @@
             "onlyEmailDomains": null,
             "requireEmail": true
         }
+    },
+    {
+        "id": "t1zxeihj5rsd6gy",
+        "name": "comment_votes",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "id": "ghod7uof",
+                "name": "comment",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "8jngy0xhw7qti2c",
+                    "cascadeDelete": true
+                }
+            },
+            {
+                "id": "stiqkj0d",
+                "name": "user",
+                "type": "relation",
+                "system": false,
+                "required": true,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "systemprofiles0",
+                    "cascadeDelete": true
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "@request.auth.id = @request.data.user",
+        "updateRule": "@request.auth.id = @request.data.user",
+        "deleteRule": "@request.auth.id = user",
+        "options": {}
+    },
+    {
+        "id": "7v36d6uxdt15f6u",
+        "name": "comment_replies",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "id": "ocvqtrpz",
+                "name": "comment",
+                "type": "relation",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "8jngy0xhw7qti2c",
+                    "cascadeDelete": true
+                }
+            },
+            {
+                "id": "olbhwncq",
+                "name": "reply",
+                "type": "relation",
+                "system": false,
+                "required": false,
+                "unique": false,
+                "options": {
+                    "maxSelect": 1,
+                    "collectionId": "8jngy0xhw7qti2c",
+                    "cascadeDelete": true
+                }
+            }
+        ],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": "@request.auth.id != ''",
+        "updateRule": null,
+        "deleteRule": "@request.auth.id = comment.user.id || @request.auth.id = reply.user.id",
+        "options": {}
     }
 ]
