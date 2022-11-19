@@ -19,6 +19,14 @@
 <div class="w-full h-full">
 	<div class="w-full h-full">
 		<h2 class="text-2xl font-bold">{data.project.name}</h2>
+		<p class="mt-1">
+			Status:
+			{#if data.project.published}
+				<span class=" font-medium text-success">Published</span>
+			{:else}
+				<span class="font-medium text-warning">Draft</span>
+			{/if}
+		</p>
 		<div class="divider" />
 	</div>
 </div>

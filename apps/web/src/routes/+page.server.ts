@@ -3,7 +3,7 @@ import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = ({ locals }) => {
 	return {
-		projects: getProjects(locals)
+		projects: getProjects(locals, 'published = true')
 	};
 };
 

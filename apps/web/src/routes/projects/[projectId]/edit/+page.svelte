@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
 	import { getImageURL } from '$lib/utils';
+	import { Input } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
 	export let data: PageData;
 	export let form: ActionData;
@@ -16,42 +17,27 @@
 		>
 			<h3 class="text-3xl font-bold">Tell us more about this project</h3>
 			<p class="mt-2 5 text-lg">We'll need the name, tagline, link, and description</p>
-			<div class="form-control w-full max-w-lg">
-				<label for="name" class="label font-medium pb-1">
-					<span class="label-text">Name</span>
-				</label>
-				<input
-					type="text"
-					name="name"
-					class="input input-bordered w-full max-w-lg"
-					value={data.project.name ?? form?.data?.name}
-				/>
-			</div>
-			<div class="form-control w-full max-w-lg">
-				<label for="tagline" class="label font-medium pb-1">
-					<span class="label-text">Tagline</span>
-				</label>
-				<input
-					type="text"
-					name="tagline"
-					class="input input-bordered w-full max-w-lg"
-					value={data.project.tagline ?? form?.data?.tagline}
-				/>
-			</div>
-			<div class="form-control w-full max-w-lg">
-				<label for="url" class="label font-medium pb-1">
-					<span class="label-text">URL</span>
-				</label>
-				<input
-					type="text"
-					name="url"
-					class="input input-bordered w-full max-w-lg"
-					value={data.project.url ?? form?.data?.url}
-				/>
-			</div>
+			<Input
+				id="name"
+				value={data.project.name ?? form?.data?.name}
+				errors={form?.errors?.name}
+				label="Project name"
+			/>
+			<Input
+				id="tagline"
+				value={data.project.tagline ?? form?.data?.tagline}
+				errors={form?.errors?.tagline}
+				label="Project tagline"
+			/>
+			<Input
+				id="url"
+				value={data.project.url ?? form?.data?.url}
+				errors={form?.errors?.url}
+				label="Project URL"
+			/>
 			<div class="form-control w-full max-w-lg">
 				<label for="description" class="label font-medium pb-1">
-					<span class="label-text">Description</span>
+					<span class="label-text">Project description</span>
 				</label>
 				<textarea
 					name="description"
@@ -85,7 +71,7 @@
 				<input type="file" name="thumbnail" id="thumbnail" value="" />
 			</div>
 			<div class="w-full max-w-lg pt-3">
-				<button class="btn btn-primary w-full max-w-lg">Edit Project</button>
+				<button class="btn btn-primary w-full max-w-lg">Save Changes</button>
 			</div>
 		</form>
 	</div>

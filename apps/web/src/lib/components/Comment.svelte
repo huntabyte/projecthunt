@@ -74,7 +74,7 @@
 				<p>{comment.content}</p>
 			{/if}
 		</div>
-		<div class="flex space-x-4 mt-2 text-sm font-semibold items-center ">
+		<div class="flex space-x-4  text-sm font-semibold items-center ">
 			<CommentVoteForm {comment} />
 			<button
 				class="hover:cursor-pointer hover:underline opacity-80"

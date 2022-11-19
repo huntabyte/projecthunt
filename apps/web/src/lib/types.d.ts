@@ -37,6 +37,9 @@ interface Project extends Record {
 	};
 	images?: string[];
 	user: string;
+	published: boolean;
+	technologies: string[];
+	topics: string[];
 }
 
 interface ProjectVote extends Record {

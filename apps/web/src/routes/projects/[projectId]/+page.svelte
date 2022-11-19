@@ -48,9 +48,14 @@
 			</div>
 		</div>
 	</div>
-	<a href={data.project.url} class="text-2xl font-bold mt-4 hover:underline max-w-max"
-		>{data.project.name}</a
-	>
+	<a
+		href={data.project.url}
+		class="text-2xl font-bold mt-4 hover:underline max-w-max flex items-center"
+		>{data.project.name}
+		{#if !data.project.published}
+			<span class="badge badge-warning ml-2">DRAFT</span>
+		{/if}
+	</a>
 	<div class="flex justify-between mt-2">
 		<p class="text-2xl font-light">{data.project.tagline}</p>
 		<div class="flex ">

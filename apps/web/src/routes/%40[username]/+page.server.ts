@@ -3,7 +3,7 @@ import { getProjects, updateProjectVote } from '$lib/services/ProjectService';
 
 export const load: PageServerLoad = ({ locals, params }) => {
 	return {
-		projects: getProjects(locals, `user.username = "${params.username}"`)
+		projects: getProjects(locals, `user.username = "${params.username}" && published = true`)
 	};
 };
 

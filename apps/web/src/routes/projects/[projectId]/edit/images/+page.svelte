@@ -126,7 +126,7 @@
 			</div>
 
 			<div class="w-full max-w-lg pt-3">
-				<button class="btn btn-primary w-full max-w-lg">Edit Project</button>
+				<button class="btn btn-primary w-full max-w-lg">Save Changes</button>
 			</div>
 		</form>
 	</div>

@@ -8,17 +8,21 @@ import type { Project } from '$lib/types';
 
 export const actions: Actions = {
 	create: async ({ request, locals }) => {
-		const { formData, errors } = await validateData(await request.formData(), createProjectDto);
+		const { formData, errors } = await validateData(
+			await request.formData(),
+			createProjectDto.pick({ url: true })
+		);
 		let projectId;
 		if (errors) {
-			const { thumbnail, ...rest } = formData;
 			return invalid(400, {
-				data: rest,
+				data: formData,
 				errors: errors.fieldErrors
 			});
 		}
 		try {
-			const { id } = await locals.pb.collection('projects').create<Project>(serialize(formData));
+			const { id } = await locals.pb
+				.collection('projects')
+				.create<Project>({ user: locals?.user?.id, ...formData });
 			projectId = id;
 		} catch (err) {
 			console.log('Error:', err);
@@ -26,6 +30,6 @@ export const actions: Actions = {
 			throw error(e.status, e.data.message);
 		}
 
-		throw redirect(303, `/projects/${projectId}`);
+		throw redirect(303, `/projects/${projectId}/edit`);
 	}
 };

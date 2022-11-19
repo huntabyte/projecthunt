@@ -12,16 +12,21 @@
 	<div class="avatar">
 		<div class="w-20 rounded">
 			<img
-				src={getImageURL(project.collectionName, project.id, project.thumbnail, '80x80')}
+				src={project.thumbnail
+					? getImageURL(project.collectionName, project.id, project.thumbnail, '80x80')
+					: 'https://via.placeholder.com/80'}
 				alt="Project thumbnail"
 			/>
 		</div>
 	</div>
 	<div class="flex flex-col w-full ml-4 h-full justify-between">
-		<div>
-			<a href="/projects/{project.id}" class="font-semibold text-lg">{project.name}</a>
-			<p>{project.tagline}</p>
-		</div>
+		<a href="/projects/{project.id}" class="font-semibold text-lg flex items-center">
+			{project.name || project.url}
+			{#if !project.published}
+				<span class="badge badge-warning ml-2">DRAFT</span>
+			{/if}
+		</a>
+		<p>{project.tagline}</p>
 		<div class="flex items-center">
 			<span class="text-md">
 				<CommentIcon />
@@ -32,7 +37,9 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-end w-full space-x-2">
-		<a href="/projects/{project.id}/edit" class="btn btn-outline">Edit Project</a>
+		<a href="/projects/{project.id}/edit" class="btn btn-outline"
+			>{project.published ? 'Edit Project' : 'Edit Draft'}</a
+		>
 		<ConfirmDeleteModal {project} />
 	</div>
 </div>
