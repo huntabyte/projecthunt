@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Avatar from '$lib/components/Avatar.svelte';
 	import { ProjectsGrid } from '$lib/components';
 	import type { PageData } from './$types';
 
