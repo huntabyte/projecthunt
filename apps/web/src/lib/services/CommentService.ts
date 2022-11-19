@@ -1,5 +1,5 @@
 import { createCommentDto, updateCommentDto } from '$lib/schemas';
-import type { Comment, CommentActionData, CommentVote, ReplyActionData } from '$lib/types';
+import type { Comment, CommentActionData, CommentVote, Project, ReplyActionData } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid } from '@sveltejs/kit';
 import { ClientResponseError } from 'pocketbase';
@@ -80,9 +80,14 @@ export const getComments = async (locals: App.Locals, projectId: string) => {
 
 export const createComment = async (
 	locals: App.Locals,
-	request: Request
+	request: Request,
+	projectId: string
 ): Promise<CommentActionData> => {
-	const { formData, errors } = await validateData(await request.formData(), createCommentDto);
+	const body = await request.formData();
+	body.append('user', locals.user.id);
+	body.append('project', projectId);
+
+	const { formData, errors } = await validateData(body, createCommentDto);
 
 	if (errors) {
 		return invalid(400, {

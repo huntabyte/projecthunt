@@ -26,8 +26,8 @@ export const actions: Actions = {
 
 		return await updateProjectVote(locals, id as string);
 	},
-	createComment: async ({ request, locals }) => {
-		return await createComment(locals, request);
+	createComment: async ({ request, locals, params }) => {
+		return await createComment(locals, request, params.projectId);
 	},
 	updateComment: async ({ request, locals }) => {
 		return await updateComment(locals, request);

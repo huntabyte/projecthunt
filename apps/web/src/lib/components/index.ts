@@ -22,11 +22,13 @@ import ProjectVoteButton from './ProjectVoteButton.svelte';
 import Button from './Button.svelte';
 import ProfileSocialIcons from './ProfileSocialIcons.svelte';
 import Dropzone from './Dropzone/Dropzone.svelte';
+import CommentCreateForm from './CommentCreateForm.svelte';
 
 export {
 	Avatar,
 	Button,
 	Comment,
+	CommentCreateForm,
 	CommentReply,
 	CommentReplyForm,
 	CommentVoteForm,
