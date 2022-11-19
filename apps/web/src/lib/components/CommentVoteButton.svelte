@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Comment } from '$lib/types';
-	import { CaretUpIcon } from '$lib/components/icons';
 	export let comment: Comment;
 	export let hasVoted: boolean;
 </script>

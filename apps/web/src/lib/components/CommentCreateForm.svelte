@@ -2,11 +2,13 @@
 	import { page } from '$app/stores';
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import { Avatar } from '$lib/components';
+	import { invalidateAll } from '$app/navigation';
 
 	const submitCreateComment: SubmitFunction = ({ form }) => {
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				form.reset();
+				await invalidateAll();
 			}
 			if (result.type === 'invalid') {
 				await applyAction(result);
