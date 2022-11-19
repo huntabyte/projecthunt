@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { zfd } from 'zod-form-data';
-
 const imageTypes = [
 	'image/jpeg',
 	'image/jpg',

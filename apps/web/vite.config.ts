@@ -3,6 +3,9 @@ import Icons from 'unplugin-icons/vite';
 import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
+	build: {
+		target: 'esnext'
+	},
 	plugins: [
 		sveltekit(),
 		Icons({
@@ -11,6 +14,9 @@ const config: UserConfig = {
 	],
 	optimizeDeps: {
 		include: ['classnames']
+	},
+	ssr: {
+		noExternal: ['zod-form-data']
 	}
 };
 
