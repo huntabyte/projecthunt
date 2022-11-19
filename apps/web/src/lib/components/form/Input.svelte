@@ -1,11 +1,11 @@
 <script lang="ts">
-	export let value: string = '';
-	export let placeholder: string = '';
+	interface $$Props extends Partial<svelte.JSX.HTMLAttributes<HTMLElementTagNameMap['input']>> {
+		id: string;
+		errors?: string[];
+		label: string;
+	}
 	export let id: string;
 	export let label: string;
-	export let type: string = 'text';
-	export let disabled: boolean = false;
-	export let required: boolean = false;
 
 	export let errors: string[] | undefined = [];
 </script>
@@ -14,16 +14,7 @@
 	<label for={id} class="label font-medium pb-1">
 		<span class="label-text">{label}</span>
 	</label>
-	<input
-		class="input input-bordered w-full max-w-lg mb-2"
-		name={id}
-		{type}
-		{id}
-		{value}
-		{placeholder}
-		{required}
-		{disabled}
-	/>
+	<input class="input input-bordered w-full max-w-lg mb-2" name={id} {...$$restProps} />
 	{#if errors}
 		{#if errors.length > 0}
 			{#each errors as error}
