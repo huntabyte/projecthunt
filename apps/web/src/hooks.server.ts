@@ -2,9 +2,10 @@ import PocketBase from 'pocketbase';
 import { serializeNonPOJOs } from '$lib/utils';
 import type { User } from '$lib/types';
 import type { Handle } from '@sveltejs/kit';
+import { PUBLIC_PB_HOST } from '$env/static/public';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.pb = new PocketBase('http://localhost:8090');
+	event.locals.pb = new PocketBase(PUBLIC_PB_HOST);
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 
 	if (event.locals.pb.authStore.isValid) {

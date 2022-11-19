@@ -2,13 +2,11 @@ import type { z, ZodError } from 'zod';
 import { z as ZOD } from 'zod';
 
 import { differenceInDays, formatDistanceToNowStrict } from 'date-fns';
-import { serialize } from 'object-to-formdata';
 import { zfd } from 'zod-form-data';
 import { updateProjectImagesDto } from './schemas';
+import { PUBLIC_PB_HOST } from '$env/static/public';
 
 const { randomBytes } = await import('node:crypto');
-
-const POCKETBASE_HOST = 'localhost:8090';
 
 export const serializeNonPOJOs = <T>(obj: T): T => {
 	return structuredClone(obj);
@@ -20,7 +18,7 @@ export const getImageURL = (
 	fileName: string | undefined,
 	size = '0x0'
 ) => {
-	return `http://${POCKETBASE_HOST}/api/files/${collection}/${recordId}/${fileName}?thumb=${size}`;
+	return `http://${PUBLIC_PB_HOST}/api/files/${collection}/${recordId}/${fileName}?thumb=${size}`;
 };
 
 export const validateData = async <T extends z.ZodTypeAny>(
