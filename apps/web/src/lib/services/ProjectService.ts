@@ -11,7 +11,7 @@ export const getProject = async (locals: App.Locals, id: string): Promise<Projec
 		const project = serializeNonPOJOs<Project>(
 			await locals.pb.collection('projects').getOne(id, {
 				expand:
-					'project_votes(project), projects_technologies(project).technology, project_topics(project)'
+					'project_votes(project), projects_technologies(project).technology, project_topics(project), comments(project)'
 			})
 		);
 		if (!project.expand?.['project_votes(project)']) {
@@ -24,6 +24,9 @@ export const getProject = async (locals: App.Locals, id: string): Promise<Projec
 
 		if (!project.expand?.['projects_topics(project)']) {
 			project.expand['projects_topics(project)'] = [];
+		}
+		if (!project.expand?.['comments(project)']) {
+			project.expand['comments(project)'] = [];
 		}
 
 		return project;
@@ -42,7 +45,7 @@ export const getProjects = async (locals: App.Locals, filter: string = '') => {
 			await locals.pb.collection('projects').getFullList<Project>(undefined, {
 				sort: '-created',
 				expand:
-					'project_votes(project), projects_technologies(project).technology, project_topics(project)',
+					'project_votes(project), projects_technologies(project).technology, project_topics(project), comments(project)',
 				filter: filter
 			})
 		);
@@ -57,6 +60,9 @@ export const getProjects = async (locals: App.Locals, filter: string = '') => {
 
 			if (!project.expand?.['projects_topics(project)']) {
 				project.expand['projects_topics(project)'] = [];
+			}
+			if (!project.expand?.['comments(project)']) {
+				project.expand['comments(project)'] = [];
 			}
 			return project;
 		});
@@ -73,26 +79,11 @@ export const getProjects = async (locals: App.Locals, filter: string = '') => {
 
 export const getUsersProjects = async (locals: App.Locals) => {
 	try {
-		const projects = serializeNonPOJOs<Project[]>(
+		let projects = serializeNonPOJOs<Project[]>(
 			await locals.pb.collection('projects').getFullList(undefined, {
-				filter: `user = "${locals?.user?.id}"`
-			})
-		);
-		return projects;
-	} catch (err) {
-		console.log('Error:', err);
-		const e = err as ClientResponseError;
-		throw error(e.status, e.data.message);
-	}
-};
-
-export const getAllProjects = async (locals: App.Locals) => {
-	try {
-		let projects = serializeNonPOJOs(
-			await locals.pb.collection('projects').getFullList<Project>(999999999, {
-				sort: '-created',
 				expand:
-					'project_votes(project), projects_technologies(project).technology, project_topics(project)'
+					'project_votes(project), projects_technologies(project).technology, project_topics(project), comments(project)',
+				filter: `user = "${locals?.user?.id}"`
 			})
 		);
 		projects = projects.map((project) => {
@@ -106,6 +97,43 @@ export const getAllProjects = async (locals: App.Locals) => {
 
 			if (!project.expand?.['projects_topics(project)']) {
 				project.expand['projects_topics(project)'] = [];
+			}
+			if (!project.expand?.['comments(project)']) {
+				project.expand['comments(project)'] = [];
+			}
+			return project;
+		});
+		return projects;
+	} catch (err) {
+		console.log('Error:', err);
+		const e = err as ClientResponseError;
+		throw error(e.status, e.data.message);
+	}
+};
+
+export const getAllProjects = async (locals: App.Locals) => {
+	try {
+		let projects = serializeNonPOJOs(
+			await locals.pb.collection('projects').getFullList<Project>(undefined, {
+				sort: '-created',
+				expand:
+					'project_votes(project), projects_technologies(project).technology, project_topics(project), comments(project)'
+			})
+		);
+		projects = projects.map((project) => {
+			if (!project.expand?.['project_votes(project)']) {
+				project.expand['project_votes(project)'] = [];
+			}
+
+			if (!project.expand?.['projects_technologies(project)']) {
+				project.expand['projects_technologies(project)'] = [];
+			}
+
+			if (!project.expand?.['projects_topics(project)']) {
+				project.expand['projects_topics(project)'] = [];
+			}
+			if (!project.expand?.['comments(project)']) {
+				project.expand['comments(project)'] = [];
 			}
 			return project;
 		});

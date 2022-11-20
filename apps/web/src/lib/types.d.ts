@@ -36,6 +36,7 @@ interface Project extends Record {
 		'project_votes(project)': ProjectVote[];
 		'projects_technologies(project)': Technology[];
 		'projects_topics(project)': Topic[];
+		'comments(project)': Comment[];
 	};
 	images?: string[];
 	user: string;

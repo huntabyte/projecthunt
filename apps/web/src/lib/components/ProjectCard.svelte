@@ -29,7 +29,7 @@
 					</span>
 				</div>
 				<div>
-					<p class="text-sm font-medium">0</p>
+					<p class="text-sm font-medium">{project.expand['comments(project)'].length}</p>
 				</div>
 			</div>
 			<ProjectVoteForm {project} />
