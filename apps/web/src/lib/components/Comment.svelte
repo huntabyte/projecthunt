@@ -116,7 +116,7 @@
 						</li>
 					{/if}
 					{#if $page.data?.user?.id === comment.user || $page.data?.user?.id === $page.data.project.user}
-						<li>
+						<li class="w-full">
 							<form action="?/deleteComment" class="w-full" method="POST" use:enhance>
 								<input type="hidden" name="id" value={comment.id} />
 								<button
