@@ -17,4 +17,5 @@
 	valueFieldName="id"
 	bind:selectedItem={selectedItems}
 	bind:value={selectedItemValues}
+	text=""
 />

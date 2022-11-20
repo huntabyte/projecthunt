@@ -9,7 +9,12 @@
 	export let data: PageData;
 	export let form: ActionData;
 
-	let files = {
+	interface Files {
+		accepted: File[];
+		rejected: File[];
+	}
+
+	let files: Files = {
 		accepted: [],
 		rejected: []
 	};
@@ -74,7 +79,13 @@
 				We recommend at least 3 images to properly showcase your project.
 			</p>
 
-			<Dropzone on:drop={handleFilesSelect} name="images" bind:inputRef />
+			<Dropzone
+				on:drop={handleFilesSelect}
+				name="images"
+				bind:inputRef
+				accept="image/*"
+				rootRef={false}
+			/>
 			{#if form?.errors?.images}
 				{#each form.errors.images as error}
 					<label for="" class="label py-0">

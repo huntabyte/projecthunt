@@ -164,7 +164,7 @@
 	// --- Public State ----
 
 	// selected item state
-	export let selectedItem = multiple ? [] : undefined;
+	export let selectedItem = multiple ? [''] : undefined;
 	export let value = undefined;
 	export let highlightedItem = undefined;
 

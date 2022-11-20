@@ -3,7 +3,6 @@
 	import { getImageURL } from '$lib/utils';
 	import { Autocomplete, Input } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
-	import type { Record } from 'pocketbase';
 	export let data: PageData;
 	export let form: ActionData;
 
@@ -62,13 +61,19 @@
 					items={data.technologies}
 					selectName="technologies"
 					selectedItems={technologies}
+					selectedItemValues={['']}
 				/>
 			</div>
 			<div class="form-control w-full max-w-lg">
 				<label for="topics" class="label font-medium pb-1">
 					<span class="label-text">Topics</span>
 				</label>
-				<Autocomplete items={data.topics} selectName="topics" selectedItems={topics} />
+				<Autocomplete
+					items={data.topics}
+					selectName="topics"
+					selectedItems={topics}
+					selectedItemValues={['']}
+				/>
 			</div>
 			<div class="form-control w-full max-w-lg">
 				<label for="thumbnail" class="label font-medium pb-1">

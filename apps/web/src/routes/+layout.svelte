@@ -9,7 +9,7 @@
 </script>
 
 <Toaster />
-<div class="min-h-screen h-full w-full">
+<div class="min-h-screen h-full w-full" data-sveltekit-prefetch>
 	<div class="bg-base-100 border-b w-full">
 		<div class="navbar mx-auto bg-base-100 lg:px-8 px-4 w-full max-w-screen-2xl container py-5 ">
 			<div class="navbar-start">
