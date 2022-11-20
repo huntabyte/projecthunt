@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = ({ locals, params }) => {
 		const project = serializeNonPOJOs<Project>(
 			await locals.pb.collection('projects').getOne(projectId, {
 				expand:
-					'project_votes(project), projects_technologies(project).technology, projects_topics(project)'
+					'project_votes(project), projects_technologies(project).technology, projects_topics(project).topic'
 			})
 		);
 
@@ -20,8 +20,8 @@ export const load: LayoutServerLoad = ({ locals, params }) => {
 			project.expand['projects_technologies(project)'] = [];
 		}
 
-		if (!project.expand?.['project_topics(project)']) {
-			project.expand['project_topics(project)'] = [];
+		if (!project.expand?.['projects_topics(project)']) {
+			project.expand['projects_topics(project)'] = [];
 		}
 
 		if (locals?.user?.id != project.user) {

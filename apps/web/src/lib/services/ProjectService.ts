@@ -1,9 +1,10 @@
 import { createProjectDto, updateProjectTags } from '$lib/schemas';
-import type { Project, ProjectVote, Technology } from '$lib/types';
+import type { Project, ProjectVote } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid, redirect } from '@sveltejs/kit';
 import { serialize } from 'object-to-formdata';
 import { ClientResponseError } from 'pocketbase';
+import { generateCreateDeleteLists } from '$lib/utils';
 
 export const getProject = async (locals: App.Locals, id: string): Promise<Project> => {
 	try {
@@ -21,8 +22,8 @@ export const getProject = async (locals: App.Locals, id: string): Promise<Projec
 			project.expand['projects_technologies(project)'] = [];
 		}
 
-		if (!project.expand?.['project_topics(project)']) {
-			project.expand['project_topics(project)'] = [];
+		if (!project.expand?.['projects_topics(project)']) {
+			project.expand['projects_topics(project)'] = [];
 		}
 
 		return project;
@@ -54,8 +55,8 @@ export const getProjects = async (locals: App.Locals, filter: string = '') => {
 				project.expand['projects_technologies(project)'] = [];
 			}
 
-			if (!project.expand?.['project_topics(project)']) {
-				project.expand['project_topics(project)'] = [];
+			if (!project.expand?.['projects_topics(project)']) {
+				project.expand['projects_topics(project)'] = [];
 			}
 			return project;
 		});
@@ -103,8 +104,8 @@ export const getAllProjects = async (locals: App.Locals) => {
 				project.expand['projects_technologies(project)'] = [];
 			}
 
-			if (!project.expand?.['project_topics(project)']) {
-				project.expand['project_topics(project)'] = [];
+			if (!project.expand?.['projects_topics(project)']) {
+				project.expand['projects_topics(project)'] = [];
 			}
 			return project;
 		});
@@ -163,28 +164,21 @@ export const updateProject = async (
 			})
 		);
 
-		let technologiesToDelete: string[] = [];
-		let technologiesToCreate: string[] = [];
+		const currentTopics = serializeNonPOJOs(
+			await locals.pb.collection('projects_topics').getFullList(undefined, {
+				filter: `project = "${projectId}"`
+			})
+		);
 
-		currentTechnologies.forEach((record) => {
-			if (!tags.technologies.includes(record.technology)) {
-				technologiesToDelete.push(record.id);
-			}
-		});
+		const { toCreate: techToCreate, toDelete: techToDelete } = generateCreateDeleteLists(
+			currentTechnologies,
+			tags.technologies,
+			'technology'
+		);
 
-		const currentTechnologyIDs = currentTechnologies.map((record) => {
-			return record.technology;
-		});
-
-		tags.technologies.forEach((tag) => {
-			if (!currentTechnologyIDs.includes(tag)) {
-				technologiesToCreate.push(tag);
-			}
-		});
-
-		if (technologiesToDelete.length > 0) {
+		if (techToDelete.length > 0) {
 			const deleteTechnologyPromises = Promise.all(
-				technologiesToDelete.map((record) => {
+				techToDelete.map((record) => {
 					return locals.pb
 						.collection('projects_technologies')
 						.delete(record, { $autoCancel: false });
@@ -193,15 +187,41 @@ export const updateProject = async (
 			await deleteTechnologyPromises;
 		}
 
-		if (technologiesToCreate.length > 0) {
+		if (techToCreate.length > 0) {
 			const createTechnologyPromises = Promise.all(
-				technologiesToCreate.map((technologyId) => {
+				techToCreate.map((id) => {
 					return locals.pb
 						.collection('projects_technologies')
-						.create({ project: projectId, technology: technologyId }, { $autoCancel: false });
+						.create({ project: projectId, technology: id }, { $autoCancel: false });
 				})
 			);
 			await createTechnologyPromises;
+		}
+
+		const { toCreate: topicsToCreate, toDelete: topicsToDelete } = generateCreateDeleteLists(
+			currentTopics,
+			tags.topics,
+			'topic'
+		);
+
+		if (topicsToDelete.length > 0) {
+			const deleteTopicsPromises = Promise.all(
+				topicsToDelete.map((record) => {
+					return locals.pb.collection('projects_topics').delete(record, { $autoCancel: false });
+				})
+			);
+			await deleteTopicsPromises;
+		}
+
+		if (topicsToCreate.length > 0) {
+			const createTopicsPromises = Promise.all(
+				topicsToCreate.map((id) => {
+					return locals.pb
+						.collection('projects_topics')
+						.create({ project: projectId, topic: id }, { $autoCancel: false });
+				})
+			);
+			await createTopicsPromises;
 		}
 	} catch (err) {
 		console.log('Error:', err);

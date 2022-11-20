@@ -3,14 +3,16 @@
 	import { getImageURL } from '$lib/utils';
 	import { Autocomplete, Input } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
+	import type { Record } from 'pocketbase';
 	export let data: PageData;
 	export let form: ActionData;
 
 	const technologies = data.project.expand['projects_technologies(project)'].map((record) => {
 		return record.expand.technology;
 	});
-	const technologyIDs = technologies.map((record) => {
-		return record.id;
+
+	const topics = data.project.expand['projects_topics(project)'].map((record) => {
+		return record.expand.topic;
 	});
 </script>
 
@@ -66,7 +68,7 @@
 				<label for="topics" class="label font-medium pb-1">
 					<span class="label-text">Topics</span>
 				</label>
-				<Autocomplete items={data.topics} selectName="topics" />
+				<Autocomplete items={data.topics} selectName="topics" selectedItems={topics} />
 			</div>
 			<div class="form-control w-full max-w-lg">
 				<label for="thumbnail" class="label font-medium pb-1">
