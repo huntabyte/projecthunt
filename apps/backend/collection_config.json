@@ -506,5 +506,85 @@
     "updateRule": null,
     "deleteRule": null,
     "options": {}
+  },
+  {
+    "id": "mcr4mxe4oqwe1d1",
+    "name": "projects_topics",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "egbibjox",
+        "name": "project",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "collectionId": "ou4em1vta5bw5ts",
+          "cascadeDelete": true
+        }
+      },
+      {
+        "id": "p9rexzon",
+        "name": "topic",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "collectionId": "s1ut7yk2jtek3fl",
+          "cascadeDelete": true
+        }
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "@request.auth.id = project.user.id",
+    "updateRule": null,
+    "deleteRule": "@request.auth.id = project.user.id",
+    "options": {}
+  },
+  {
+    "id": "tdmqhqe1f21lap0",
+    "name": "projects_technologies",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "1crdztiv",
+        "name": "project",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "collectionId": "ou4em1vta5bw5ts",
+          "cascadeDelete": true
+        }
+      },
+      {
+        "id": "w0rvsbwm",
+        "name": "technology",
+        "type": "relation",
+        "system": false,
+        "required": true,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "collectionId": "u5mtm3oenueb1t7",
+          "cascadeDelete": true
+        }
+      }
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "@request.auth.id = project.user.id",
+    "updateRule": null,
+    "deleteRule": "@request.auth.id = project.user.id",
+    "options": {}
   }
 ]
