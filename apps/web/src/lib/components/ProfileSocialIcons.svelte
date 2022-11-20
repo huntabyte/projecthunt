@@ -6,17 +6,32 @@
 
 <div class="flex justify-center space-x-3 md:order-2 text-xl">
 	{#if profile.twitter}
-		<a href="/" class="text-neutral hover:text-neutral-focus">
+		<a
+			href={profile.twitter}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="text-neutral hover:text-neutral-focus"
+		>
 			<TwitterIcon />
 		</a>
 	{/if}
 	{#if profile.github}
-		<a href="/" class="text-neutral hover:text-neutral-focus">
+		<a
+			href={profile.github}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="text-neutral hover:text-neutral-focus"
+		>
 			<GitHubIcon />
 		</a>
 	{/if}
 	{#if profile.youtube}
-		<a href="/" class="text-neutral hover:text-neutral-focus">
+		<a
+			href={profile.youtube}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="text-neutral hover:text-neutral-focus"
+		>
 			<YouTubeIcon />
 		</a>
 	{/if}
