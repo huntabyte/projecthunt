@@ -82,7 +82,7 @@
 				<label for="thumbnail" class="avatar w-20 hover:cursor-pointer">
 					{#if data.project.thumbnail}
 						<label for="thumbnail" class="absolute -top-0.5 -right-0.5 hover:cursor-pointer">
-							<button formaction="?/delete" class="w-5 h-5">
+							<button formaction="?/delete" class="w-5 h-5 text-error">
 								<FaRegTrashAlt />
 							</button>
 						</label>
@@ -98,7 +98,13 @@
 						</div>
 					{/if}
 				</label>
-				<input type="file" name="thumbnail" id="thumbnail" value="" />
+				<input
+					type="file"
+					name="thumbnail"
+					id="thumbnail"
+					value=""
+					class="file-input file-input-bordered w-full max-w-lg mt-4"
+				/>
 			</div>
 			<div class="w-full max-w-lg pt-3">
 				<button class="btn btn-primary w-full max-w-lg">Save Changes</button>
