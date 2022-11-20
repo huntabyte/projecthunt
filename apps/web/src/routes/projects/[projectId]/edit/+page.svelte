@@ -1,10 +1,17 @@
 <script lang="ts">
 	import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
 	import { getImageURL } from '$lib/utils';
-	import { Input } from '$lib/components';
+	import { Autocomplete, Input } from '$lib/components';
 	import type { ActionData, PageData } from './$types';
 	export let data: PageData;
 	export let form: ActionData;
+
+	const technologies = data.project.expand['projects_technologies(project)'].map((record) => {
+		return record.expand.technology;
+	});
+	const technologyIDs = technologies.map((record) => {
+		return record.id;
+	});
 </script>
 
 <div class="flex flex-col w-full h-full p-2">
@@ -44,6 +51,22 @@
 					class="textarea textarea-bordered h-24 resize-none"
 					value={data.project.description ?? form?.data?.description}
 				/>
+			</div>
+			<div class="form-control w-full max-w-lg">
+				<label for="technologies" class="label font-medium pb-1">
+					<span class="label-text">Technologies</span>
+				</label>
+				<Autocomplete
+					items={data.technologies}
+					selectName="technologies"
+					selectedItems={technologies}
+				/>
+			</div>
+			<div class="form-control w-full max-w-lg">
+				<label for="topics" class="label font-medium pb-1">
+					<span class="label-text">Topics</span>
+				</label>
+				<Autocomplete items={data.topics} selectName="topics" />
 			</div>
 			<div class="form-control w-full max-w-lg">
 				<label for="thumbnail" class="label font-medium pb-1">

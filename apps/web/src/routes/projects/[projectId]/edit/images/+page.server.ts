@@ -1,12 +1,12 @@
 import { updateProjectImagesDto } from '$lib/schemas';
-import { validateFormData } from '$lib/utils';
+import { validateImages } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
 	uploadImages: async ({ request, locals, params }) => {
-		const { formData, errors } = await validateFormData(
+		const { formData, errors } = await validateImages(
 			await request.formData(),
 			updateProjectImagesDto
 		);

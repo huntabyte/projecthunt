@@ -1,5 +1,5 @@
-import { createProjectDto } from '$lib/schemas';
-import type { Project, ProjectVote } from '$lib/types';
+import { createProjectDto, updateProjectTags } from '$lib/schemas';
+import type { Project, ProjectVote, Technology } from '$lib/types';
 import { serializeNonPOJOs, validateData } from '$lib/utils';
 import { error, invalid, redirect } from '@sveltejs/kit';
 import { serialize } from 'object-to-formdata';
@@ -9,13 +9,21 @@ export const getProject = async (locals: App.Locals, id: string): Promise<Projec
 	try {
 		const project = serializeNonPOJOs<Project>(
 			await locals.pb.collection('projects').getOne(id, {
-				expand: 'project_votes(project)'
+				expand:
+					'project_votes(project), projects_technologies(project).technology, project_topics(project)'
 			})
 		);
-		if (project.expand?.['project_votes(project)']) {
-			return project;
+		if (!project.expand?.['project_votes(project)']) {
+			project.expand['project_votes(project)'] = [];
 		}
-		project.expand['project_votes(project)'] = [];
+
+		if (!project.expand?.['projects_technologies(project)']) {
+			project.expand['projects_technologies(project)'] = [];
+		}
+
+		if (!project.expand?.['project_topics(project)']) {
+			project.expand['project_topics(project)'] = [];
+		}
 
 		return project;
 	} catch (err) {
@@ -32,15 +40,23 @@ export const getProjects = async (locals: App.Locals, filter: string = '') => {
 		let projects = serializeNonPOJOs(
 			await locals.pb.collection('projects').getFullList<Project>(undefined, {
 				sort: '-created',
-				expand: 'project_votes(project)',
+				expand:
+					'project_votes(project), projects_technologies(project).technology, project_topics(project)',
 				filter: filter
 			})
 		);
 		projects = projects.map((project) => {
-			if (project.expand?.['project_votes(project)']) {
-				return project;
+			if (!project.expand?.['project_votes(project)']) {
+				project.expand['project_votes(project)'] = [];
 			}
-			project.expand['project_votes(project)'] = [];
+
+			if (!project.expand?.['projects_technologies(project)']) {
+				project.expand['projects_technologies(project)'] = [];
+			}
+
+			if (!project.expand?.['project_topics(project)']) {
+				project.expand['project_topics(project)'] = [];
+			}
 			return project;
 		});
 		return projects;
@@ -74,14 +90,22 @@ export const getAllProjects = async (locals: App.Locals) => {
 		let projects = serializeNonPOJOs(
 			await locals.pb.collection('projects').getFullList<Project>(999999999, {
 				sort: '-created',
-				expand: 'project_votes(project)'
+				expand:
+					'project_votes(project), projects_technologies(project).technology, project_topics(project)'
 			})
 		);
 		projects = projects.map((project) => {
-			if (project.expand?.['project_votes(project)']) {
-				return project;
+			if (!project.expand?.['project_votes(project)']) {
+				project.expand['project_votes(project)'] = [];
 			}
-			project.expand['project_votes(project)'] = [];
+
+			if (!project.expand?.['projects_technologies(project)']) {
+				project.expand['projects_technologies(project)'] = [];
+			}
+
+			if (!project.expand?.['project_topics(project)']) {
+				project.expand['project_topics(project)'] = [];
+			}
 			return project;
 		});
 		return projects;
@@ -103,7 +127,9 @@ export const updateProject = async (
 ) => {
 	let data = await request.formData();
 
-	if (data.get('thumbnail') === '') {
+	const thumb = data.get('thumbnail') as Blob;
+
+	if (thumb.size === 0) {
 		data.delete('thumbnail');
 	}
 
@@ -118,17 +144,65 @@ export const updateProject = async (
 		});
 	}
 
+	const { formData: tags } = await validateData(data, updateProjectTags, true);
+
 	try {
 		formData.user = locals?.user?.id;
 
 		if (formData?.thumbnail?.size === 0) {
-			console.log('empty');
 			const { thumbnail, ...rest } = formData;
 			serializedFormData = serialize(rest);
 		} else {
 			serializedFormData = serialize(formData);
 		}
 		await locals.pb.collection('projects').update(projectId, serializedFormData);
+
+		const currentTechnologies = serializeNonPOJOs(
+			await locals.pb.collection('projects_technologies').getFullList(undefined, {
+				filter: `project = "${projectId}"`
+			})
+		);
+
+		let technologiesToDelete: string[] = [];
+		let technologiesToCreate: string[] = [];
+
+		currentTechnologies.forEach((record) => {
+			if (!tags.technologies.includes(record.technology)) {
+				technologiesToDelete.push(record.id);
+			}
+		});
+
+		const currentTechnologyIDs = currentTechnologies.map((record) => {
+			return record.technology;
+		});
+
+		tags.technologies.forEach((tag) => {
+			if (!currentTechnologyIDs.includes(tag)) {
+				technologiesToCreate.push(tag);
+			}
+		});
+
+		if (technologiesToDelete.length > 0) {
+			const deleteTechnologyPromises = Promise.all(
+				technologiesToDelete.map((record) => {
+					return locals.pb
+						.collection('projects_technologies')
+						.delete(record, { $autoCancel: false });
+				})
+			);
+			await deleteTechnologyPromises;
+		}
+
+		if (technologiesToCreate.length > 0) {
+			const createTechnologyPromises = Promise.all(
+				technologiesToCreate.map((technologyId) => {
+					return locals.pb
+						.collection('projects_technologies')
+						.create({ project: projectId, technology: technologyId }, { $autoCancel: false });
+				})
+			);
+			await createTechnologyPromises;
+		}
 	} catch (err) {
 		console.log('Error:', err);
 		const e = err as ClientResponseError;

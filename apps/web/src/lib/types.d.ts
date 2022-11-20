@@ -34,12 +34,12 @@ interface Project extends Record {
 	description: string;
 	expand: {
 		'project_votes(project)': ProjectVote[];
+		'projects_technologies(project)': Technology[];
+		'project_topics(project)': Topic[];
 	};
 	images?: string[];
 	user: string;
 	published: boolean;
-	technologies: string[];
-	topics: string[];
 }
 
 interface ProjectVote extends Record {
@@ -73,6 +73,14 @@ interface CommentReply extends Record {
 	expand: {
 		reply: Comment;
 	};
+}
+
+interface Technology extends Record {
+	name: string;
+}
+
+interface Topic extends Record {
+	name: string;
 }
 
 type ProjectDto = z.infer<projectDto>;

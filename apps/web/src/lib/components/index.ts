@@ -23,8 +23,11 @@ import Button from './Button.svelte';
 import ProfileSocialIcons from './ProfileSocialIcons.svelte';
 import Dropzone from './Dropzone/Dropzone.svelte';
 import CommentCreateForm from './CommentCreateForm.svelte';
+import Autocomplete from './Autocomplete.svelte';
+import SimpleAutoComplete from './SimpleAutoComplete.svelte';
 
 export {
+	Autocomplete,
 	Avatar,
 	Button,
 	Comment,
@@ -49,5 +52,6 @@ export {
 	FileInput,
 	Input,
 	SearchInput,
+	SimpleAutoComplete,
 	Textarea
 };

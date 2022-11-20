@@ -49,6 +49,13 @@ export const createProjectDto = z.object({
 	user: z.string().optional()
 });
 
+export const updateProjectTags = zfd.formData(
+	z.object({
+		technologies: zfd.repeatableOfType(z.string()),
+		topics: zfd.repeatableOfType(z.string())
+	})
+);
+
 export const updateProjectImagesDto = zfd.formData({
 	images: zfd.repeatableOfType(
 		z.instanceof(Blob).superRefine((val, ctx) => {

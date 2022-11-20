@@ -4,6 +4,7 @@ import { zfd } from 'zod-form-data';
 import { differenceInDays, formatDistanceToNowStrict } from 'date-fns';
 import { updateProjectImagesDto } from './schemas';
 import { PUBLIC_PB_HOST } from '$env/static/public';
+import type { Record } from 'pocketbase';
 
 const { randomBytes } = await import('node:crypto');
 
@@ -22,9 +23,49 @@ export const getImageURL = (
 
 export const validateData = async <T extends z.ZodTypeAny>(
 	formData: FormData,
-	schema: T
+	schema: T,
+	zfd: boolean = false
 ): Promise<{ formData: z.infer<T>; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
 	const body = Object.fromEntries(formData);
+
+	if (zfd) {
+		try {
+			const data = schema.parse(formData);
+			return {
+				formData: data,
+				errors: null
+			};
+		} catch (err) {
+			console.log('Error:', err);
+			const errors = (err as ZodError).flatten();
+			return {
+				formData,
+				errors
+			};
+		}
+	} else {
+		try {
+			const data = schema.parse(body);
+			return {
+				formData: data,
+				errors: null
+			};
+		} catch (err) {
+			console.log('Error:', err);
+			const errors = (err as ZodError).flatten();
+			return {
+				formData: body,
+				errors
+			};
+		}
+	}
+};
+
+export const validateFormData = async <T extends z.ZodTypeAny>(
+	formData: FormData,
+	schema: T
+): Promise<{ formData: z.infer<T>; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
+	const body = formData;
 
 	try {
 		const formData = schema.parse(body);
@@ -50,7 +91,7 @@ interface SafeParseImages {
 	};
 }
 
-export const validateFormData = async <T extends z.ZodTypeAny>(
+export const validateImages = async <T extends z.ZodTypeAny>(
 	formData: FormData,
 	schema: T
 ): Promise<{ formData: FormData; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
@@ -105,4 +146,39 @@ export const generateRelativeDate = (date: Date) => {
 	}
 
 	return formatDistanceToNowStrict(date, { addSuffix: true });
+};
+
+interface CreateDelete {
+	toDelete: string[];
+	toCreate: string[];
+}
+
+export const generateCreateDeleteLists = <T extends Record>(
+	current: T[],
+	updated: string[],
+	type: string
+): CreateDelete => {
+	const toDelete: string[] = [];
+	const toCreate: string[] = [];
+
+	current.forEach((record) => {
+		if (!updated.includes(record[type])) {
+			toDelete.push(record.id);
+		}
+	});
+
+	const currentIDs = current.map((record) => {
+		return record[type];
+	});
+
+	updated.forEach((item) => {
+		if (!currentIDs.includes(item)) {
+			toCreate.push(item);
+		}
+	});
+
+	return {
+		toDelete,
+		toCreate
+	};
 };

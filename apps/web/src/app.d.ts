@@ -13,6 +13,7 @@ declare global {
 		// interface Error {}
 		// interface Platform {}
 	}
+	declare module 'simple-svelte-autocomplete';
 }
 /// <reference types="@sveltejs/kit" />
 /// <reference types="unplugin-icons/types/svelte" />
