@@ -12,6 +12,10 @@
 		{
 			title: 'Images & Media',
 			href: `/projects/${data.project.id}/edit/images`
+		},
+		{
+			title: 'Publish',
+			href: `/projects/${data.project.id}/edit/publish`
 		}
 	];
 </script>
