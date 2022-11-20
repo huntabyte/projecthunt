@@ -9,7 +9,7 @@ export const load: PageServerLoad = ({ locals, params }) => {
 		try {
 			const votes = serializeNonPOJOs<ProjectVote[]>(
 				await locals.pb.collection('project_votes').getFullList(undefined, {
-					expand: 'project.project_votes(project)',
+					expand: 'project.project_votes(project), project.comments(project)',
 					filter: `user.username = "${username}"`
 				})
 			);

@@ -3,7 +3,6 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	console.log(data.projects);
 </script>
 
 <div class="w-full mt-4 space-y-6">

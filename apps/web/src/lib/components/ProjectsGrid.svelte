@@ -8,7 +8,9 @@
 <div
 	class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-4 lg:gap-x-8"
 >
-	{#each projects as project}
-		<ProjectCard {project} />
-	{/each}
+	{#if projects.length > 0}
+		{#each projects as project}
+			<ProjectCard {project} />
+		{/each}
+	{/if}
 </div>

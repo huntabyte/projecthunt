@@ -12,12 +12,15 @@
 		{
 			title: 'Images & Media',
 			href: `/projects/${data.project.id}/edit/images`
-		},
-		{
-			title: 'Publish',
-			href: `/projects/${data.project.id}/edit/publish`
 		}
 	];
+
+	if (!data.project.published) {
+		navigation.push({
+			title: 'Publish',
+			href: `/projects/${data.project.id}/edit/publish`
+		});
+	}
 </script>
 
 <div class="w-full h-full">

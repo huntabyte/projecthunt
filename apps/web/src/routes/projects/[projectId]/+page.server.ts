@@ -11,9 +11,15 @@ import {
 } from '$lib/services/CommentService';
 import { deleteRecord } from '$lib/services/base';
 
-export const load: PageServerLoad = ({ locals, params, url }) => {
+export const load: PageServerLoad = async ({ locals, params, url }) => {
+	const project = await getProject(locals, params.projectId);
+
+	if (!project.published && project.user != locals?.user?.id) {
+		throw redirect(303, '/');
+	}
+
 	return {
-		project: getProject(locals, params.projectId),
+		project,
 		comments: getComments(locals, params.projectId),
 		showEdit: url.searchParams.get('showEdit'),
 		editId: url.searchParams.get('editId')
