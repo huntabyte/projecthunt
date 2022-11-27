@@ -8,6 +8,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.pb = new PocketBase(PUBLIC_PB_HOST);
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 
+	try {
+		// get an up-to-date auth store state by veryfing and refreshing the loaded auth model (if any)
+		if (event.locals.pb.authStore.isValid) {
+			await event.locals.pb.collection('users').authRefresh();
+		}
+	} catch (_) {
+		// clear the auth store on failed refresh
+		event.locals.pb.authStore.clear();
+	}
+
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = serializeNonPOJOs<User>(event.locals.pb.authStore.model as User);
 	} else {
